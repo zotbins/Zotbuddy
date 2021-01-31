@@ -12,6 +12,7 @@ import {
   Card,
   CardItem,
 } from 'native-base'
+import LoginForm from './LoginForm'
 
 const LoginPage = props => {
   return (

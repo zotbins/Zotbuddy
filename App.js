@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar'
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
 import firebase from 'firebase'
-import { AppLoading } from 'expo'
+import { Asset } from 'expo-asset'
+import AppLoading from 'expo-app-loading'
 import LoginPage from './screens/Login/LoginPage'
 
 import { firebaseConfig } from './config'

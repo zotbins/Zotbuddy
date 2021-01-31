@@ -1,78 +1,71 @@
-import React, { useState } from 'react'
-import {
-  Container,
-  Content,
-  Header,
-  Left,
-  Right,
-  Body,
-  Title,
-  Text,
-  Button,
-  Card,
-  CardItem,
-} from 'native-base'
+import React, { useEffect } from 'react'
+import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
+import { useForm } from 'react-hook-form'
+import Constants from 'expo-constants'
 
-const LoginFrom = ({ navigation }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState([])
+const LoginForm = ({ navigation }) => {
+  const { register, setValue, handleSubmit, errors } = useForm()
 
-  const handleSignUp = (e) => {
-    const aggregateErrors = []
-    try {
-      if (password.length < 6) {
-        aggregateErrors.push({
-          field: 'password',
-          message: 'password length is less than 6'
-        })
-      }
-    } catch {
-      aggregateErrors.push({
-        field: 'login',
-        message: 'authentication failed'
-      })
-    }
-  }
+  //TODO: Create onSubmit function...
+  const onSubmit = data => console.log('submitted: ', data)
+  
+  useEffect(() => {
+    register({ name: 'email'}, { required: true })
+    register({ name: 'password'}, { required: true })
+  }, [register])
+
+  console.log(errors)
 
   return (
-    <Container>
-      <Header>
-        <Left />
-        <Body>
-          <Title>ZotBuddy</Title>
-        </Body>
-        <Right />
-      </Header>
-      <Content
-        contentContainerStyle={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingTop: 40,
-          paddingHorizontal: 10,
-        }}
-      >
-        <Card>
-          <CardItem>
-            <Text>Test text</Text>
-          </CardItem>
-          <CardItem>
-            <Text>Test text</Text>
-          </CardItem>
-        </Card>
-        <Button
-          dark
-          block
-          onPress={() => {
-            console.log('donothing')
-          }}
-          style={{ marginTop: 40 }}
-        >
-          <Text>Test</Text>
-        </Button>
-      </Content>
-    </Container>
-  )
+    <View style={styles.container}>
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={text => setValue('email', text, true)}
+      />
+      {errors.email && <Text>This is required.</Text>}
+
+      <Text style={styles.label}>Password</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={text => setValue('password', text, true)}
+      />
+      {errors.password && <Text>This is required.</Text>}
+
+      <View style={styles.button}>
+        <Button color="white" title="Button" onPress={handleSubmit(onSubmit)} />
+      </View>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  label: {
+    color: 'white',
+    margin: 20,
+    marginLeft: 0
+  },
+  button :{
+    marginTop: 40,
+    color: 'white',
+    backgroundColor: '#ec5990',
+    height: 40,
+    borderRadius: 4,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingTop: Constants.statusBarHeight,
+    padding: 8,
+    width: '100%',
+    backgroundColor: '#0e101c'
+  },
+  input: {
+    backgroundColor: 'white',
+    height: 40,
+    padding: 10,
+    borderRadius: 4,
+  }
+})
 
 export default LoginForm
