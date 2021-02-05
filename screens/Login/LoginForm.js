@@ -2,12 +2,56 @@ import React, { useEffect } from 'react'
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
+import * as firebase from 'firebase'
+import 'firebase/firestore'
+import { storeItem } from '../../util'
 
 const LoginForm = ({ navigation }) => {
   const { register, setValue, handleSubmit, errors } = useForm()
 
   //TODO: Create onSubmit function...
   const onSubmit = data => console.log('submitted: ', data)
+
+  const onLogin = (data) => {
+    const { email, password } = data
+    console.log(email)
+    console.log(password)
+    try{
+      firebase.auth().signInWithEmailAndPassword(email, password).then((res) => {
+        if (SecureStore.isAvailableAsync()) {
+          SecureStore.setItemAsync('uid', res.user.uid)
+        } else {
+          console.log('SecureStore unavailable')
+        }
+      })
+    }
+    catch(error){
+      console.log(error.toString())
+    }
+  }
+
+  const onSignIn = async (data) => {
+    const { email, password } = data
+    try{
+      firebase.auth().createUserWithEmailAndPassword(email, password).then(async (res) => {
+        if (SecureStore.isAvailableAsync()) {
+          await storeItem('uid', res.user.uid)
+          const dbh = firebase.firestore()
+          dbh.collection('users').doc(res.user.uid).set({
+            email: email,
+            password: password,
+            points: 0,
+          })
+          console.log('EVERYTHING WORKS')
+        } else {
+          console.log('SecureStore unavailable')
+        }
+      })
+    }
+    catch(error){
+      console.log(error.toString())
+    }
+  }
   
   useEffect(() => {
     register({ name: 'email'}, { required: true })
@@ -33,7 +77,7 @@ const LoginForm = ({ navigation }) => {
       {errors.password && <Text>This is required.</Text>}
 
       <View style={styles.button}>
-        <Button color="white" title="Button" onPress={handleSubmit(onSubmit)} />
+        <Button color="white" title="Button" onPress={handleSubmit(onSignIn)} />
       </View>
     </View>
   );
