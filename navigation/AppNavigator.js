@@ -1,17 +1,29 @@
-//TODO add switch navigator here...
+import React from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import { createSwitchNavigator, createAppContainer } from "react-navigation";
 import LoginPage from '../screens/Login/LoginPage'
-import HomePage from '../screens/Home/HomePage'
+import MainStack from './MainStack'
 
-const AppNavigator = createSwitchNavigator({
-    route0: LoginPage,
-    route1: HomePage,
-    // route2: BarcodeScanner,
-    // route3: AboutUs
-  },
-  {
-    initialRouteName: 'route0',
-  });
 
-  export default createAppContainer(AppNavigator);
+const Stack = createStackNavigator()
+
+const AppNavigator = props => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={'Main'} headerMode={false}>
+        {props.isAuth ? (
+          <Stack.Screen name='Main' component={MainStack} />
+        ) : (
+          <>
+            <Stack.Screen name='Main' component={MainStack} />
+            <Stack.Screen name='Login' component={LoginPage} />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+
+
+  export default AppNavigator

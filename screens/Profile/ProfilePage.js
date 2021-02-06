@@ -13,11 +13,12 @@ import {
   CardItem,
 } from 'native-base'
 
-import BarCodeScannerComponent from '../../components/BarCodeScanner'
-
-const ScannerPage = props => {
-  console.log('scanner')
-  return (<Card/>)
+const ProfilePage = props => {
+  return (
+    <Card>
+      
+    </Card>
+  )
 }
 
-export default ScannerPage
+export default ProfilePage

@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
 import { 
-  StyleSheet,
-} from 'react-native'
-import { 
   Container, 
   Header, 
   Content, 
@@ -19,14 +16,14 @@ import {
   Accordion,
 } from 'native-base'
 
-const HomePage = props => {
+const EventsPage = props => {
   return (
     <Card>
       <Text>
-        about us...
+        events
       </Text>
     </Card>
   )
 }
 
-export default HomePage
+export default EventsPage
