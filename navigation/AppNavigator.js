@@ -11,7 +11,7 @@ const Stack = createStackNavigator()
 const AppNavigator = props => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Main'} headerMode={false}>
+      <Stack.Navigator initialRouteName={'Login'} headerMode={false}>
         {props.isAuth ? (
           <Stack.Screen name='Main' component={MainStack} />
         ) : (
@@ -26,4 +26,4 @@ const AppNavigator = props => {
 }
 
 
-  export default AppNavigator
+export default AppNavigator

@@ -26,4 +26,4 @@ const EventsPage = props => {
   )
 }
 
-export default EventsPage
+export default EventsPage;

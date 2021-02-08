@@ -47,7 +47,7 @@ const MainStack = () => {
         <Tab.Screen name='Trivia' component={TriviaPage} />
         <Tab.Screen name='Scanner' component={ScannerPage} />
         <Tab.Screen name='Profile' component={ProfilePage} />
-        <Tab.Screen name='Events' components={EventsPage} />
+        <Tab.Screen name='Events' component={EventsPage} />
       </Tab.Navigator>
   )
 }

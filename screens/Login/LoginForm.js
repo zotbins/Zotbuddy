@@ -6,12 +6,15 @@ import * as firebase from 'firebase'
 import 'firebase/firestore'
 import { storeItem } from '../../util'
 import * as SecureStore from 'expo-secure-store'
+import { useNavigation } from '@react-navigation/native';
 
-const LoginForm = ({ navigation }) => {
+
+const LoginForm =  props  => {
   const { register, setValue, handleSubmit, errors } = useForm()
 
   //TODO: Create onSubmit function...
   const onSubmit = data => console.log('submitted: ', data)
+  const navigation = useNavigation();
 
   const onLogin = (data) => {
     const { email, password } = data
@@ -43,7 +46,8 @@ const LoginForm = ({ navigation }) => {
             password: password,
             points: 0,
           })
-          console.log('EVERYTHING WORKS')
+          
+          navigation.navigate("Main")
         } else {
           console.log('SecureStore unavailable')
         }
@@ -113,4 +117,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default LoginForm
+export default LoginForm;
