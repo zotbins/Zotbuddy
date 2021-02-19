@@ -14,6 +14,8 @@ const LoginForm =  props  => {
   const navigation = useNavigation()
 
   const onLogin = (_) => {
+    //TODO
+    //fix onLogin to operate like onSignUp
     const email = getValues('email')
     const password = getValues('password')
 
@@ -31,7 +33,7 @@ const LoginForm =  props  => {
     }
   }
 
-  const onSignIn = async (_) => {
+  const onSignUp = async (_) => {
     const email = getValues('email')
     const password = getValues('password')
 
@@ -81,7 +83,7 @@ const LoginForm =  props  => {
       {errors.password && <Text>This is required.</Text>}
 
       <View style={styles.button}>
-        <Button title="Sign In" onPress={onSignIn} />
+        <Button title="Sign Up" onPress={onSignUp} />
         <Button title="Log In" onPress={onLogin} />
       </View>
     </View>
