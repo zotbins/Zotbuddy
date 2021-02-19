@@ -6,20 +6,17 @@ import * as firebase from 'firebase'
 import 'firebase/firestore'
 import { storeItem } from '../../util'
 import * as SecureStore from 'expo-secure-store'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
 
 
 const LoginForm =  props  => {
-  const { register, setValue, handleSubmit, errors } = useForm()
+  const { register, setValue, getValues, errors } = useForm()
+  const navigation = useNavigation()
 
-  //TODO: Create onSubmit function...
-  const onSubmit = data => console.log('submitted: ', data)
-  const navigation = useNavigation();
+  const onLogin = (_) => {
+    const email = getValues('email')
+    const password = getValues('password')
 
-  const onLogin = (data) => {
-    const { email, password } = data
-    console.log(email)
-    console.log(password)
     try{
       firebase.auth().signInWithEmailAndPassword(email, password).then((res) => {
         if (SecureStore.isAvailableAsync()) {
@@ -34,8 +31,10 @@ const LoginForm =  props  => {
     }
   }
 
-  const onSignIn = async (data) => {
-    const { email, password } = data
+  const onSignIn = async (_) => {
+    const email = getValues('email')
+    const password = getValues('password')
+
     try{
       firebase.auth().createUserWithEmailAndPassword(email, password).then(async (res) => {
         if (SecureStore.isAvailableAsync()) {
@@ -82,7 +81,8 @@ const LoginForm =  props  => {
       {errors.password && <Text>This is required.</Text>}
 
       <View style={styles.button}>
-        <Button color="white" title="Button" onPress={handleSubmit(onSignIn)} />
+        <Button title="Sign In" onPress={onSignIn} />
+        <Button title="Log In" onPress={onLogin} />
       </View>
     </View>
   );
