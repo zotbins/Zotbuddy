@@ -3,7 +3,8 @@ import {
   Dimensions,
   StyleSheet, 
   View,
-  Pressable
+  Pressable,
+  ScrollView
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 import {
@@ -15,6 +16,7 @@ import {
   Body,
   Title,
   Text,
+  H1,
   Button,
   Card,
   CardItem,
@@ -47,14 +49,49 @@ const BackgroundHeader = () => {
   )
 }
 
+
 const HomePage = props => {
   return (
-    <View style={styles.container}>
-      <BackgroundHeader/>
-      <View style={styles.contentContainer}>
+    <ScrollView style={styles.container}>
 
+      <BackgroundHeader/>
+      
+      <View style={styles.contentContainer}>
+        <H1 style = {{textAlign: "center", fontWeight: "bold"}}>
+        UCI Dining + Zotbins About Us
+        </H1>
+        <View style = {{height: "80%",width: "94%", alignSelf: "center", marginTop: 10, justifyContent: "space-between"}}>
+          <Text>
+            UCI Dining Services is committed to providing sustainable practices in services, food and products, how we manage waste and how we educate the campus community.
+          </Text>
+          
+          <Text>
+            UCI Dining proudly supports the sustainability goals of the University of California Office of the President (UCOP) in reducing waste and greenhouse gas emissions and increasing the sustainable foods we offer.
+          </Text>
+          
+          <Text>
+            Most recently, UCI Dining has collaborated with Zotbins to bring you this app to help with proper waste disposal, learn new zero waste knowledge through trivia, and bring you the latest UCI Dining & Sustainability news and events.
+          </Text>
+          
+          <Text>
+            Zotbins was created by ZerO Waste Anteaters (ZOWA), an independent group of undergraduate researchers, who are focused on technology-based zero waste management. 
+          </Text>
+
+          <Text>
+            ZotBins is a smart waste bin system that collects data to help make waste management more efficient and to promote zero waste.
+          </Text>
+          
+          <Text>
+            One aspect of this project consists of physical  “smart bins” deployed in various locations (i.e. buildings, college campuses, cities) that can accurately measure and record the amount of waste in each bin most with a digital display that gives waste disposal instructions.
+          </Text>
+
+          <Text>
+            Another part of this project includes the web app which provides functionality to help facilities management in cultivating a sustainable campus, while the mobile app seeks to engage users in more environmentally-conscious practices.
+          </Text>
+
+        </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 

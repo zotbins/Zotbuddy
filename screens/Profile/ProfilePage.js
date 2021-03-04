@@ -6,19 +6,7 @@ import {
   Pressable
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
-import {
-  Container,
-  Content,
-  Header,
-  Left,
-  Right,
-  Body,
-  Title,
-  Text,
-  Button,
-  Card,
-  CardItem,
-} from 'native-base'
+import ProfileForm from './ProfileForm'
 
 /**
  * Styles need to be refactored for different platforms
@@ -49,12 +37,7 @@ const BackgroundHeader = () => {
 
 const ProfilePage = props => {
   return (
-    <View style={styles.container}>
-      <BackgroundHeader/>
-      <View style={styles.contentContainer}>
-
-      </View>
-    </View>
+    <ProfileForm/>
   )
 }
 

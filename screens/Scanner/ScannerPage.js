@@ -17,7 +17,7 @@ import BarCodeScannerComponent from '../../components/BarCodeScanner'
 
 const ScannerPage = props => {
   console.log('scanner')
-  return (<Card/>)
+  return (<BarCodeScannerComponent/>)
 }
 
 export default ScannerPage

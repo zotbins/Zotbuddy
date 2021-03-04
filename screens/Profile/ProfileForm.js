@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
-import { storeItem } from '../../util'
 import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
 
@@ -32,21 +31,41 @@ const ProfileForm =  props  => {
     //todo
     console.log('reset form')
   }
+
+  const displayData = async (_) => {
+    const dbh = firebase.firestore()
+    let userId = await SecureStore.getItemAsync('uid');
+    let doc =  dbh.collection("users").doc(userId).get()
+
+    if (!doc.exists){
+      alert("No user data found!")
+    }
+    else{
+      let dataObj = doc.data()
+      setValue("firstname", dataObj.firstname, true)
+      setValue("lastname", dataObj.lastname, true)
+      setValue("email", dataObj.email, true)
+      setValue("points", dataObj.points, true)
+
+    }
+  }
   
   useEffect(() => {
-    register({ name: 'name'})
-  }, [register])
+    register({name: 'firstname'}, {required: true})
+    register({name: 'lastname'},{required: true})
+    register({ name: 'email'}, {required: true})
+    register({ name: 'points'}, {required: true})
+    displayData()}, [register])
 
   console.log(errors)
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Name</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={text => setValue('name', text, true)}
-      />
-
+      <Text style={styles.label}>First Name: {getValues("firstname")}</Text>
+      <Text style={styles.label}>Last Name: {getValues("lastname")}</Text>
+      <Text style={styles.label}>Email: {getValues("email")}</Text>
+      <Text style={styles.label}>Points: {getValues("points")}</Text>
+      
       <View style={styles.button}>
         <Button title="Submit" onPress={onSubmit} />
         <Button title="Reset" onPress={onReset} />

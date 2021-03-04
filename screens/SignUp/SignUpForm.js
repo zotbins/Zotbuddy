@@ -9,22 +9,28 @@ import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
 
 
-const LoginForm =  props  => {
+const SignUpForm =  props  => {
   const { register, setValue, getValues, errors } = useForm()
   const navigation = useNavigation()
 
-  const onLogin = async (_) => {
-    //TODO
-    //fix onLogin to operate like onSignUp
+  const onSignUp = async (_) => {
     const email = getValues('email')
     const password = getValues('password')
-    console.log("Hey there1!")
+    const firstname = getValues('firstname')
+    const lastname = getValues('lastname')
+
     try{
-      firebase.auth().signInWithEmailAndPassword(email, password).then(async (res) => {
-        console.log("Hey there!")
+      firebase.auth().createUserWithEmailAndPassword(email, password).then(async (res) => {
         if (SecureStore.isAvailableAsync()) {
-          console.log("Hey there!")
           await storeItem('uid', res.user.uid)
+          const dbh = firebase.firestore()
+          dbh.collection('users').doc(res.user.uid).set({
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            password: password,
+            points: 0,
+          })
           
           navigation.navigate("Main")
         } else {
@@ -36,8 +42,10 @@ const LoginForm =  props  => {
       console.log(error.toString())
     }
   }
-
+  
   useEffect(() => {
+    register({name: 'firstname'}, {required: true})
+    register({name: 'lastname'},{required: true})
     register({ name: 'email'}, { required: true })
     register({ name: 'password'}, { required: true })
   }, [register])
@@ -46,6 +54,20 @@ const LoginForm =  props  => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.label}>First Name</Text>
+      <TextInput
+        style = {styles.input}
+        onChangeText = {text => setValue('firstname', text, true)}
+      />
+      {errors.firstname && <Text>This is required.</Text>}
+
+      <Text style={styles.label}>Last Name</Text>
+      <TextInput
+        style = {styles.input}
+        onChangeText = {text => setValue('lastname', text, true)}
+      />
+      {errors.lastname && <Text>This is required.</Text>}
+
       <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
@@ -56,18 +78,16 @@ const LoginForm =  props  => {
       <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
+        secureTextEntry={true}
         onChangeText={text => setValue('password', text, true)}
       />
       {errors.password && <Text>This is required.</Text>}
+
+      <View style={styles.button}>
+        <Button title="Sign Up" onPress={onSignUp} />
+        <Button title="Back" onPress={() => props.navigation.back()} />
+      </View>
       
-      <Text style={styles.label}> </Text>
-
-      <Button title="Log In" onPress={onLogin} style = {styles.button}/>
-
-      <Text style={styles.label}> </Text>
-      
-      <Button title="Sign Up" onPress={() => navigation.navigate('SignUp')} style = {styles.button} />
-
     </View>
   );
 }
@@ -79,7 +99,11 @@ const styles = StyleSheet.create({
     marginLeft: 0
   },
   button :{
-    marginTop: 20,
+    marginTop: 40,
+    color: 'white',
+    backgroundColor: '#ec5990',
+    height: 40,
+    borderRadius: 4,
   },
   container: {
     flex: 1,
@@ -97,4 +121,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default LoginForm;
+export default SignUpForm;

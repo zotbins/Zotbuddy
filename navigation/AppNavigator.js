@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 import LoginPage from '../screens/Login/LoginPage'
 import MainStack from './MainStack'
 
+import SignUpPage from '../screens/SignUp/SignUpPage'
+
 
 const Stack = createStackNavigator()
 
@@ -18,6 +20,9 @@ const AppNavigator = props => {
           <>
             <Stack.Screen name='Main' component={MainStack} />
             <Stack.Screen name='Login' component={LoginPage} />
+            <Stack.Screen name='SignUp' component={SignUpPage} />
+
+            
           </>
         )}
       </Stack.Navigator>
