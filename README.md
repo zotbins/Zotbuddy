@@ -14,6 +14,7 @@ The workflow is a bit tedious, since you have to wait for the app to update on y
 If there are any other issues, close your terminal and go back to Step 4.
 
 GitHub Commit Format: https://www.conventionalcommits.org/en/v1.0.0/
+
 **The original name of this repo was "zotbins-mobile-app-android".**
 # Common Errors  
 1. **I installed a new dependency and didn't change anything else. Now the app won't run...**
