@@ -13,6 +13,11 @@ const LoginForm =  props  => {
   const { register, setValue, getValues, errors } = useForm()
   const navigation = useNavigation()
 
+
+  const goToForgotPasswordPage = () => {
+    navigation.navigate("ForgotPassword")
+  }
+
   const onLogin = async (_) => {
     //TODO
     //fix onLogin to operate like onSignUp
@@ -63,6 +68,10 @@ const LoginForm =  props  => {
       <Text style={styles.label}> </Text>
 
       <Button title="Log In" onPress={onLogin} style = {styles.button}/>
+
+      <Text style={styles.label}> </Text>
+
+      <Button title="Forgot Password" onPress={goToForgotPasswordPage} style = {styles.button}/>
 
       <Text style={styles.label}> </Text>
       

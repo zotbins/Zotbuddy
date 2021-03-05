@@ -12,16 +12,6 @@ const ProfileForm =  props  => {
   const { register, setValue, getValues, errors } = useForm()
   const navigation = useNavigation()
 
-  const onLinkToGoogle = async (_) => {
-    //todo
-    console.log('link acc with google')
-  }
-
-  const onLinkToFacebook = async (_) => {
-    //todo
-    console.log('link acc with facebook')
-  }
-
   const onSubmit = async (_) => {
     //todo
     console.log('update form with firebase')
@@ -76,8 +66,7 @@ const ProfileForm =  props  => {
          * 
          * onPress => link with fb or gmail
          */}
-        <Button title="Link with Facebook" />
-        <Button title="Link with Gmail" />
+        
       </View>
     </View>
   );

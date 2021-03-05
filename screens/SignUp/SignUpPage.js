@@ -4,10 +4,10 @@ import SignUpForm from './SignUpForm'
 
 const SignUpPage = props => {
   return (
-    <>
-        <SignUpForm/>
+  
+    <SignUpForm {...props}/>
         
-    </>
+    
   )
 }
 

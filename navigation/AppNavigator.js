@@ -6,6 +6,7 @@ import LoginPage from '../screens/Login/LoginPage'
 import MainStack from './MainStack'
 
 import SignUpPage from '../screens/SignUp/SignUpPage'
+import ForgotPasswordPage from '../screens/ForgotPassword/ForgotPasswordPage'
 
 
 const Stack = createStackNavigator()
@@ -21,6 +22,8 @@ const AppNavigator = props => {
             <Stack.Screen name='Main' component={MainStack} />
             <Stack.Screen name='Login' component={LoginPage} />
             <Stack.Screen name='SignUp' component={SignUpPage} />
+            <Stack.Screen name='ForgotPassword' component={ForgotPasswordPage} />
+
 
             
           </>

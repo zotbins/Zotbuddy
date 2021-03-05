@@ -83,10 +83,11 @@ const SignUpForm =  props  => {
       />
       {errors.password && <Text>This is required.</Text>}
 
-      <View style={styles.button}>
-        <Button title="Sign Up" onPress={onSignUp} />
-        <Button title="Back" onPress={() => props.navigation.back()} />
-      </View>
+    
+      <Button title="Sign Up" onPress={onSignUp} styles={{marginBottom: 20}} />
+      <Text></Text>
+      <Button title="Back" onPress={() => props.navigation.goBack()} />
+      
       
     </View>
   );
