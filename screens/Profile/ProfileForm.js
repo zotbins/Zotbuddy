@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native'
 
 
 const ProfileForm =  props  => {
-  const { register, setValue, getValues, errors } = useForm()
+  const { register, setValue, getValues, reset, errors } = useForm()
   const navigation = useNavigation()
 
   const onSubmit = async (_) => {
@@ -17,9 +17,8 @@ const ProfileForm =  props  => {
     console.log('update form with firebase')
   }
 
-  const onReset = async (_) => {
-    //todo
-    console.log('reset form')
+  const onReset = () => {
+    //reset()
   }
 
   const displayData = async (_) => {
@@ -45,7 +44,8 @@ const ProfileForm =  props  => {
     register({name: 'lastname'},{required: true})
     register({ name: 'email'}, {required: true})
     register({ name: 'points'}, {required: true})
-    displayData()}, [register])
+    displayData()
+  }, [register])
 
   console.log(errors)
 
