@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { 
   Dimensions,
-  StyleSheet, 
+  StyleSheet,
+  Image,
   View,
   Pressable,
   ScrollView
 } from 'react-native'
-import { Path, Svg } from 'react-native-svg'
+import { Rect, Svg } from 'react-native-svg'
 import {
   Container,
   Content,
@@ -19,8 +20,14 @@ import {
   H1,
   Button,
   Card,
+  Tabs,
+  Tab,
   CardItem,
 } from 'native-base'
+
+import uciDiningLogo from '../../assets/images/UCIDining_logo.png'
+import zotbinsLogo from '../../assets/images/ZotBins_logo_slow_blink.gif'
+import zotBuddyLogo from '../../assets/images/robot-dev.png'
 
 /**
  * Styles need to be refactored for different platforms
@@ -39,9 +46,8 @@ const BackgroundHeader = () => {
           viewBox='0 0 1440 320'
           style={{ position: 'absolute', top: 130 }}
         >
-          <Path
+          <Rect
             fill='#79D6FB'
-            d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z'
           />
         </Svg>
       </View>
@@ -52,46 +58,75 @@ const BackgroundHeader = () => {
 
 const HomePage = props => {
   return (
-    <ScrollView style={styles.container}>
+    <Container style={styles.container}>
+       <Tabs>
+       <Tab heading="ZotBuddy" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
+       <BackgroundHeader/>
 
-      <BackgroundHeader/>
-      
-      <View style={styles.contentContainer}>
-        <H1 style = {{textAlign: "center", fontWeight: "bold"}}>
-        UCI Dining + Zotbins About Us
-        </H1>
-        <View style = {{height: "80%",width: "94%", alignSelf: "center", marginTop: 10, justifyContent: "space-between"}}>
-          <Text>
-            UCI Dining Services is committed to providing sustainable practices in services, food and products, how we manage waste and how we educate the campus community.
-          </Text>
-          
-          <Text>
-            UCI Dining proudly supports the sustainability goals of the University of California Office of the President (UCOP) in reducing waste and greenhouse gas emissions and increasing the sustainable foods we offer.
-          </Text>
-          
-          <Text>
-            Most recently, UCI Dining has collaborated with Zotbins to bring you this app to help with proper waste disposal, learn new zero waste knowledge through trivia, and bring you the latest UCI Dining & Sustainability news and events.
-          </Text>
-          
-          <Text>
-            Zotbins was created by ZerO Waste Anteaters (ZOWA), an independent group of undergraduate researchers, who are focused on technology-based zero waste management. 
-          </Text>
-
-          <Text>
-            ZotBins is a smart waste bin system that collects data to help make waste management more efficient and to promote zero waste.
-          </Text>
-          
-          <Text>
-            One aspect of this project consists of physical  “smart bins” deployed in various locations (i.e. buildings, college campuses, cities) that can accurately measure and record the amount of waste in each bin most with a digital display that gives waste disposal instructions.
-          </Text>
-
-          <Text>
-            Another part of this project includes the web app which provides functionality to help facilities management in cultivating a sustainable campus, while the mobile app seeks to engage users in more environmentally-conscious practices.
-          </Text>
-
+        <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
+          <Image style={styles.zotBuddyLogo} source={zotBuddyLogo}/>
+          <Card>
+            <CardItem style={{marginBottom: 15}}>
+                <Body style={styles.categoryAlign}>
+                  <Text style={styles.categoryTitleText}>What is ZotBuddy?</Text>
+                  <Text style={styles.categoryText}>
+                    ZotBins and UCI Dining in collaboration bring to you this app to spread awareness of proper waste disposal,
+                    learn new zero waste knowledge through trivia, and bring you the latest UCI Dining & Sustainability news and events!
+                  </Text>
+                  <Text style={styles.categoryTitleText}>Our Goal</Text>
+                  <Text style={styles.categoryText}>
+                    We hope that using ZotBuddy will engage users in more environmentally-conscious practices and help promote the practice of zero waste!
+                  </Text>
+                </Body>
+            </CardItem>
+          </Card>
         </View>
-      </View>
-    </ScrollView>
+       </Tab>
+
+       <Tab heading="ZotBins" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
+        <BackgroundHeader/>
+        <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
+          <Image style={styles.zotLogo} source={zotbinsLogo}/>
+          <Card>
+            <CardItem style={{marginBottom: 15}} >
+                <Body style={styles.categoryAlign}>
+                    <Text style={styles.categoryTitleText}>What is Zotbins?</Text>
+                    <Text style={styles.categoryText}>
+                        ZotBins is a smart waste bin system, created by ZOWA, that collects data to help make waste management more efficient and to promote the practice of zero waste. It consists
+                        of a 3 parts: the hardware "smart trash bins", a web app with tools for facilities managements, and this mobile app!
+                    </Text>
+                    <Text style={styles.categoryTitleText}>ZerO Waste Anteaters</Text>
+                    <Text style={styles.categoryText}>
+                     ZerO Waste Anteaters (ZOWA) is an independent group of undergraduate researchers, who are focused on technology-based zero waste management.
+                    </Text>
+                </Body>
+            </CardItem>
+           </Card>
+        </View>
+        </Tab>
+
+       <Tab heading="UCI Dining" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
+       <BackgroundHeader/>
+        <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
+          <Image style={styles.diningLogo} source={uciDiningLogo}/>
+          <Card>
+            <CardItem style={{marginBottom: 15}} >
+                <Body style={styles.categoryAlign}>
+                  <Text style={styles.categoryTitleText}>What is UCI Dining?</Text>
+                  <Text style={styles.categoryText}>
+                    UCI Dining proudly supports the sustainability goals of the University of California Office of the President (UCOP) in reducing waste and greenhouse gas emissions and increasing the sustainable foods we offer on campus.
+                  </Text>
+                  <Text style={styles.categoryTitleText}>Our Mission</Text>
+                  <Text style={styles.categoryText}>
+                    UCI Dining Services is committed to providing sustainable practices in services, food and products, how we manage waste and how we educate the campus community.
+                  </Text>
+                </Body>
+            </CardItem>
+          </Card>
+        </View>
+       </Tab>
+       </Tabs>
+    </Container>
   )
 }
 
@@ -100,45 +135,52 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#edf3f6'
   },
-  contentContainer: {
-    marginTop: 34,
-    marginHorizontal: 10
-  },
-  headerText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center',
-    marginTop: 35
-  },
   svgCurve: {
     position: 'absolute',
     width: Dimensions.get('window').width
   },
   categoryTitleText: {
-    margin: 10,
     fontWeight: 'bold',
-    fontSize: 24
+    fontSize: 27,
+    alignSelf: 'center',
+    color: '#484848',
+    marginBottom: 12,
+    marginTop: 15
+  },
+  categoryAlign: {
+    justifyContent: 'center',
+    marginBottom: 10
   },
   categoryText: {
-    fontSize: 10
+    fontSize: 15,
+    textAlign: 'center',
+    color: '#606060',
   },
-  buttonRowContainer: {
-    marginHorizontal: 20,
-    marginVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  zotLogo: {
+    height: 130,
+    width: 348,
+    margin: 10,
+    resizeMode: 'contain',
+    alignSelf: 'center'
   },
-  categoryButton: {
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: 'black',
-    borderRadius: 6,
-    height: 90,
-    width: 90,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
+  diningLogo: {
+    resizeMode: 'contain',
+    height: 120,
+    width: 300,
+    marginTop: 30,
+    alignSelf: 'center'
+  },
+  zotBuddyLogo: {
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    height: 120,
+    width: 335,
+    marginTop: 15,
+    marginBottom: 15,
+  },
+  tabs: {
+    backgroundColor: '#79D6FB',
+  },
 })
 
 export default HomePage
