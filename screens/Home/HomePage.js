@@ -27,7 +27,7 @@ import {
 
 import uciDiningLogo from '../../assets/images/UCIDining_logo.png'
 import zotbinsLogo from '../../assets/images/ZotBins_logo_slow_blink.gif'
-import zotBuddyLogo from '../../assets/images/robot-dev.png'
+import zotBuddyLogo from '../../assets/images/petr.jpg'
 
 /**
  * Styles need to be refactored for different platforms
