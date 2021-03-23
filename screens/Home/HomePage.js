@@ -70,12 +70,13 @@ const HomePage = props => {
                 <Body style={styles.categoryAlign}>
                   <Text style={styles.categoryTitleText}>What is ZotBuddy?</Text>
                   <Text style={styles.categoryText}>
-                    ZotBins and UCI Dining in collaboration bring to you this app to spread awareness of proper waste disposal,
-                    learn new zero waste knowledge through trivia, and bring you the latest UCI Dining & Sustainability news and events!
+                    ZotBuddy can help you better waste practices for the item at hand, learn about sustainable
+                    practices through fun trivia, and can bring you the latest UCI Dining & Sustainability news and events!
                   </Text>
                   <Text style={styles.categoryTitleText}>Our Goal</Text>
                   <Text style={styles.categoryText}>
-                    We hope that using ZotBuddy will engage users in more environmentally-conscious practices and help promote the practice of zero waste!
+                    We hope that using ZotBuddy will engage users in more environmentally-conscious practices and help
+                    promote the practice of zero waste!
                   </Text>
                 </Body>
             </CardItem>
@@ -92,12 +93,14 @@ const HomePage = props => {
                 <Body style={styles.categoryAlign}>
                     <Text style={styles.categoryTitleText}>What is Zotbins?</Text>
                     <Text style={styles.categoryText}>
-                        ZotBins is a smart waste bin system, created by ZOWA, that collects data to help make waste management more efficient and to promote the practice of zero waste. It consists
-                        of a 3 parts: the hardware "smart trash bins", a web app with tools for facilities managements, and this mobile app!
+                        ZotBins is a smart space initiative that provides holistic feedback through waste data and encourages
+                        the practice of zero waste. It consists of 3 parts: the hardware "smart trash bins", a web app with tools
+                        for facilities management, and this mobile app!
                     </Text>
                     <Text style={styles.categoryTitleText}>ZerO Waste Anteaters</Text>
                     <Text style={styles.categoryText}>
-                     ZerO Waste Anteaters (ZOWA) is an independent group of undergraduate researchers, who are focused on technology-based zero waste management.
+                        Zotbins was created in 2017 by ZerO Waste Anteaters (ZOWA), an independent group of undergraduate researchers,
+                        who are focused on technology-based zero waste management. ZOWA, in collaboration with UCI Dining have developed ZotBuddy!
                     </Text>
                 </Body>
             </CardItem>
