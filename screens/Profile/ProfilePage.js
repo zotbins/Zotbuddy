@@ -6,35 +6,12 @@ import {
   Pressable
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
-import {
-  Container,
-  Content,
-  Header,
-  Left,
-  Right,
-  Body,
-  Title,
-  Text,
-  Button,
-  Card,
-  CardItem,
-} from 'native-base'
-
-import Leaderboard from './Leaderboard'
+import ProfileForm from './ProfileForm'
 
 /**
  * Styles need to be refactored for different platforms
  * This is just a quick MVP
  */
-
-const quizCategories = [
-  'Zero-Waste Goals',
-  'Let\'s talk trash',
-  'Sustainability in Dining',
-  'Sustainability Terms & Definitions',
-  'Be a Planteater',
-  'Testing'
-]
 
 //Temporary
 //https://heartbeat.fritz.ai/creating-custom-wavy-headers-using-react-native-svg-639ce0861327
@@ -58,39 +35,9 @@ const BackgroundHeader = () => {
   )
 }
 
-const TriviaPage = props => {
+const ProfilePage = props => {
   return (
-    <View style={styles.container}>
-      <BackgroundHeader/>
-      <View style={styles.contentContainer}>
-        <Leaderboard />
-        <Text style={styles.categoryTitleText}>Quiz Categories</Text>
-        <View style={styles.buttonRowContainer}>
-          {quizCategories.slice(0, 3).map(category => (
-            <Pressable
-              key={category}
-              android_ripple={{ color: 'black' }}
-              onClick={() => { console.log('test')}}
-              style={styles.categoryButton}
-            >
-              <Text style={styles.categoryText}>{category}</Text>
-            </Pressable>
-          ))}
-        </View>
-        <View style={styles.buttonRowContainer}>
-          {quizCategories.slice(3).map(category => (
-            <Pressable
-              key={category}
-              android_ripple={{ color: 'black' }}
-              onClick={() => { console.log('test')}}
-              style={styles.categoryButton}
-            >
-              <Text style={styles.categoryText}>{category}</Text>
-            </Pressable>
-          ))}
-        </View>
-      </View>
-    </View>
+    <ProfileForm/>
   )
 }
 
@@ -140,4 +87,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default TriviaPage
+export default ProfilePage

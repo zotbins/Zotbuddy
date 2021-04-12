@@ -1,11 +1,11 @@
-import { StatusBar } from 'expo-status-bar'
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, StatusBar } from 'react-native'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
 import firebase from 'firebase'
 import { Asset } from 'expo-asset'
 import AppLoading from 'expo-app-loading'
+import AppNavigator from './navigation/AppNavigator'
 import LoginPage from './screens/Login/LoginPage'
 
 import { firebaseConfig } from './config'
@@ -53,10 +53,10 @@ const App = props => {
     )
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <LoginPage/>
-      </View>
+      <>
+        <StatusBar hidden />
+        <AppNavigator/>
+      </>
     )
   }
 }
