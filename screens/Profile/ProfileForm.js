@@ -2,12 +2,14 @@ import React, {useEffect} from 'react'
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
+import * as firebase from 'firebase'
+import 'firebase/firestore'
+import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
-import { render } from 'react-dom'
 
 
 const ProfileForm =  props  => {
-  //const { register, setValue, getValues, reset, errors } = useForm()
+  const { register, setValue, getValues, reset, errors } = useForm()
   const navigation = useNavigation()
 
   const onSubmit = async (_) => {
@@ -19,7 +21,7 @@ const ProfileForm =  props  => {
     //reset()
   }
 
-  /*const displayData = async (_) => {
+  const displayData = async (_) => {
     const dbh = firebase.firestore()
     let userId = await SecureStore.getItemAsync('uid');
     let doc =  dbh.collection("users").doc(userId).get()
@@ -32,10 +34,10 @@ const ProfileForm =  props  => {
       setValue("firstname", dataObj.firstname, true)
       setValue("lastname", dataObj.lastname, true)
       setValue("email", dataObj.email, true)
-      setValue("points", dataObj.points, true)}
+      setValue("points", dataObj.points, true)
 
     }
-  
+  }
   
   useEffect(() => {
     register({name: 'firstname'}, {required: true})
@@ -45,14 +47,14 @@ const ProfileForm =  props  => {
     displayData()
   }, [register])
 
-  console.log(errors)*/
+  console.log(errors)
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>First Name: {props.blood.firstname}</Text>
-      <Text style={styles.label}>Last Name: {props.blood.lastname}</Text>
-      <Text style={styles.label}>Email: {props.blood.email}</Text>
-      <Text style={styles.label}>Points: {props.blood.points}</Text>
+      <Text style={styles.label}>First Name: {getValues("firstname")}</Text>
+      <Text style={styles.label}>Last Name: {getValues("lastname")}</Text>
+      <Text style={styles.label}>Email: {getValues("email")}</Text>
+      <Text style={styles.label}>Points: {getValues("points")}</Text>
       
       <View style={styles.button}>
         <Button title="Submit" onPress={onSubmit} />

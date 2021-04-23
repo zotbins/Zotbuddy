@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
-import { useEffect } from 'react'
 import { 
   Dimensions,
   StyleSheet, 
   View,
+  Pressable
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 import ProfileForm from './ProfileForm'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
-import * as SecureStore from 'expo-secure-store'
-
 
 /**
  * Styles need to be refactored for different platforms
@@ -40,46 +36,9 @@ const BackgroundHeader = () => {
 }
 
 const ProfilePage = props => {
-  const [display, setDisplay] = useState({})
-  const displayData = async (_) => {
-    const dbh = firebase.firestore()
-    let userId = await SecureStore.getItemAsync('uid');
-    let doc =  await dbh.collection("users").doc(userId).get()
-
-    if (!doc.exists){
-      setDisplay({})
-    }
-    else{
-      let dataObj = doc.data()
-      setDisplay({
-        firstname: dataObj.firstname,
-        lastname: dataObj.lastname,
-        email: dataObj.email,
-        points: dataObj.points
-      })
-      //setValue("firstname", dataObj.firstname, true)
-      //setValue("lastname", dataObj.lastname, true)
-      //setValue("email", dataObj.email, true)
-      //setValue("points", dataObj.points, true)}
-    }
-  }
-
-  useEffect (() => {
-    async function cover() {
-      displayData()
-    }
-    cover()
-
-  }, [])
-
-  if (display == {}){
-    return <></>
-  }
-  else{
-    return (
-      <ProfileForm blood = {display}/>
-    )
-  }
+  return (
+    <ProfileForm/>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -128,4 +87,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ProfilePage;
+export default ProfilePage
