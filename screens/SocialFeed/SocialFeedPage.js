@@ -20,11 +20,18 @@ import {
   Card,
   CardItem
 } from 'native-base' 
+import Axios from 'axios'
 
 import InstagramEmbed from 'react-native-embed-instagram' 
 import WebView from 'react-native-webview'
 
-
+const getIgPosts = async () => {
+  const res = []
+    
+    // https://developers.facebook.com/docs/instagram-api/reference/ig-media/
+    
+    return res
+}
 const IgPost = require("./InstagramPost.html");
 
 const InstagramPost = (props) => {
@@ -47,7 +54,10 @@ const styles = StyleSheet.create({
   }
 });
 
+
+
 const SocialFeedPage = props => {
+  let posts = getIgPosts();
   return (
     <View style={styles.view}>
       <ScrollView>
