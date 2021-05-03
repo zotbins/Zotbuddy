@@ -192,6 +192,7 @@ const LoginForm =  props  => {
       <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
+        secureTextEntry={true}
         onChangeText={text => setValue('password', text, true)}
       />
       {errors.password && <Text>This is required.</Text>}
