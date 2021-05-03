@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "400197254537",
+    "firebase_url": "https://zbuddy-3a716-default-rtdb.firebaseio.com",
+    "project_id": "zbuddy-3a716",
+    "storage_bucket": "zbuddy-3a716.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400197254537:android:8bac4623ff4fded8dff558",
+        "android_client_info": {
+          "package_name": "com.zotbins.zbuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400197254537-i7ncouqfpd2v789rqnd6tepeqetag0ci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvqEmL9lcb3AArGdqh2IQWGJvBwTrUEKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400197254537-i7ncouqfpd2v789rqnd6tepeqetag0ci.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "400197254537-fpup3uamt8eieirpn1g1k8kpv9houqd8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "host.exp.exponent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

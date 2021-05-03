@@ -36,7 +36,7 @@ import zotBuddyLogo from '../../assets/images/petr.jpg'
 
 //Temporary
 //https://heartbeat.fritz.ai/creating-custom-wavy-headers-using-react-native-svg-639ce0861327
-const BackgroundHeader = () => {
+/*const BackgroundHeader = () => {
   return (
     <View style={styles.svgCurve}>
       <View style={{ backgroundColor: '#79D6FB', height: 160 }}>
@@ -53,7 +53,7 @@ const BackgroundHeader = () => {
       </View>
     </View>
   )
-}
+}*/
 
 
 const HomePage = props => {
@@ -61,7 +61,7 @@ const HomePage = props => {
     <Container style={styles.container}>
        <Tabs>
        <Tab heading="ZotBuddy" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
-       <BackgroundHeader/>
+       
 
         <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
           <Image style={styles.zotBuddyLogo} source={zotBuddyLogo}/>
@@ -85,7 +85,7 @@ const HomePage = props => {
        </Tab>
 
        <Tab heading="ZotBins" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
-        <BackgroundHeader/>
+        
         <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
           <Image style={styles.zotLogo} source={zotbinsLogo}/>
           <Card>
@@ -109,7 +109,7 @@ const HomePage = props => {
         </Tab>
 
        <Tab heading="UCI Dining" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
-       <BackgroundHeader/>
+       
         <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
           <Image style={styles.diningLogo} source={uciDiningLogo}/>
           <Card>
