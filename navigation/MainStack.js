@@ -7,6 +7,8 @@ import ScannerPage from '../screens/Scanner/ScannerPage'
 import ProfilePage from '../screens/Profile/ProfilePage'
 import TriviaPage from '../screens/Trivia/TriviaPage'
 import EventsPage from '../screens/Events/EventsPage'
+import SocialFeedPage from '../screens/SocialFeed/SocialFeedPage'
+import MapPage from '../screens/Map/MapPage'
 
 const Tab = createBottomTabNavigator()
 
@@ -32,6 +34,10 @@ const MainStack = () => {
               case 'Events':
                 iconName = 'calendar-clear-outline'
                 break
+              case 'SocialFeed':
+                iconName = 'logo-instagram'
+              case 'Map':
+                iconName = 'map-pin'
               default:
                 break
             }
@@ -48,6 +54,8 @@ const MainStack = () => {
         <Tab.Screen name='Scanner' component={ScannerPage} />
         <Tab.Screen name='Profile' component={ProfilePage} />
         <Tab.Screen name='Events' component={EventsPage} />
+        <Tab.Screen name='SocialFeed' component={SocialFeedPage} />
+        <Tab.Screen name='Map' component={MapPage} />
       </Tab.Navigator>
   )
 }
