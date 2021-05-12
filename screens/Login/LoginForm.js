@@ -21,6 +21,7 @@ const LoginForm =  props  => {
   logInwithFacebookAsync = async() => {
     /* This method handles the Facebook authentication */
     try {
+      //The appId needs to be stored in n ENV File
       await Facebook.initializeAsync({
         appId: '984282755681388',
       });
@@ -115,9 +116,7 @@ const LoginForm =  props  => {
                   console.log('SecureStore unavailable')
                 }
 
-
           }); //ending sign in with credential
-
       }//ending isUserEqual
     }); //ending unsubscribe
   }
@@ -127,6 +126,7 @@ const LoginForm =  props  => {
   signInWithGoogleAsync = async() => {
     /* This function handles the Google Sign In feature*/
     try {
+      //The android Client Id and the IOS client Id need to be stored inside of a env
       const result = await Google.logInAsync({
         androidClientId: '400197254537-hingemon30b2n4te4fn4q5tv6al62rc3.apps.googleusercontent.com',
         iosClientId: '400197254537-fpup3uamt8eieirpn1g1k8kpv9houqd8.apps.googleusercontent.com',
