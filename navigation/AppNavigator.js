@@ -7,6 +7,7 @@ import MainStack from './MainStack'
 
 import SignUpPage from '../screens/SignUp/SignUpPage'
 import ForgotPasswordPage from '../screens/ForgotPassword/ForgotPasswordPage'
+import ResetPassword from '../screens/Reset/ResetPassword'
 
 
 const Stack = createStackNavigator()
@@ -23,6 +24,7 @@ const AppNavigator = props => {
             <Stack.Screen name='Login' component={LoginPage} />
             <Stack.Screen name='SignUp' component={SignUpPage} />
             <Stack.Screen name='ForgotPassword' component={ForgotPasswordPage} />
+            <Stack.Screen name='ResetPassword' component={ResetPassword} />
 
 
             
