@@ -1,9 +1,8 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
-import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
 import { useNavigation } from '@react-navigation/native'
-import { render } from 'react-dom'
+
 
 
 const ProfileForm =  props  => {
@@ -16,7 +15,7 @@ const ProfileForm =  props  => {
   }
 
   const onReset = () => {
-    //reset()
+    navigation.navigate("ResetPassword")
   }
 
   /*const displayData = async (_) => {
@@ -54,9 +53,7 @@ const ProfileForm =  props  => {
       <Text style={styles.label}>Email: {props.blood.email}</Text>
       <Text style={styles.label}>Points: {props.blood.points}</Text>
       
-      <View style={styles.button}>
-        <Button title="Submit" onPress={onSubmit} />
-        <Button title="Reset" onPress={onReset} />
+      <Button title="Reset" onPress={onReset} />
         {/**
          * TODO:
          * check if account is linked
@@ -65,7 +62,6 @@ const ProfileForm =  props  => {
          * onPress => link with fb or gmail
          */}
         
-      </View>
     </View>
   );
 }

@@ -13,12 +13,13 @@ const EventsForm = props => {
 
     return(
         <SafeAreaView style = {styles.container}>
-            <Text style = {styles.title}>Events</Text>
+            <Text style = {styles.pageTitle}>Events</Text>
             <FlatList
                 data = {arr}
                 renderItem = {({item}) =>
                     <View style = {styles.item}>
-                        <Text style = {styles.title}>{item.title}</Text>
+                        <Text style = {styles.itemTitle}>{item.title}</Text>
+                        <Text style = {styles.dateFont}>{item.startDate.toString().substring(0, item.startDate.toString().length - 15)} - {item.endDate.toString().substring(0, item.endDate.toString().length - 15)}</Text>
                         <Text style = {styles.font}>{item.description}</Text>
 
                     </View>
@@ -40,19 +41,35 @@ const styles = StyleSheet.create({
 
     item: {
         marginTop: 24,
-        padding: 30,
-        backgroundColor: "pink",
+        padding: 10,
+        backgroundColor: "#EAEAEA",
+        borderRadius: 10
     },
    
-    title: {
-        textAlign: "center",
+    pageTitle: {
+        fontFamily: "Roboto",
         fontSize: 30,
         marginBottom: 30,
         fontWeight: "bold"
     },
 
+    itemTitle: {
+        fontFamily: "Roboto",
+        fontSize: 25,
+        fontWeight: "bold",
+        marginBottom: 4
+    },
+
     font: {
-        fontSize: 24
+        fontFamily: "Roboto",
+        fontSize: 15,
+        lineHeight: 20
+    },
+
+    dateFont: {
+        fontFamily: "Roboto",
+        fontSize: 14,
+        marginBottom: 15
     }
 
 
