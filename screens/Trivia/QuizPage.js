@@ -35,6 +35,14 @@ const quizCategories = [
   'Testing'
 ]
 
+const testQuestion = 'What is your favorite color?'
+const testChoices = [
+  'Blue',
+  'Red',
+  'Green',
+  'Yellow',
+]
+
 const QuizPage = props => {
   //create container and pass question as props
 
@@ -43,6 +51,7 @@ const QuizPage = props => {
   const [index, setIndex] = useState(0)
   const [progress, setProgress] = useState(0)
   const [choice, setChoice] = useState(null)
+  
 
   const onSubmit = () => {
     
@@ -79,12 +88,12 @@ const QuizPage = props => {
       <View>
         <Text>{index}</Text>
         <View>
-          {question && question.choices.map((choice, index) => {
+          {testChoices && testChoices.map((choice, index) => {
             return (
               <View key={index}>
                 <TriviaButton
-                  label={choice.questionText}
-                  value={choice.value}
+                  label={choice}
+                  value={choice}
                   onPress={onPressChoice}
                 />
               </View>
