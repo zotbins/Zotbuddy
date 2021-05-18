@@ -149,6 +149,10 @@ const LoginForm =  props  => {
     navigation.navigate("ForgotPassword")
   }
 
+  const toMain = () => {
+    navigation.navigate("Main")
+  }
+
   const onLogin = async (_) => {
     //TODO
     //fix onLogin to operate like onSignUp
@@ -208,6 +212,7 @@ const LoginForm =  props  => {
       <Text style={styles.label}> </Text>
       
       <Button title="Sign Up" onPress={() => navigation.navigate('SignUp')} style = {styles.button} />
+      <Button title="to main" onPress={toMain} style = {styles.button} />
 
       <Text style={styles.label}> </Text>
       <Button title = "Sign In With Google" onPress={() => signInWithGoogleAsync()}/>
