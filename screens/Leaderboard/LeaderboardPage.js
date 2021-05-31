@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import EventsForm from "./EventsForm"
+import LeaderboardForm from "./LeaderboardForm"
 import * as firebase from 'firebase'
 import 'firebase/firestore'
 
-const EventsPage = props => {
+const LeaderboardPage = props => {
   const [arr, setArr] = useState([])
   
-  const getEvents = async (_) => {
+  const getLeaderboard = async (_) => {
     let arr = []
     const db = firebase.firestore()
-    const query = db.collection("event").orderBy('startDate', 'asc')
+    const query = db.collection("users").orderBy('points', 'desc')
     await query.get().then((querySnapshot) => {
         querySnapshot.forEach((userDoc) => {
             arr.push({...userDoc.data(), key: arr.length + 1})
-            arr[arr.length-1]["startDate"] = userDoc.data().startDate.toDate()
-            arr[arr.length-1]["endDate"] = userDoc.data().endDate.toDate()
         })
     })
     console.log(arr)
@@ -22,7 +20,7 @@ const EventsPage = props => {
   }
   useEffect(() => {
      async function cover(){
-        getEvents()
+        getLeaderboard()
      }
      cover()
     }, [])
@@ -33,10 +31,10 @@ const EventsPage = props => {
   }
   else{
     return (
-      <EventsForm blood = {arr}/>
+      <LeaderboardForm blood = {arr}/>
     )
   }
     
 }
 
-export default EventsPage;
+export default LeaderboardPage;

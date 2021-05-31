@@ -61,8 +61,6 @@ const HomePage = props => {
     <Container style={styles.container}>
        <Tabs>
        <Tab heading="ZotBuddy" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
-       
-
         <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
           <Image style={styles.zotBuddyLogo} source={zotBuddyLogo}/>
           <Card>
