@@ -11,7 +11,7 @@ const ProfileForm =  props  => {
 
   const onSubmit = async (_) => {
     //todo
-    console.log('update form with firebase')
+    navigation.navigate("Leaderboard")
   }
 
   const onReset = () => {
@@ -54,6 +54,7 @@ const ProfileForm =  props  => {
       <Text style={styles.label}>Points: {props.blood.points}</Text>
       
       <Button title="Reset" onPress={onReset} />
+      <Button title="Leaderboard" onPress={onSubmit}/>
         {/**
          * TODO:
          * check if account is linked
