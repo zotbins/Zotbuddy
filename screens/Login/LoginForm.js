@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Text, View, StyleSheet, Image, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, ScrollView, SafeAreaView, Keyboard } from 'react-native'
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
 import * as firebase from 'firebase'
@@ -9,12 +9,21 @@ import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
+import ZotZeroHorizontal from '../../assets/svgs/ZotZeroHorizontal.svg'
+import GoogleSvg from '../../assets/svgs/Google.svg'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Alert } from 'react-native';
+import {SvgXml, SvgUri} from "react-native-svg"
+import { Row } from 'native-base'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 
 const LoginForm =  props  => {
   const { register, setValue, getValues, errors } = useForm()
   const navigation = useNavigation()
+  const [userInputColor, setUserInputColor] = useState("black")
+  const [passInputColor, setPassInputColor] = useState("black")
+  let _textInputRef = null;
 
 
 
@@ -178,69 +187,189 @@ const LoginForm =  props  => {
     register({ name: 'password'}, { required: true })
   }, [register])
 
+  changeColor = () => {
+
+  }
+
   console.log(errors)
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Email</Text>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <SafeAreaView style={styles.container}>
+      <View style={styles.header} >
+      <ZotZeroHorizontal style={styles.logo}/>
+      {/* <SvgXml style={styles.logo} source={require('../../assets/svgs/ZotZeroHorizontal.svg')} /> */}
+      {/* <Image style={styles.logo} source={require("../../assets/images/ZotZero.png")} /> */}
+      <Text style={styles.title}> Welcome to ZotZero!</Text>
+      </View>
+      <View style={styles.loginBox}>
+      <Text style={[styles.label , {color: userInputColor}]}>Email</Text>
+     
       <TextInput
-        style={styles.input}
+        style={[styles.input, {borderColor: userInputColor}]}
+        onFocus={() => setUserInputColor("#6AA2B8")}
+        onBlur={() => setUserInputColor("black")} 
         onChangeText={text => setValue('email', text, true)}
-      />
+        />
+  
+        
       {errors.email && <Text>This is required.</Text>}
-
-      <Text style={styles.label}>Password</Text>
+      
+      <Text style={[styles.label , {color: passInputColor}]}>Password</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, {borderColor: passInputColor}]}
+        onFocus={() => setPassInputColor("#6AA2B8")}
+        onBlur={() => setPassInputColor("black")} 
         secureTextEntry={true}
         onChangeText={text => setValue('password', text, true)}
       />
       {errors.password && <Text>This is required.</Text>}
+
+      <Text onPress={goToForgotPasswordPage} style={styles.forgotPassword}>Forgot Your Password?</Text>
+
       
       <Text style={styles.label}> </Text>
 
-      <Button title="Log In" onPress={onLogin} style = {styles.button}/>
-
-      <Text style={styles.label}> </Text>
-
-      <Button title="Forgot Password" onPress={goToForgotPasswordPage} style = {styles.button}/>
-
-      <Text style={styles.label}> </Text>
-      
-      <Button title="Sign Up" onPress={() => navigation.navigate('SignUp')} style = {styles.button} />
-
-      <Text style={styles.label}> </Text>
+      <TouchableOpacity
+        style={[styles.button, {backgroundColor:"#0064A4"}]}
+        onPress={onLogin}
+      >
+        <Text style={[styles.buttonText, {color:"white"}]}>Login</Text>
+      </TouchableOpacity>
+      <Text style={styles.separator}>- or -</Text>
+      <TouchableOpacity
+        style={[styles.button, {borderColor:"#6AA2B8", borderWidth: 1}]}
+        onPress={() => signInWithGoogleAsync()}
+      >
+        <GoogleSvg style={styles.buttonImageGoogle} />
+        {/* <Image style={styles.buttonImageGoogle} source={require("../../assets/images/Google.png")} /> */}
+        <Text style={[styles.buttonText, {color:"#6AA2B8"}]}>Sign in with Google</Text>
+      </TouchableOpacity>
+{/* 
       <Button title = "Sign In With Google" onPress={() => signInWithGoogleAsync()}/>
 
-      <Button title = "Sign In with Facebook" onPress={() => logInwithFacebookAsync()}></Button>
-
-    </View>
+      <Button title = "Sign In with Facebook" onPress={() => logInwithFacebookAsync()}></Button> */}
+      </View>
+      <View style={styles.bottom}>
+      <Text onPress={() => navigation.navigate('SignUp')} style={styles.signUp}>Don't have an account? <Text style={{ fontWeight: 'bold' }}>Sign up here!</Text></Text>
+      </View>
+      </SafeAreaView>
+      </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  label: {
-    color: 'white',
-    margin: 20,
-    marginLeft: 0
-  },
-  button :{
-    marginTop: 20,
-  },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: "column",
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     paddingTop: Constants.statusBarHeight,
     padding: 8,
+    marginTop: 60,
     width: '100%',
-    backgroundColor: '#0e101c'
+    backgroundColor: '#F4F4F4'
+  },
+  header: {
+    flex:1,
+    flexDirection: "column",
+    alignItems: 'center',
+    padding: 3,
+    paddingBottom: 0,
+  },
+  loginBox: {
+    backgroundColor: 'white',
+    shadowColor: 'black',
+    shadowOpacity: .25,
+    shadowOffset: {width: 10, height: 10},
+    shadowRadius: 5,
+    elevation: 3,
+    flexShrink: 3,
+    flexDirection: "column",
+    alignItems: 'center',
+    padding: 3,
+    paddingBottom: 20,
+    width: '92%',
+  },
+  bottom: {
+    flex: 1,
+    marginBottom: 18,
+    justifyContent: 'flex-end'
+  },
+  logo: {
+    width: 300,
+    height: 150,
+    resizeMode: 'contain',
+    marginBottom: 0,
+    marginTop: 0,
+  },  
+  title: {
+    fontSize: 26,
+    color: '#0064A4',
+    alignSelf: 'center', 
+    fontWeight: 'bold',
+  },
+  label: {
+    fontSize: 14,
+    alignSelf: 'flex-start',
+    margin: 10,
+    marginLeft: 30,
+    marginBottom: -10,
+    backgroundColor: "white",
+    zIndex: 4
   },
   input: {
-    backgroundColor: 'white',
+    width: "95%",
+    borderWidth: 1,
+    
     height: 40,
     padding: 10,
-    borderRadius: 4,
-  }
+    borderRadius: 5,
+  },
+  forgotPassword: {
+    fontSize: 14,
+    alignSelf: 'flex-end',
+    marginRight: 20,
+    marginTop: 5,
+    color: "#6AA2B8",
+  },
+  buttonImageGoogle: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+    marginRight: 13
+  },
+  buttonImageFb: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+    marginRight: 6
+  },
+  button: {
+    marginTop: 5,
+    borderRadius: 20,
+    width: 250,
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonText: {
+    fontSize: 18,
+    alignSelf: 'center',
+    color: 'black',
+  },
+  separator: {
+    marginTop: 13,
+    marginBottom: 13,
+    color:"#6AA2B8"
+  },
+  signUp: {
+    fontSize: 18,
+    alignSelf: 'center',
+    color: '#0064A4',
+  },
+  
 })
 
 export default LoginForm;

@@ -5,9 +5,12 @@ import {
   Image,
   View,
   Pressable,
-  ScrollView
+  ScrollView,
+  SafeAreaView,
+  StatusBar
 } from 'react-native'
 import { Rect, Svg } from 'react-native-svg'
+import { useNavigation } from '@react-navigation/native'
 import {
   Container,
   Content,
@@ -25,9 +28,15 @@ import {
   CardItem,
 } from 'native-base'
 
+import MapPage from '../Map/MapPage'
+import Leaderboard from '../Trivia/Leaderboard'
+
 import uciDiningLogo from '../../assets/images/UCIDining_logo.png'
 import zotbinsLogo from '../../assets/images/ZotBins_logo_slow_blink.gif'
 import zotBuddyLogo from '../../assets/images/petr.jpg'
+import { Constants } from 'expo-barcode-scanner'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import SmileySvg from '../../assets/svgs/smiley.svg'
 
 /**
  * Styles need to be refactored for different platforms
@@ -57,131 +66,131 @@ import zotBuddyLogo from '../../assets/images/petr.jpg'
 
 
 const HomePage = props => {
+  const navigation = useNavigation()
   return (
-    <Container style={styles.container}>
-       <Tabs>
-       <Tab heading="ZotBuddy" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
-        <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
-          <Image style={styles.zotBuddyLogo} source={zotBuddyLogo}/>
-          <Card>
-            <CardItem style={{marginBottom: 15}}>
-                <Body style={styles.categoryAlign}>
-                  <Text style={styles.categoryTitleText}>What is ZotBuddy?</Text>
-                  <Text style={styles.categoryText}>
-                    ZotBuddy can help you better waste practices for the item at hand, learn about sustainable
-                    practices through fun trivia, and can bring you the latest UCI Dining & Sustainability news and events!
-                  </Text>
-                  <Text style={styles.categoryTitleText}>Our Goal</Text>
-                  <Text style={styles.categoryText}>
-                    We hope that using ZotBuddy will engage users in more environmentally-conscious practices and help
-                    promote the practice of zero waste!
-                  </Text>
-                </Body>
-            </CardItem>
-          </Card>
+    
+    // <SafeAreaView style={styles.container}>
+    // <ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow:1}}>
+      <View style={styles.container}>
+        <View style={styles.welcome}>
+          <Text style={styles.nameStyle}>Welcome back, _____</Text>
+          <TouchableOpacity style={styles.profileButton}>
+            <SmileySvg style={styles.smile}/>
+          </TouchableOpacity>
         </View>
-       </Tab>
-
-       <Tab heading="ZotBins" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
         
-        <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
-          <Image style={styles.zotLogo} source={zotbinsLogo}/>
-          <Card>
-            <CardItem style={{marginBottom: 15}} >
-                <Body style={styles.categoryAlign}>
-                    <Text style={styles.categoryTitleText}>What is Zotbins?</Text>
-                    <Text style={styles.categoryText}>
-                        ZotBins is a smart space initiative that provides holistic feedback through waste data and encourages
-                        the practice of zero waste. It consists of 3 parts: the hardware "smart trash bins", a web app with tools
-                        for facilities management, and this mobile app!
-                    </Text>
-                    <Text style={styles.categoryTitleText}>ZerO Waste Anteaters</Text>
-                    <Text style={styles.categoryText}>
-                        Zotbins was created in 2017 by ZerO Waste Anteaters (ZOWA), an independent group of undergraduate researchers,
-                        who are focused on technology-based zero waste management. ZOWA, in collaboration with UCI Dining have developed ZotBuddy!
-                    </Text>
-                </Body>
-            </CardItem>
-           </Card>
+        <View style={styles.topText}>
+        <Text style={styles.textStyle}>Daily Trivia</Text>
         </View>
-        </Tab>
+        <View style={styles.trivia} >
+          <Text>Take today’s quiz to boost your ranking!</Text>
+          <TouchableOpacity style={styles.button}>
+            <Text style={{color: "#6AA2B8", textAlign: 'center'}}>Take Quiz</Text>
+          </TouchableOpacity>
+        </View>
 
-       <Tab heading="UCI Dining" tabStyle={styles.tabs} activeTabStyle={styles.tabs} textStyle={{color: 'white'}}>
-       
-        <View style = {{width: "94%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
-          <Image style={styles.diningLogo} source={uciDiningLogo}/>
-          <Card>
-            <CardItem style={{marginBottom: 15}} >
-                <Body style={styles.categoryAlign}>
-                  <Text style={styles.categoryTitleText}>What is UCI Dining?</Text>
-                  <Text style={styles.categoryText}>
-                    UCI Dining proudly supports the sustainability goals of the University of California Office of the President (UCOP) in reducing waste and greenhouse gas emissions and increasing the sustainable foods we offer on campus.
-                  </Text>
-                  <Text style={styles.categoryTitleText}>Our Mission</Text>
-                  <Text style={styles.categoryText}>
-                    UCI Dining Services is committed to providing sustainable practices in services, food and products, how we manage waste and how we educate the campus community.
-                  </Text>
-                </Body>
-            </CardItem>
-          </Card>
+        <View style={styles.topText}>
+          <Text style={styles.textStyle}>Leaderboard</Text>
+          <Text style={styles.seeMore}>See More</Text>
         </View>
-       </Tab>
-       </Tabs>
-    </Container>
-  )
-}
+        <View style={styles.leaderboard}>
+          <Leaderboard />
+        </View>
+
+        <View style={styles.topText}>
+          <Text style={styles.textStyle}>Nearby Zotbins</Text>
+          <Text style={styles.seeMore}>See More</Text>
+        </View>
+        <View style={styles.nearby_bins}>
+          <MapPage />  
+        </View>
+
+        </View>
+    // </ScrollView>
+    // </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
+  topText:{
+    marginTop: 20,
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  seeMore:{
+    fontSize: 14,
+    color: "#6AA2B8"
+  },
+  smile: {
+    resizeMode: 'contain',
+  },
+  profileButton: {
+    backgroundColor: "#DCDCDC",
+    width: 40,
+    height: 40,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end'
+  },
+  button: {
+    marginTop: 5,
+    borderRadius: 20,
+    width: 85,
+    height: 40,
+    borderColor: "#6AA2B8",
+    justifyContent: 'center',
+    borderWidth: 1
+  },
   container: {
     flex: 1,
-    backgroundColor: '#edf3f6'
+    marginHorizontal: 20,
+    paddingTop: Constants.statusBarHeight,
   },
-  svgCurve: {
-    position: 'absolute',
-    width: Dimensions.get('window').width
+  nameStyle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: "#0064A4"
   },
-  categoryTitleText: {
-    fontWeight: 'bold',
-    fontSize: 27,
-    alignSelf: 'center',
-    color: '#484848',
-    marginBottom: 12,
-    marginTop: 15
+  textStyle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: "#0064A4"
   },
-  categoryAlign: {
-    justifyContent: 'center',
-    marginBottom: 10
+  welcome: {
+    paddingTop: 20,
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
-  categoryText: {
-    fontSize: 15,
-    textAlign: 'center',
-    color: '#606060',
+  trivia: {
+    paddingVertical: 10,
+    flexShrink: 1,
+    backgroundColor: "white",
+    borderRadius: 20,
+    overflow: 'hidden',
+    alignItems: 'center'
   },
-  zotLogo: {
-    height: 130,
-    width: 348,
-    margin: 10,
-    resizeMode: 'contain',
-    alignSelf: 'center'
+  leaderboard: {
+    flexShrink: 2,
+    // backgroundColor: "white",
+    borderRadius: 20,
+    overflow: 'hidden',
   },
-  diningLogo: {
-    resizeMode: 'contain',
-    height: 120,
-    width: 300,
-    marginTop: 30,
-    alignSelf: 'center'
+  nearby_bins: {
+    paddingTop: 5,
+    flex: 2,
+    backgroundColor: "white",
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginBottom: 15
   },
-  zotBuddyLogo: {
-    resizeMode: 'contain',
-    alignSelf: 'center',
-    height: 120,
-    width: 335,
-    marginTop: 15,
-    marginBottom: 15,
-  },
-  tabs: {
-    backgroundColor: '#79D6FB',
-  },
-})
+  scrollView:{
+    marginHorizontal: 20,
+  }
+});
 
 export default HomePage

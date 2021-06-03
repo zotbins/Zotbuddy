@@ -3,8 +3,11 @@ import {
   Dimensions,
   StyleSheet, 
   View,
+  Image,
+  Linking,
   Pressable,
-  ScrollView
+  ScrollView,
+  TouchableOpacity
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 import {
@@ -64,6 +67,11 @@ const SocialFeedPage = props => {
         <InstagramPost id="CNLJDyFhsKO" />
         <InstagramPost id="CNJWA8QhjND" />
         <InstagramPost id="CMVYih8h3jh" />
+        <TouchableOpacity
+        onPress={() => Linking.openURL('https://www.instagram.com/ucidining/')}
+      >
+        <Text style={styles.buttonText}>Click for More Posts!</Text>
+      </TouchableOpacity>
       </ScrollView>
     </View>
   )

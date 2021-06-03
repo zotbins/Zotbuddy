@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon } from 'native-base'
 
 import HomePage from '../screens/Home/HomePage'
+import AboutPage from '../screens/About/AboutPage'
 import ScannerPage from '../screens/Scanner/ScannerPage'
 import ProfilePage from '../screens/Profile/ProfilePage'
 import TriviaPage from '../screens/Trivia/TriviaPage'
@@ -20,6 +21,9 @@ const MainStack = () => {
             let iconName
             switch (route.name) {
               case 'Home':
+                iconName = 'home'
+                break
+              case 'About':
                 iconName = 'home'
                 break
               case 'Trivia':
@@ -50,6 +54,7 @@ const MainStack = () => {
         }}
       >
         <Tab.Screen name='Home' component={HomePage} />
+        <Tab.Screen name='About' component={AboutPage} />
         <Tab.Screen name='Trivia' component={TriviaPage} />
         <Tab.Screen name='Scanner' component={ScannerPage} />
         <Tab.Screen name='Profile' component={ProfilePage} />
