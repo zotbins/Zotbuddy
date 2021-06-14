@@ -26,25 +26,9 @@ import {
  * This is just a quick MVP
  */
 
-const quizCategories = [
-  'Zero-Waste Goals',
-  'Let\'s talk trash',
-  'Sustainability in Dining',
-  'Sustainability Terms & Definitions',
-  'Be a Planteater',
-  'Testing'
-]
-
-const testQuestion = 'What is your favorite color?'
-const testChoices = [
-  'Blue',
-  'Red',
-  'Green',
-  'Yellow',
-]
-
-const QuizPage = props => {
+const QuizForm = props => {
   //create container and pass question as props
+  //const { question, choices, onNext, onPrev } = 
 
   const [questions, setQuestions] = useState(props.questions)
   const [question, setQuestion] = useState(props.questions[0])
@@ -62,21 +46,21 @@ const QuizPage = props => {
     //save to questions state
   }
 
-  const nextQuestion = () => {
+  const nextQuestion = useCallback(() => {
     //increment questionIndex
     if (0 <= index < questions.length) {
       //saveQuestion()
       index++;
     }
-  }
+  }, [])
 
-  const previousQuestion = () => {
+  const previousQuestion = useCallback(() => {
     //increment questionIndex
     if (0 <= index < questions.length) {
       //saveQuestion()
       index--;
     }
-  }
+  }, [])
 
   const onPressChoice = e => {
     //update current choice
@@ -104,20 +88,6 @@ const QuizPage = props => {
     </View>
   )
 }
-
-const TriviaButton = React.memo(props => {
-  const {
-    label,
-    value,
-    onPress,
-  } = props
-  
-  return (
-    <TouchableOpacity value={value} onPress={onPress}>
-      <Text>{label}</Text>
-    </TouchableOpacity>
-  )
-})
 
 const styles = StyleSheet.create({
   container: {
