@@ -25,12 +25,12 @@ export default class BarCodeScannerComponent extends Component{
               "Content-Type": "application/json",
             },
           };
-        data = data.substring(2, data.length)
+        //data = data.substring(2, data.length)
         var self = this;
         axios.defaults.headers.common = {
             "X-API-Key": "2d0e68bd4fea4a34bcf4f43ea22d2b72",
         };
-        axios({method: "get", url: "http://ec2-35-82-126-163.us-west-2.compute.amazonaws.com/v0/barcode/"+data, config}).then(function(response){
+       /* axios({method: "get", url: "http://ec2-35-82-126-163.us-west-2.compute.amazonaws.com/v0/barcode/"+data, config}).then(function(response){
             self.setState({data: response.data});
             
             console.log(response.data)
@@ -38,7 +38,10 @@ export default class BarCodeScannerComponent extends Component{
             
         }).catch(function(error){
             console.log(error);
-        });
+        });*/
+
+        console.log(data)
+
     }
     render(){
         const {CameraPermissionGranted} = this.state
