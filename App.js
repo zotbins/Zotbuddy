@@ -14,7 +14,7 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
 }
 
-const App = props => {
+const App = (props) => {
   const [isLoadingComplete, setLoadingComplete] = useState(false)
 
   const loadResourcesAsync = async () => {
@@ -32,13 +32,13 @@ const App = props => {
       }),
     ])
   }
-  
+
   const handleLoadingError = (error) => {
     // In this case, you might want to report the error to your error reporting
     // service, for example Sentry
     console.warn(error)
   }
-  
+
   const handleFinishLoading = (setLoadingComplete) => {
     setLoadingComplete(true)
   }
@@ -55,13 +55,13 @@ const App = props => {
     return (
       <>
         <StatusBar hidden />
-        <AppNavigator/>
+        <AppNavigator />
       </>
     )
   }
 }
 
-export default App 
+export default App
 
 const styles = StyleSheet.create({
   container: {
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})
