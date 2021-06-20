@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View, StyleSheet, TextInput, Image } from 'react-native'
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
-//import zotBinsLogo from '../../assets/images/ZotBins_Icon.png'
-import zotZeroLogo from '../../assets/images/Logo-ZotZero-Horizontal-02.svg'
-import { Icon, Button, Card, CardItem } from 'native-base'
+import { Icon, Button, Card } from 'native-base'
 
 
 const ForgotPasswordForm =  props  => {
   const { register, setValue, getValues, errors } = useForm()
-
+  const [userInputColor, setUserInputColor] = useState('black')
 
   const passwordReset = (e) => {
     firebase.auth().sendPasswordResetEmail(getValues("email"))
@@ -37,11 +35,14 @@ const ForgotPasswordForm =  props  => {
       <Card style={styles.card}>
           <Text style={styles.label2}>No worries! Enter your registered email below to reset your password.</Text>
 
-          <Text style={styles.label3}>Email</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={text => setValue('email', text, true)}
-          />
+            <Text style={[styles.label, { color: userInputColor }]}>Email</Text>
+
+            <TextInput
+            style={[styles.input, { borderColor: userInputColor }]}
+            onFocus={() => setUserInputColor('#6AA2B8')}
+            onBlur={() => setUserInputColor('black')}
+            onChangeText={(text) => setValue('email', text, true)}
+            />
           {errors.email && <Text>This is required.</Text>}
 
           <Text style={styles.label}> </Text>
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     color: '#0064A4',
     fontSize: 26,
     fontWeight: 'bold',
-    marginTop: 125,
+    marginTop: 100,
     marginBottom: 15,
     alignSelf: 'center'
   },
@@ -100,16 +101,22 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#F4F4F4'
   },
+  label: {
+    fontSize: 14,
+    alignSelf: 'flex-start',
+    margin: 10,
+    marginLeft: 30,
+    marginBottom: -10,
+    backgroundColor: 'white',
+    zIndex: 4,
+  },
   input: {
-    //backgroundColor: '#F3F3F3',
-    color: '#4F4F4F',
+    width: '90%',
+    borderWidth: 1,
     height: 40,
-    marginLeft: 20,
-    marginRight: 20,
     padding: 10,
-    borderRadius: 4,
-    borderColor: '#555759',
-    borderWidth: 1
+    borderRadius: 5,
+    alignSelf: 'center'
   },
   backArrow: {
       width: 145,

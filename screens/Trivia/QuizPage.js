@@ -43,6 +43,7 @@ LogBox.ignoreLogs(['Setting a timer'])
 const QuizPage = (props) => {
   const [questions, setQuestions] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [chosenAnswer, setChosenAnswer] = useState(4)
 
   const fetchChoice = async (docRefs) => {
     try {
@@ -88,6 +89,7 @@ const QuizPage = (props) => {
     if (0 <= currentIndex < questions.length) {
       setCurrentIndex(currentIndex + 1)
     }
+    setChosenAnswer(questions[currentIndex+1].userChoice)
   }
 
   const previousQuestion = () => {
@@ -95,11 +97,13 @@ const QuizPage = (props) => {
     if (0 <= currentIndex < questions.length) {
       setCurrentIndex(currentIndex - 1)
     }
+    setChosenAnswer(questions[currentIndex-1].userChoice)
   }
 
   const saveChoice = (choiceIndex) => {
     questions[currentIndex].userChoice = choiceIndex
     setQuestions([...questions])
+    setChosenAnswer(choiceIndex)
   }
 
   const calculateScore = () => {
@@ -115,7 +119,7 @@ const QuizPage = (props) => {
   const onSubmit = () => {
     const correct = calculateScore()
     console.log(correct)
-
+    setChosenAnswer(4)
     //todo:
     //add current user score with correct
   }
@@ -139,6 +143,7 @@ const QuizPage = (props) => {
           previousQuestion={previousQuestion}
           saveChoice={saveChoice}
           onSubmit={onSubmit}
+          chosenAnswer={chosenAnswer}
         />
       ) : (
         <Text>Loading stuff</Text>
