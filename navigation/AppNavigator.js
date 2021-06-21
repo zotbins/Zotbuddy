@@ -9,7 +9,7 @@ import SignUpPage from '../screens/SignUp/SignUpPage'
 import ForgotPasswordPage from '../screens/ForgotPassword/ForgotPasswordPage'
 import ResetPassword from '../screens/Reset/ResetPassword'
 import LeaderboardPage from '../screens/Leaderboard/LeaderboardPage'
-
+import EventDetailsPage from '../screens/Events/EventDetailsPage'
 
 const Stack = createStackNavigator()
 
@@ -27,7 +27,7 @@ const AppNavigator = props => {
             <Stack.Screen name='ForgotPassword' component={ForgotPasswordPage} />
             <Stack.Screen name='ResetPassword' component={ResetPassword} />
             <Stack.Screen name='Leaderboard' component={LeaderboardPage} />
-
+            <Stack.Screen name='EventDetailsPage' component={EventDetailsPage} />
 
             
           </>
