@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 import firebase from 'firebase'
+import * as SecureStore from 'expo-secure-store'
 import {
   Container,
   Content,
@@ -89,7 +90,7 @@ const QuizPage = (props) => {
     if (0 <= currentIndex < questions.length) {
       setCurrentIndex(currentIndex + 1)
     }
-    setChosenAnswer(questions[currentIndex+1].userChoice)
+    setChosenAnswer(questions[currentIndex + 1].userChoice)
   }
 
   const previousQuestion = () => {
@@ -97,7 +98,7 @@ const QuizPage = (props) => {
     if (0 <= currentIndex < questions.length) {
       setCurrentIndex(currentIndex - 1)
     }
-    setChosenAnswer(questions[currentIndex-1].userChoice)
+    setChosenAnswer(questions[currentIndex - 1].userChoice)
   }
 
   const saveChoice = (choiceIndex) => {
@@ -108,7 +109,10 @@ const QuizPage = (props) => {
 
   const calculateScore = () => {
     return questions.reduce((acc, question) => {
-      if (question.choices[question.userChoice].isAnswer) {
+      if (
+        question.userChoice &&
+        question.choices[question.userChoice].isAnswer
+      ) {
         return acc + 1
       } else {
         return acc
@@ -116,22 +120,22 @@ const QuizPage = (props) => {
     }, 0)
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const correct = calculateScore()
-    console.log(correct)
-    setChosenAnswer(4)
-    //todo:
-    //add current user score with correct
+    let userId = await SecureStore.getItemAsync('uid')
+    let doc = dbh.collection('users').doc(userId).get()
+    if (!doc.exists) {
+      alert('No user data found!')
+    } else {
+      let dataObj = doc.data()
+      setValue('points', dataObj.points + correct, true)
+    }
   }
 
   useEffect(() => {
     //fetch on first render
     fetchQuestions()
   }, [])
-
-  useEffect(() => {
-    console.log(questions)
-  }, [questions])
 
   return (
     <View style={styles.container}>
