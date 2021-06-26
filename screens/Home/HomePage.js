@@ -45,6 +45,11 @@ const HomePage = (props) => {
     navigation.navigate('Trivia')
   }, [])
 
+  const toLeaderBoard = useCallback(() => {
+    navigation.navigate('Leaderboard')
+  }, [])
+
+
   return (
     // <SafeAreaView style={styles.container}>
     // <ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow:1}}>
@@ -73,7 +78,12 @@ const HomePage = (props) => {
 
       <View style={styles.topText}>
         <Text style={styles.textStyle}>Leaderboard</Text>
-        <Text style={styles.seeMore}>See More</Text>
+        <Text 
+            style={styles.seeMore} 
+            onPress={toLeaderBoard}
+        >
+            See More
+        </Text>
       </View>
       <View style={styles.leaderboard}>
         <Leaderboard />
