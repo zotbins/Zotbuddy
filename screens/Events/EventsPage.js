@@ -5,6 +5,7 @@ import 'firebase/firestore'
 
 const EventsPage = props => {
   const [arr, setArr] = useState([])
+  
   const getEvents = async (_) => {
     let arr = []
     const db = firebase.firestore()
@@ -12,6 +13,8 @@ const EventsPage = props => {
     await query.get().then((querySnapshot) => {
         querySnapshot.forEach((userDoc) => {
             arr.push({...userDoc.data(), key: arr.length + 1})
+            arr[arr.length-1]["startDate"] = userDoc.data().startDate.toDate()
+            arr[arr.length-1]["endDate"] = userDoc.data().endDate.toDate()
         })
     })
     console.log(arr)

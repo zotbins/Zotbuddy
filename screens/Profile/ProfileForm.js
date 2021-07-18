@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react'
-import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
+import { Text, View, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
 import { useNavigation } from '@react-navigation/native'
-import { render } from 'react-dom'
+
 
 
 const ProfileForm =  props  => {
@@ -12,11 +12,11 @@ const ProfileForm =  props  => {
 
   const onSubmit = async (_) => {
     //todo
-    console.log('update form with firebase')
+    navigation.navigate("Leaderboard")
   }
 
   const onReset = () => {
-    //reset()
+    navigation.navigate("ResetPassword")
   }
 
   /*const displayData = async (_) => {
@@ -49,14 +49,31 @@ const ProfileForm =  props  => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>First Name: {props.blood.firstname}</Text>
-      <Text style={styles.label}>Last Name: {props.blood.lastname}</Text>
-      <Text style={styles.label}>Email: {props.blood.email}</Text>
-      <Text style={styles.label}>Points: {props.blood.points}</Text>
-      
+      <Text style={styles.title}>{props.blood.firstname} {props.blood.lastname}</Text>
+      <Text style={styles.points}>{props.blood.points} Points</Text>
+
+      <View style={styles.grayBorder}/>
+
+        
+      <View style={styles.infoBox}>
+        <Text style={styles.infoTitle}>Full Name</Text>
+        <Text style={styles.infoName}>{props.blood.firstname} {props.blood.lastname}</Text>
+        
+        <Text style={styles.infoTitle}>Email</Text>
+        <Text style={styles.info}>{props.blood.email}</Text>
+      </View>
+
+      <View style={styles.grayBorder}/>
+
       <View style={styles.button}>
-        <Button title="Submit" onPress={onSubmit} />
-        <Button title="Reset" onPress={onReset} />
+        <TouchableOpacity style={styles.profileButton} onPress={onSubmit}>
+          <Text style={styles.profileButtonText}>Submit</Text>
+          <Text style={styles.profileButtonEnd}>></Text>  
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.lastProfileButton} onPress={onReset}>
+          <Text style={styles.profileButtonText}>Reset</Text>
+          <Text style={styles.profileButtonEnd}>></Text>  
+        </TouchableOpacity>
         {/**
          * TODO:
          * check if account is linked
@@ -66,30 +83,103 @@ const ProfileForm =  props  => {
          */}
         
       </View>
+      
+
+      <View style={styles.grayBorder}/>
+      <Text style={{alignSelf: 'center', justifyContent: 'flex-end', fontWeight: 'bold', fontSize: 18}}>Log Out</Text>
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  label: {
-    color: 'white',
-    margin: 20,
-    marginLeft: 0
+  profileButtonText: {
+    fontSize: 16,
+    marginLeft: 10
+  },
+  profileButtonEnd: {
+    fontSize: 26,
+    alignSelf: 'flex-end',
+    marginRight: 3,
+  },
+  lastProfileButton: {
+    alignItems: 'center',
+    justifyContent:'space-between',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    flexDirection: 'row',
+    padding: 3,
+    shadowColor: 'black',
+    shadowOpacity: .25,
+    shadowOffset: {width: 0, height: 0},
+    shadowRadius: 15,
+    elevation: 3,
+    width: "80%",
+  },
+  profileButton: {
+    marginBottom: 12,
+    alignItems: 'center',
+    justifyContent:'space-between',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    flexDirection: 'row',
+    padding: 3,
+    shadowColor: 'black',
+    shadowOpacity: .25,
+    shadowOffset: {width: 0, height: 0},
+    shadowRadius: 15,
+    elevation: 3,
+    width: "80%",
+  },
+  infoBox: {
+    marginLeft: 30
+  },
+  grayBorder: {
+    borderBottomColor: '#CCCCCC',
+          borderBottomWidth: 1,
+          width: "85%",
+          margin: 20,
+          alignSelf: 'center'
+  },
+  title: {
+    fontSize: 26,
+    color: 'black',
+    alignSelf: 'center',
+  },
+  points: {
+    fontSize: 20,
+    color: 'black',
+    alignSelf: 'center',
+  },
+  infoTitle: {
+    color: 'black',
+    fontSize: 16,
+    margin: 5,
+    marginBottom: 1
+  },
+  infoName: {
+    color: '#4F4F4F',
+    margin: 5,
+    marginBottom: 15,
+    fontSize: 16
+  },
+  info: {
+    color: '#4F4F4F',
+    margin: 5,
+    fontSize: 16
   },
   button :{
-    marginTop: 40,
+    alignItems: 'center',
     color: 'white',
-    backgroundColor: '#ec5990',
-    height: 40,
     borderRadius: 4,
   },
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     paddingTop: Constants.statusBarHeight,
     padding: 8,
     width: '100%',
-    backgroundColor: '#0e101c'
+    backgroundColor: '#F4F4F4'
   },
   input: {
     backgroundColor: 'white',

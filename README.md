@@ -21,3 +21,5 @@ GitHub Commit Format: https://www.conventionalcommits.org/en/v1.0.0/
 Try deleting "node-modules" and "package-lock.json".
 Execute "expo install", then execute "expo start -c".
 *Running these commands will reinstall your dependencies.*
+# Dependencies Used
+1. yarn add react-native-webview
