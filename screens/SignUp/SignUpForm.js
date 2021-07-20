@@ -24,12 +24,15 @@ const SignUpForm =  props  => {
         if (SecureStore.isAvailableAsync()) {
           await storeItem('uid', res.user.uid)
           const dbh = firebase.firestore()
+          date = new Date()
           dbh.collection('users').doc(res.user.uid).set({
             firstname: firstname,
             lastname: lastname,
             email: email,
             password: password,
             points: 0,
+            dateSignedIn: (date.getMonth() + 1).toString() + "/" + (date.getDay()).toString() + "/" + (date.getFullYear()).toString(),
+            showQuiz: 1
           })
           
           navigation.navigate("Main")
