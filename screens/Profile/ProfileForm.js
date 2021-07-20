@@ -68,11 +68,11 @@ const ProfileForm =  props  => {
       <View style={styles.button}>
         <TouchableOpacity style={styles.profileButton} onPress={onSubmit}>
           <Text style={styles.profileButtonText}>Submit</Text>
-          <Text style={styles.profileButtonEnd}>></Text>  
+          <Text style={styles.profileButtonEnd}></Text>  
         </TouchableOpacity>
         <TouchableOpacity style={styles.lastProfileButton} onPress={onReset}>
           <Text style={styles.profileButtonText}>Reset</Text>
-          <Text style={styles.profileButtonEnd}>></Text>  
+          <Text style={styles.profileButtonEnd}></Text>  
         </TouchableOpacity>
         {/**
          * TODO:
