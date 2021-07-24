@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native'
-import { Rect, Svg } from 'react-native-svg'
+import * as firebase from 'firebase'
 import { useNavigation } from '@react-navigation/native'
 import {
   Container,
@@ -45,6 +45,38 @@ const HomePage = (props) => {
     navigation.navigate('Trivia')
   }, [])
 
+  const isQuizDone = async (_) => {
+    const dbh = firebase.firestore()
+    let userId = await SecureStore.getItemAsync('uid');
+    let dataObj = await dbh.collection("users").doc(userId).get().data()
+    let month = dataObj.dateSignedIn.substring(0, 2)
+    let day = dataObj.dateSignedIn.substring(3, 5)
+    let year = dataObj.dateSignedIn.substring(6, 10)
+    date = new Date()
+
+    if(dataObj.showQuiz == 1){
+      return 1
+    }
+
+    else if (dataObj.showQuiz == 0 && month == (date.getMonth() + 1).toString() && day == (date.getDate()).toString()
+        && year == (date.getFullYear()).toString()){
+          return 0
+    }
+
+    else if(dataObj.showQuiz == 0 && (month != (date.getMonth() + 1).toString() || day != (date.getDate()).toString()
+    || year != (date.getFullYear()).toString())){
+      dbh.collection('users').doc(userId).update({
+        showQuiz: 1,
+        dateSignedIn: (date.getMonth() + 1).toString() + "/" + (date.getDay()).toString() + "/" + (date.getFullYear()).toString()
+      })
+
+      return 1
+    }
+
+    else{
+      return 0
+    }
+  }
   return (
     // <SafeAreaView style={styles.container}>
     // <ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow:1}}>
