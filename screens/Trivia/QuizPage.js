@@ -30,15 +30,6 @@ import QuizForm from './QuizForm'
  * This is just a quick MVP
  */
 
-const quizCategories = [
-  'Zero-Waste Goals',
-  "Let's talk trash",
-  'Sustainability in Dining',
-  'Sustainability Terms & Definitions',
-  'Be a Planteater',
-  'Testing',
-]
-
 LogBox.ignoreLogs(['Setting a timer'])
 
 const QuizPage = (props) => {
@@ -64,7 +55,6 @@ const QuizPage = (props) => {
       const questionsRef = await firebase
         .firestore()
         .collection('question')
-        .limit(5)
         .get()
       let questions = []
       questionsRef.forEach((doc) => {
@@ -82,6 +72,46 @@ const QuizPage = (props) => {
       setQuestions([...questions])
     } catch (err) {
       console.error(err)
+    }
+  }
+
+  const fetchDifficultyList = async () => {
+    try {
+      const questionsRef = await firebase
+        .firestore()
+        .collection('difficulty')
+        .get()
+      let questions = {
+        easyArray: questionsRef.docs[0].data().easyArray,
+        easyArraySize: questionsRef.docs[0].data().easyArraySize,
+        mediumArray: questionsRef.docs[0].data().mediumArray,
+        mediumArraySize: questionsRef.docs[0].data().mediumArraySize,
+        hardArray: questionsRef.docs[0].data().hardArray,
+        hardArraySize: questionsRef.docs[0].data().hardArraySize,
+      }
+      console.log(questions.easyArray[1].id)
+      const data = await questions.easyArray[1].get()
+      console.log(data.data().question)
+      //fetchQuestionsList(questions.easyArr.splice(0, 5))
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const fetchQuestionsList = async (docRefs) => {
+    try {
+      let questions = []
+      for (let i = 0; i < docRefs.length; i++) {
+        const docSnapShot = await docRefs[i].get()
+        console.log(docSnapShot.data())
+        questions.push(docSnapShot.data())
+      }
+      for (let i = 0; i < questions.length; i++) {
+        let choices = await fetchChoice(questions[i].choices)
+        questions[i].choices = choices
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -135,6 +165,7 @@ const QuizPage = (props) => {
   useEffect(() => {
     //fetch on first render
     fetchQuestions()
+    fetchDifficultyList()
   }, [])
 
   return (
@@ -150,7 +181,7 @@ const QuizPage = (props) => {
           chosenAnswer={chosenAnswer}
         />
       ) : (
-        <Text>Loading stuff</Text>
+        <Text>Loading Questions</Text>
       )}
     </View>
   )
