@@ -5,7 +5,9 @@ import {
   View,
   Pressable,
   ScrollView,
-  Alert
+  Alert,
+  TouchableOpacity,
+  Modal
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 import {
@@ -15,11 +17,12 @@ import {
   Left,
   Right,
   Body,
-  Title,
+  Title, 
   Text,
   Button,
   Card,
-  CardItem
+  CardItem,
+ 
 } from 'native-base'    
 
 import MapView, { Marker } from "react-native-maps";
@@ -30,6 +33,7 @@ import * as Location from 'expo-location'
 import {getDistance} from 'geolib'
 import { ThemeColors } from 'react-navigation';
 import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
+import { TapGestureHandler } from 'react-native-gesture-handler';
 
 // import MapboxGL from "@react-native-mapbox-gl/maps";
 
@@ -46,12 +50,55 @@ const styles = StyleSheet.create({
   },
   overlay: {
     backgroundColor: 'white'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 });
 
 const ZotbinMarker = (props) => {
+
   return (
-    <Marker style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: props.latitude, longitude: props.longitude}}>
+    
+    <Marker key={props.title} style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: props.latitude, longitude: props.longitude}}>
     <MapView.Callout tooltip style={styles.customView}>
       <View style={styles.calloutText}>
         <Text>{props.title} {"\n"}{props.description}{"\n"}{props.percentage}%<Button onPress={() => Alert.alert('The Directions')} title="Get Directions" color="#841584"/></Text>
@@ -72,14 +119,14 @@ export default class MapPage extends React.Component {
       west: null,
       north: null,
       east: null,
-      latitude: 33.6400,
-      longitude: -117.835342,
+      latitude: null,
+      longitude: null,
       closestBin: "Default",
       distance: "N/A Mile(s) Away",
+      uniqueValue: 1,
+      showInstructions: false,
     };
   }
-  
-
   
 
   arr_of_Zotbins = {"zotbin1": {
@@ -101,19 +148,19 @@ export default class MapPage extends React.Component {
   updateState(location) {
     // Uncomment this to navigate to current location
     // ----------------------------------------------
-    // this.setState({
-    //   ...this.state,
-    //   latitude: location.coords.latitude,
-    //   longitude: location.coords.longitude,
-    // });
-
-    // Location used to show the Zotbins on the map
     this.setState({
       ...this.state,
-      latitude: 33.647250,
-      longitude: -117.838600,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
     });
-    this.closestZotbin();
+
+    // Location used to show the Zotbins on the map
+    // this.setState({
+    //   ...this.state,
+    //   latitude: 33.647250,
+    //   longitude: -117.838600,
+    // });
+    // this.closestZotbin();
   }
 
   // setData(zotbinList) {
@@ -125,19 +172,23 @@ export default class MapPage extends React.Component {
   //   fetch('testsite').then((response) => response.json()).then((json) => this.setData(json)).catch((error) => console.error(error));
   // }
 
-  async componentDidMount() {
+  async getLocation() {
     try {
-      this.getBins();
+      // this.getBins();
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
+        status = await Location.requestPermissionsAsync();
         return;
       }
       let location = await Location.getCurrentPositionAsync({});
-      console.log(location);
       this.updateState(location);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async componentDidMount() {
+    this.getLocation()
   }
 
   onRegionChangeComplete = (region) => {
@@ -157,6 +208,13 @@ export default class MapPage extends React.Component {
     });
   };
 
+  refreshComponent = () => {
+    this.setState({
+      uniqueValue: this.state.uniqueValue + 1
+    })
+    this.getLocation();
+  }
+
   closestZotbin() {
     const {elements, south, west, north, east, latitude, longitude} = this.state
     let shortest_distance = 1000000000000
@@ -172,7 +230,7 @@ export default class MapPage extends React.Component {
       if (distance < shortest_distance) {
         shortest_distance = distance
         shortest_distance_index = i
-      }
+      } 
     }
     
     this.setState({
@@ -183,9 +241,26 @@ export default class MapPage extends React.Component {
     console.log(this.arr_of_bins[shortest_distance_index].name)
   }
 
+
+  setShowInstructions(bool) {
+    console.log('hi')
+    this.setState({
+      ...this.state,
+      showInstructions: bool
+    });
+  }
+
   render() {
-    const zotMarkers = Object.values(this.arr_of_Zotbins).map((zotbin) =>
-      <ZotbinMarker title={zotbin.name} description={zotbin.description} percentage={zotbin.percentage} latitude={zotbin.latitude} longitude={zotbin.longitude}/>
+  
+    const zotMarkers = Object.values(this.arr_of_Zotbins).map((zotbin, key) =>
+        <Marker key={key} style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: zotbin.latitude, longitude: zotbin.longitude}}>
+        <MapView.Callout tooltip style={styles.customView}>
+          <View style={styles.calloutText}>
+            <Text>{zotbin.name} {"\n"}{zotbin.description}{"\n"}{zotbin.percentage}%<Button onPress={() => Alert.alert('The Directions')} title="Get Directions" color="#841584"/></Text>
+            
+          </View>
+        </MapView.Callout>  
+      </Marker>
       
     );
       return (
@@ -201,13 +276,27 @@ export default class MapPage extends React.Component {
             <Marker style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: 33.647250, longitude: -117.846600 }} /> */}
 
           </MapView> 
+          {this.state.latitude == null ?
           <View style={styles.overlay}>
-          <Text>Closest Zotbin: {this.state.closestBin}</Text>
-          <Text>Distance: {this.state.distance}</Text>
-          </View>
+            {!this.state.showInstructions ?
+            <View>
+            <Text>Your location cannot found.</Text>
+            <TouchableOpacity onPress={() => this.setShowInstructions(true)}>
+              <Text>Click here to see how to show your location!</Text>
+            </TouchableOpacity>
+            </View>
+            :<View><Text>To enable your location, please click Settings > Location > Allow Location</Text>
+            <Text>And to enable it within this App, please go to this App's info > Permissions > Location > Allow Location Permission</Text>
+            <TouchableOpacity onPress={this.refreshComponent}>
+              <Text>Click here after you have enabled your location</Text>
+            </TouchableOpacity>
+            </View>
+            }
+            </View>
+          :<View style={styles.overlay}><Text>Closest Zotbin: {this.state.closestBin}</Text>
+          <Text>Distance: {this.state.distance}</Text></View>}
         </View>
       )
   }
 
 }
-

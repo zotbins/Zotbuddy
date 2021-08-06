@@ -9,7 +9,9 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native'
-import * as firebase from 'firebase'
+import firebase from 'firebase'
+import 'firebase/firestore'
+import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
 import {
   Container,
@@ -28,6 +30,7 @@ import {
   CardItem,
 } from 'native-base'
 
+import ProgressCircle from 'react-native-progress-circle'
 import MapPage from '../Map/MapPage'
 import Leaderboard from '../Trivia/Leaderboard'
 
@@ -37,30 +40,54 @@ import zotBuddyLogo from '../../assets/images/petr.jpg'
 import { Constants } from 'expo-barcode-scanner'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SmileySvg from '../../assets/svgs/smiley.svg'
+import { useEffect } from 'react'
 
 const HomePage = (props) => {
+  const [quizDone, setQuizDone] = useState(false);
+  const [checkQuiz, setCheckQuiz] = useState(true);
+  const [quizPoints, setQuizPoints] = useState(0);
+  const [boolean, setBoolean] = useState(true); 
   const navigation = useNavigation()
+
+
+  useEffect(() => {
+    if (checkQuiz) {
+      console.log('here')
+      isQuizDone();
+    }
+    console.log('here')
+    console.log(quizDone);
+    
+
+  });
 
   const toHome = useCallback(() => {
     navigation.navigate('Trivia')
   }, [])
 
   const isQuizDone = async (_) => {
+    console.log("test")
     const dbh = firebase.firestore()
+    console.log("test")
     let userId = await SecureStore.getItemAsync('uid');
-    let dataObj = await dbh.collection("users").doc(userId).get().data()
+    let doc = await dbh.collection("users").doc(userId).get()
+    let dataObj = doc.data()
     let month = dataObj.dateSignedIn.substring(0, 2)
     let day = dataObj.dateSignedIn.substring(3, 5)
     let year = dataObj.dateSignedIn.substring(6, 10)
-    date = new Date()
+    let date = new Date()
 
     if(dataObj.showQuiz == 1){
-      return 1
+      console.log('Here')
+      setQuizDone(false)
+      
     }
 
     else if (dataObj.showQuiz == 0 && month == (date.getMonth() + 1).toString() && day == (date.getDate()).toString()
         && year == (date.getFullYear()).toString()){
-          return 0
+          console.log('Here2')
+          setQuizDone(true)
+          setQuizPoints(dataObj.points)
     }
 
     else if(dataObj.showQuiz == 0 && (month != (date.getMonth() + 1).toString() || day != (date.getDate()).toString()
@@ -69,55 +96,82 @@ const HomePage = (props) => {
         showQuiz: 1,
         dateSignedIn: (date.getMonth() + 1).toString() + "/" + (date.getDay()).toString() + "/" + (date.getFullYear()).toString()
       })
-
-      return 1
+      console.log('Here3')
+      setQuizDone(false)
     }
 
     else{
-      return 0
+      console.log('Here4')
+      setQuizDone(true)
+      setQuizPoints(dataObj.points)
     }
+    setCheckQuiz(false)
   }
   return (
     // <SafeAreaView style={styles.container}>
-    // <ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow:1}}>
+    // <ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow:1}}>    
     <View style={styles.container}>
-      <View style={styles.welcome}>
-        <Text style={styles.nameStyle}>Welcome back, _____</Text>
-        <TouchableOpacity style={styles.profileButton}>
-          <SmileySvg style={styles.smile} />
-        </TouchableOpacity>
-      </View>
+      <Button onPress={isQuizDone}></Button>
+    <View style={styles.welcome}>
+      <Text style={styles.nameStyle}>Welcome back, _____</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.profileButton}>
+        <SmileySvg style={styles.smile}/>
+      </TouchableOpacity>
+    </View>
 
-      <View style={styles.topText}>
-        <Text style={styles.textStyle}>Daily Trivia</Text>
-      </View>
-      <View style={styles.trivia}>
-        <Text>Take today’s quiz to boost your ranking!</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text
-            style={{ color: '#6AA2B8', textAlign: 'center' }}
-            onPress={toHome}
-          >
-            Take Quiz
-          </Text>
-        </TouchableOpacity>
-      </View>
 
-      <View style={styles.topText}>
-        <Text style={styles.textStyle}>Leaderboard</Text>
-        <Text style={styles.seeMore}>See More</Text>
-      </View>
-      <View style={styles.leaderboard}>
-        <Leaderboard />
-      </View>
+    <View style={styles.topText}>
+    <Text style={styles.textStyle}>Daily Trivia</Text>
+    </View>
+    {quizDone ?
+    <View style={styles.trivia}>
+    <ProgressCircle
+        percent={quizPoints/5 * 100}
+        radius={50}
+        borderWidth={5}
+        color="#94C83D"
+        shadowColor="#E4E0DB"
+        bgColor="#fff"
+    >
+        <Text style={{ fontSize: 24 }}>{quizPoints.toString() + '/5'}</Text>
+    </ProgressCircle>
+    <Text style={{fontSize: 20}}>Nice Try!</Text>
+    <Text style={{fontSize: 20}}>You scored {quizPoints}/5 on today's quiz</Text>
+    <TouchableOpacity style={styles.finished_button}>
+      <Text
+        style={{ color: '#6AA2B8', textAlign: 'center' }}
+        onPress={toHome}
+      >
+        Review Results
+      </Text>
+    </TouchableOpacity>
+  </View>
+    :
+    <View style={styles.trivia} >
+      <Text>Take today’s quiz to boost your ranking!</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Trivia')} style={styles.button}>
+        <Text style={{color: "#6AA2B8", textAlign: 'center'}}>Take Quiz</Text>
+      </TouchableOpacity>
+    </View>
+    
+      }
 
-      <View style={styles.topText}>
-        <Text style={styles.textStyle}>Nearby Zotbins</Text>
-        <Text style={styles.seeMore}>See More</Text>
-      </View>
-      <View style={styles.nearby_bins}>
-        <MapPage />
-      </View>
+    <View style={styles.topText}>
+      <Text style={styles.textStyle}>Leaderboard</Text>
+      <Text onPress={() => navigation.navigate('Leaderboard')} style={styles.seeMore}>See More</Text>
+    </View>
+    <View style={styles.leaderboard}>
+      <Leaderboard />
+    </View>
+
+    <View style={styles.topText}>
+      <Text style={styles.textStyle}>Nearby Zotbins</Text>
+      <Text onPress={() => navigation.navigate('Map')} style={styles.seeMore}>See More</Text>
+    </View>
+    <View style={styles.nearby_bins}>
+      <MapPage />  
+    </View>
+
     </View>
     // </ScrollView>
     // </SafeAreaView>
@@ -158,7 +212,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   container: {
-    flex: 1,
+    flexGrow: 1,
     marginHorizontal: 20,
     paddingTop: Constants.statusBarHeight,
   },
