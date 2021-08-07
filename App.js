@@ -52,12 +52,17 @@ const App = (props) => {
       />
     )
   } else {
-    return (
-      <>
-        <StatusBar hidden />
-        <AppNavigator />
-      </>
-    )
+    try{
+      return (
+        <>
+          <StatusBar hidden />
+          <AppNavigator />
+        </>
+      )
+    }catch(error){
+      console.log(error)
+    }
+
   }
 }
 

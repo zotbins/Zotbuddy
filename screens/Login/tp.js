@@ -12,7 +12,7 @@ import {
   SafeAreaView,
   Keyboard,
 } from 'react-native'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
@@ -27,23 +27,17 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Alert } from 'react-native'
 import { SvgXml, SvgUri } from 'react-native-svg'
 import { Row } from 'native-base'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import Input from "../../components/Input";
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const LoginForm = (props) => {
-  const { control, setValue, getValues, errors} = useForm()
+  const { register, setValue, getValues, errors } = useForm()
   const navigation = useNavigation()
   const [userInputColor, setUserInputColor] = useState('black')
   const [passInputColor, setPassInputColor] = useState('black')
-  const [err, setErr] = useState(null)
-
   let _textInputRef = null
 
   const testLogin = () => {
     navigation.navigate('Main')
-  }
-  const clearLoginError = () => {
-    setErr(null)
   }
 
   const logInwithFacebookAsync = async () => {
@@ -149,9 +143,6 @@ const LoginForm = (props) => {
               console.log('SecureStore unavailable')
             }
           }) //ending sign in with credential
-          .catch(error =>{
-            console.log(error.toString())
-          })
       } //ending isUserEqual
     }) //ending unsubscribe
   }
@@ -189,12 +180,21 @@ const LoginForm = (props) => {
     //fix onLogin to operate like onSignUp
     const email = getValues('email')
     const password = getValues('password')
-    if (email == "" || password == ""){
+    // if ((email == undefined || email == "") && (password == undefined || password == "")){
+    //   console.log(email, password)
+    //   alert('Invalid Credentials! Enter Email Id and Password');
+    //   return;      
+    // }
+
+    if (email == undefined || email == ""){
+      alert('Please Enter Email Id');
       return;
     }
-
+    else if (password == undefined || password == ""){
+      alert('Please Enter Password');
+      return;
+    }
     console.log('Hey there1!', email, password)
-
     try {
       firebase
         .auth()
@@ -210,36 +210,19 @@ const LoginForm = (props) => {
             console.log('SecureStore unavailable')
           }
         })
-        .catch(error => {
-          
-          if (error.toString() ==  "Error: There is no user record corresponding to this identifier. The user may have been deleted."){
-            clearLoginError()
-            setErr("Account does not exist")
-          }
-          else if (error.toString() == "Error: The password is invalid or the user does not have a password."){
-            clearLoginError()
-            console.log("I come here")
-            setErr("Wrong Password. Try Again or Reset it")
-          }
-          else if (error.toString() == "Error: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."){
-            clearLoginError()
-            alert("Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.")
-          }
-          else if (error.toString() == "Error: The email address is badly formatted."){
-            clearLoginError()
-            setErr("Invalid Email Format")
-          }
-
-          console.log(error.toString())
-        })
     } catch (error) {
-
       console.log(error.toString())
     }
   }
 
+  // useEffect(() => {
+  //   register({ name: 'email' }, { required: true })
+  //   register({ name: 'password' }, { required: true })
+  // }, [register])
 
+  changeColor = () => {}
 
+  console.log(errors)
 
   return (
     <KeyboardAvoidingView
@@ -256,73 +239,29 @@ const LoginForm = (props) => {
         
         <View style={styles.loginBox}>
           <Text style={[styles.label, { color: userInputColor }]}>Email</Text>
-          <Controller
-            defaultValue=""
-            control={control}
-            render={({onChange, onBlur, value}) => (
-            
-              <Input
-                name="email"
-                error = {errors.email}
-                errorText={errors?.email?.message}
-                style={[styles.input, { borderColor: 'black' }]}
-                value={value}
-                placeholder = "email"
-                onFocus={() => setUserInputColor('#6AA2B8')}
-                onBlur={() => setUserInputColor('black')}
-                onChangeText={(text) =>  {
-                  clearLoginError()
-                  setValue('email', text, true)}}
-              />
 
-              
-            )}
-            name="email"
-            rules={{
-              required: {
-                value:true,
-                message: 'Email is required'
-              }
-            }}
+          <TextInput
+            {...register('email', {required: true})}
+            style={[styles.input, { borderColor: userInputColor }]}
+            onFocus={() => setUserInputColor('#6AA2B8')}
+            onBlur={() => setUserInputColor('black')}
+            onChangeText={(text) => setValue('email', text, true)}
           />
-          
+
+          {console.log(errors)}
+          {errors.email && <Text>This is required.</Text>}
 
           <Text style={[styles.label, { color: passInputColor }]}>
             Password
           </Text>
-
-          <Controller
-
-            defaultValue=""
-            control={control}
-            render={({onChange, onBlur, value}) => (
- 
-              <Input
-              name="password"
-                error = {errors.password}
-                errorText={errors?.password?.message}
-                value={value}
-                placeholder = "password"
-                style={[styles.input, { borderColor: 'black' }]}
-                onFocus={() => setUserInputColor('#6AA2B8')}
-                onBlur={() => setUserInputColor('black')}
-                secureTextEntry={true}
-                onChangeText={(text) =>  {
-                  clearLoginError()
-                  setValue('password', text, true)}}
-              />
-              
-            )}
-            name="password"
-            rules={{
-              required:{
-                value:true,
-                message: 'Password is required'
-              }
-            }}
+          <TextInput
+            style={[styles.input, { borderColor: passInputColor }]}
+            onFocus={() => setPassInputColor('#6AA2B8')}
+            onBlur={() => setPassInputColor('black')}
+            secureTextEntry={true}
+            onChangeText={(text) => setValue('password', text, true)}
           />
-          {err && <Text style= {styles.errorText}> {err} </Text>}
-
+          {errors.password && <Text>This is required.</Text>}
 
           <Text onPress={goToForgotPasswordPage} style={styles.forgotPassword}>
             Forgot Your Password?
@@ -478,12 +417,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#0064A4',
   },
-  errorText: {
-    alignSelf: 'flex-start',
-    paddingLeft: 20,
-    flexDirection: 'column',
-    color: '#fa4646'
-}
 })
 
 export default LoginForm
