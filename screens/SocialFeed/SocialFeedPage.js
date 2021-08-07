@@ -48,11 +48,22 @@ const InstagramPost = (props) => {
 const styles = StyleSheet.create({
   post: {
     flexGrow: 1,
-    height: 500
+    height: 1650
   },
   view: {
     flex: 1
     
+  },
+  button: {
+    height: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+
+  },
+  buttonText: {
+    textAlign: 'center',
+    alignSelf: 'center'
   }
 });
 
@@ -63,14 +74,14 @@ const SocialFeedPage = props => {
   return (
     <View style={styles.view}>
       <ScrollView>
-        <Text>UCI Dining Instagram</Text>
-        <InstagramPost id="CNLJDyFhsKO" />
+        <WebView source={{uri: 'https://www.instagram.com/ucidining/?hl=en'}} style={styles.post}/>
+        {/* <InstagramPost id="CNLJDyFhsKO" />
         <InstagramPost id="CNJWA8QhjND" />
-        <InstagramPost id="CMVYih8h3jh" />
-        <TouchableOpacity
+  <InstagramPost id="CMVYih8h3jh" />*/}
+        <TouchableOpacity style={styles.button}
         onPress={() => Linking.openURL('https://www.instagram.com/ucidining/')}
       >
-        <Text style={styles.buttonText}>Click for More Posts!</Text>
+        <Text style={styles.buttonText}>Click to open in App!</Text> 
       </TouchableOpacity>
       </ScrollView>
     </View>

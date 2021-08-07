@@ -23,11 +23,6 @@ import * as Google from 'expo-google-app-auth'
 import * as Facebook from 'expo-facebook'
 import ZotZeroHorizontal from '../../assets/svgs/ZotZeroHorizontal.svg'
 import GoogleSvg from '../../assets/svgs/Google.svg'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { Alert } from 'react-native'
-import { SvgXml, SvgUri } from 'react-native-svg'
-import { Row } from 'native-base'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Input from "../../components/Input";
 
 const LoginForm = (props) => {
