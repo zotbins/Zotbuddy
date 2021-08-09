@@ -33,7 +33,7 @@ import QuizForm from './QuizForm'
 LogBox.ignoreLogs(['Setting a timer'])
 
 const QuizPage = (props) => {
-  const [questions, setQuestions] = useState(null)
+  const [questions, setQuestions] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [chosenAnswer, setChosenAnswer] = useState(4)
 
@@ -50,68 +50,54 @@ const QuizPage = (props) => {
     }
   }
 
+  const formatQuestions = async (questionsRef, questionsArr) => {
+    questionsRef.forEach((doc) => {
+      questionsArr.push({
+        id: doc.id,
+        choices: doc.data().choices,
+        difficulty: doc.data().difficulty,
+        question: doc.data().question,
+      })
+    })
+    for (let i = 0; i < questionsArr.length; i++) {
+      let choices = await fetchChoice(questionsArr[i].choices)
+      questionsArr[i].choices = choices
+    }
+  }
+
   const fetchQuestions = async () => {
     try {
-      const questionsRef = await firebase
+      const easyArr = []
+      const medArr = []
+      const hardArr = []
+
+      const easyQuestionsRef = await firebase
         .firestore()
         .collection('question')
+        .where('difficulty', '==', 'EASY')
+        .limit(2)
         .get()
-      let questions = []
-      questionsRef.forEach((doc) => {
-        questions.push({
-          id: doc.id,
-          choices: doc.data().choices,
-          difficulty: doc.data().difficulty,
-          question: doc.data().question,
-        })
-      })
-      for (let i = 0; i < questions.length; i++) {
-        let choices = await fetchChoice(questions[i].choices)
-        questions[i].choices = choices
-      }
-      setQuestions([...questions])
-    } catch (err) {
-      console.error(err)
-    }
-  }
+      await formatQuestions(easyQuestionsRef, easyArr)
 
-  const fetchDifficultyList = async () => {
-    try {
-      const questionsRef = await firebase
+      const mediumQuestionsRef = await firebase
         .firestore()
-        .collection('difficulty')
+        .collection('question')
+        .where('difficulty', '==', 'MEDIUM')
+        .limit(2)
         .get()
-      let questions = {
-        easyArray: questionsRef.docs[0].data().easyArray,
-        easyArraySize: questionsRef.docs[0].data().easyArraySize,
-        mediumArray: questionsRef.docs[0].data().mediumArray,
-        mediumArraySize: questionsRef.docs[0].data().mediumArraySize,
-        hardArray: questionsRef.docs[0].data().hardArray,
-        hardArraySize: questionsRef.docs[0].data().hardArraySize,
-      }
-      console.log(questions.easyArray[1].id)
-      const data = await questions.easyArray[1].get()
-      console.log(data.data().question)
-      //fetchQuestionsList(questions.easyArr.splice(0, 5))
+      await formatQuestions(mediumQuestionsRef, medArr)
+
+      const hardQuestionsRef = await firebase
+        .firestore()
+        .collection('question')
+        .where('difficulty', '==', 'HARD')
+        .limit(1)
+        .get()
+      await formatQuestions(hardQuestionsRef, hardArr)
+
+      setQuestions([...easyArr, ...medArr, ...hardArr])
     } catch (err) {
       console.error(err)
-    }
-  }
-
-  const fetchQuestionsList = async (docRefs) => {
-    try {
-      let questions = []
-      for (let i = 0; i < docRefs.length; i++) {
-        const docSnapShot = await docRefs[i].get()
-        console.log(docSnapShot.data())
-        questions.push(docSnapShot.data())
-      }
-      for (let i = 0; i < questions.length; i++) {
-        let choices = await fetchChoice(questions[i].choices)
-        questions[i].choices = choices
-      }
-    } catch (err) {
-      console.log(err)
     }
   }
 
@@ -153,24 +139,31 @@ const QuizPage = (props) => {
   const onSubmit = async () => {
     const correct = calculateScore()
     let userId = await SecureStore.getItemAsync('uid')
-    let doc = dbh.collection('users').doc(userId).get()
+    let doc = await firebase.firestore().collection('users').doc(userId).get()
     if (!doc.exists) {
+      console.log(doc.data())
       alert('No user data found!')
     } else {
       let dataObj = doc.data()
-      setValue('points', dataObj.points + correct, true)
+      await firebase
+        .firestore()
+        .collection('users')
+        .doc(userId)
+        .set({
+          ...dataObj,
+          points: dataObj.points + correct,
+        })
     }
   }
 
   useEffect(() => {
     //fetch on first render
     fetchQuestions()
-    fetchDifficultyList()
   }, [])
 
   return (
     <View style={styles.container}>
-      {questions ? (
+      {questions.length ? (
         <QuizForm
           questions={questions}
           currentIndex={currentIndex}
