@@ -101,6 +101,69 @@ const QuizPage = (props) => {
     }
   }
 
+  //temp solution to select random questions
+
+  const formatAllQuestions = async (questionsRef, questionsArr, limit) => {
+    let questionSize = 0
+
+    questionsRef.forEach((doc) => {
+      questionSize = questionSize + 1
+      questionsArr.push({
+        id: doc.id,
+        choices: doc.data().choices,
+        difficulty: doc.data().difficulty,
+        question: doc.data().question,
+      })
+    })
+
+    //create set and add n unique questions to set
+    let indexSet = new Set()
+    while (indexSet.size < limit) {
+      let random = Math.floor(Math.random() * questionsArr.length) + 1
+      indexSet.add(random)
+    }
+
+    //change set to array and query the choices using the randomly selected indexes
+    let indexArr = Array.from(indexSet)
+    for (let i = 0; i < limit; i++) {
+      let choices = await fetchChoice(questionsArr[indexArr[i]].choices)
+      questionsArr[indexArr[i]].choices = choices
+    }
+  }
+
+  const fetchAllQuestions = async () => {
+    try {
+      const easyArr = []
+      const medArr = []
+      const hardArr = []
+
+      const easyQuestionsRef = await firebase
+        .firestore()
+        .collection('question')
+        .where('difficulty', '==', 'EASY')
+        .get()
+      await formatAllQuestions(easyQuestionsRef, easyArr, 2)
+
+      const mediumQuestionsRef = await firebase
+        .firestore()
+        .collection('question')
+        .where('difficulty', '==', 'MEDIUM')
+        .get()
+      await formatAllQuestions(mediumQuestionsRef, medArr, 2)
+
+      const hardQuestionsRef = await firebase
+        .firestore()
+        .collection('question')
+        .where('difficulty', '==', 'HARD')
+        .get()
+      await formatAllQuestions(hardQuestionsRef, hardArr, 2)
+
+      setQuestions([...easyArr, ...medArr, ...hardArr])
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   const nextQuestion = () => {
     //increment questionIndex
     if (0 <= currentIndex < questions.length) {
