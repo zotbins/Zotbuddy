@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
+  SafeAreaView,
+  Keyboard,
+} from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import Constants from 'expo-constants'
 import * as firebase from 'firebase'
@@ -7,12 +19,17 @@ import 'firebase/firestore'
 import { storeItem } from '../../util'
 import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
+//import BackArrow from '../../assets/svgs/BackArrow.svg'
 import Input from "../../components/Input";
 
 const SignUpForm =  props  => {
-  const { control, setValue, getValues, errors } = useForm()
+  const { control, register, setValue, getValues, errors } = useForm()
   const [err, setErr] = useState(null)
-
+  const [firstNameInputColor, setFirstNameInputColor] = useState('black')
+  const [lastNameInputColor, setLastNameInputColor] = useState('black')
+  const [emailInputColor, setEmailInputColor] = useState('black')
+  const [passInputColor, setPassInputColor] = useState('black')
+  const [marginTop, setMarginTop] = useState(100)
   const navigation = useNavigation()
 
   const clearLoginError = () => {
@@ -73,12 +90,40 @@ const SignUpForm =  props  => {
     }
   }
   
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setMarginTop(50)// or some other action
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setMarginTop(100); // or some other action
+      }
+    );
 
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, [register])
 
   console.log(errors)
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <SafeAreaView style={styles.container}>
+    <View style={styles.header}>
+      {/* <BackArrow onPress={() => navigation.navigate('Login')} style={styles.backArrowImage} /> */}
+    
+          <Text style={styles.title}>Create Account</Text>
+        </View>
+      <View style={[styles.loginBox, {marginTop: marginTop}]}>
+      <Text style={styles.helperText}>
+          Don't worry, you can always change this information later.
+      </Text>
       <Text style={styles.label}>First Name</Text>
       <Controller
             defaultValue=""
@@ -87,6 +132,7 @@ const SignUpForm =  props  => {
             
               <Input
                 name="firstname"
+                otherStyles={styles}
                 style={[styles.input, { borderColor: 'black' }]}
                 value={value}
                 placeholder = "First Name"
@@ -104,11 +150,7 @@ const SignUpForm =  props  => {
               }
             }}
           />
-      {/* <TextInput
-        style = {styles.input}
-        onChangeText = {text => setValue('firstname', text, true)}
-      />
-      {errors.firstname && <Text>This is required.</Text>} */}
+
 
       <Text style={styles.label}>Last Name</Text>
 
@@ -119,6 +161,7 @@ const SignUpForm =  props  => {
             
               <Input
                 name="lastname"
+                otherStyles={styles}
                 style={[styles.input, { borderColor: 'black' }]}
                 value={value}
                 placeholder = "Last Name"
@@ -136,11 +179,7 @@ const SignUpForm =  props  => {
               }
             }}
           />
-      {/* <TextInput
-        style = {styles.input}
-        onChangeText = {text => setValue('lastname', text, true)}
-      />
-      {errors.lastname && <Text>This is required.</Text>} */}
+
 
       <Text style={styles.label}>Email</Text>
 
@@ -151,6 +190,7 @@ const SignUpForm =  props  => {
             
               <Input
                 name="email"
+                otherStyles={styles}
                 style={[styles.input, { borderColor: 'black' }]}
                 value={value}
                 placeholder = "Email"
@@ -168,11 +208,7 @@ const SignUpForm =  props  => {
               }
             }}
           />
-      {/* <TextInput
-        style={styles.input}
-        onChangeText={text => setValue('email', text, true)}
-      />
-      {errors.email && <Text>This is required.</Text>} */}
+
 
       <Text style={styles.label}>Password</Text>
 
@@ -183,6 +219,7 @@ const SignUpForm =  props  => {
             
               <Input
                 name="password"
+                otherStyles={styles}
                 style={[styles.input, { borderColor: 'black' }]}
                 secureTextEntry={true}
                 value={value}
@@ -202,54 +239,143 @@ const SignUpForm =  props  => {
               }
             }}
           />
-      {/* <TextInput
-        style={styles.input}
-        secureTextEntry={true}
-        onChangeText={text => setValue('password', text, true)}
-      /> */}
+
       {err && <Text style= {styles.errorText}> {err} </Text>}
 
-
-    
       <Button title="Sign Up" onPress={onSignUp} styles={{marginBottom: 20}} />
       <Text></Text>
       <Button title="Back" onPress={() => props.navigation.goBack()} />
       
-      
     </View>
+    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  label: {
-    color: 'white',
-    margin: 20,
-    marginLeft: 0
-  },
-  button :{
-    marginTop: 40,
-    color: 'white',
-    backgroundColor: '#ec5990',
-    height: 40,
-    borderRadius: 4,
-  },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     paddingTop: Constants.statusBarHeight,
     padding: 8,
+    marginTop: 0,
     width: '100%',
-    backgroundColor: '#0e101c'
+    
+    backgroundColor: '#F4F4F4',
+  },
+  header: {
+    flex: .2,
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '95%',
+    padding: 3,
+    paddingBottom: 0,
+  },
+  loginBox: {
+    backgroundColor: 'white',
+    shadowColor: 'black',
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 10, height: 10 },
+    shadowRadius: 5,
+    elevation: 3,
+    flexShrink: 3,
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 3,
+    paddingBottom: 20,
+    width: '92%',
+    overflow: 'visible',
+  },
+  bottom: {
+
+    flex: 1,
+    marginBottom: 18,
+    justifyContent: 'flex-end',
+  },
+  logo: {
+    width: 300,
+    height: 150,
+    resizeMode: 'contain',
+    marginBottom: 0,
+    marginTop: 0,
+  },
+  title: {
+    fontSize: 26,
+    color: '#0064A4',
+    alignSelf: 'center',
+    fontWeight: 'bold',
+  },
+  label: {
+    fontSize: 14,
+    alignSelf: 'flex-start',
+    margin: 10,
+    marginLeft: 30,
+    marginBottom: -10,
+    backgroundColor: 'white',
+    zIndex: 4,
   },
   input: {
-    backgroundColor: 'white',
+    width: '95%',
+    borderWidth: 1,
+
     height: 40,
     padding: 10,
-    borderRadius: 4,
+    borderRadius: 5,
+  },
+  helperText: {
+    fontSize: 16,
+    alignSelf: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    color: '#6AA2B8',
+  },
+  backArrowImage: {
+    alignSelf: 'flex-start',
+    marginBottom: 90,
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+    marginRight: 13,
+
+  },
+  buttonImageFb: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+    marginRight: 6,
+  },
+  button: {
+    marginTop: 40,
+    marginBottom: 40,
+    borderRadius: 20,
+    width: 250,
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 18,
+    alignSelf: 'center',
+    color: 'black',
+  },
+  separator: {
+    marginTop: 13,
+    marginBottom: 13,
+    color: '#6AA2B8',
+  },
+  signUp: {
+    fontSize: 18,
+    alignSelf: 'center',
+    color: '#0064A4',
   },
   errorText: {
     alignSelf: 'flex-start',
-    paddingLeft: 20,
+    padding: 7,
     flexDirection: 'column',
     color: '#fa4646'
 }

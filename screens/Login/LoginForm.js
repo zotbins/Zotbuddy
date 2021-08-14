@@ -263,6 +263,7 @@ const LoginForm = (props) => {
             
               <Input
                 name="email"
+                otherStyles={styles}
                 error = {errors.email}
                 errorText={errors?.email?.message}
                 style={[styles.input, { borderColor: 'black' }]}
@@ -299,6 +300,7 @@ const LoginForm = (props) => {
  
               <Input
               name="password"
+              otherStyles={styles}
                 error = {errors.password}
                 errorText={errors?.password?.message}
                 value={value}
