@@ -72,9 +72,11 @@ const HomePage = (props) => {
     let userId = await SecureStore.getItemAsync('uid');
     let doc = await dbh.collection("users").doc(userId).get()
     let dataObj = doc.data()
-    let month = dataObj.dateSignedIn.substring(0, 2)
-    let day = dataObj.dateSignedIn.substring(3, 5)
-    let year = dataObj.dateSignedIn.substring(6, 10)
+    console.log(dataObj.dateSignedIn)
+    let dataSignedInArray = dataObj.dateSignedIn.split('/')
+    let month = dataSignedInArray[0]
+    let day = dataSignedInArray[1]
+    let year = dataSignedInArray[2]
     let date = new Date()
 
     if(dataObj.showQuiz == 1){
@@ -94,7 +96,7 @@ const HomePage = (props) => {
     || year != (date.getFullYear()).toString())){
       dbh.collection('users').doc(userId).update({
         showQuiz: 1,
-        dateSignedIn: (date.getMonth() + 1).toString() + "/" + (date.getDay()).toString() + "/" + (date.getFullYear()).toString()
+        dateSignedIn: (date.getMonth() + 1).toString() + "/" + (date.getDate()).toString() + "/" + (date.getFullYear()).toString()
       })
       console.log('Here3')
       setQuizDone(false)
@@ -111,7 +113,9 @@ const HomePage = (props) => {
     // <SafeAreaView style={styles.container}>
     // <ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow:1}}>    
     <View style={styles.container}>
-      <Button onPress={isQuizDone}></Button>
+      <TouchableOpacity styles={{border: '1px solid blue'}} onPress={isQuizDone}>
+        <Text>Test Button to Reload Quiz Check</Text>
+      </TouchableOpacity>
     <View style={styles.welcome}>
       <Text style={styles.nameStyle}>Welcome back, _____</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.profileButton}>
