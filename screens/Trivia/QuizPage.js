@@ -31,56 +31,33 @@ import QuizForm from './QuizForm'
  * This is just a quick MVP
  */
 
-const quizCategories = [
-  'Zero-Waste Goals',
-  "Let's talk trash",
-  'Sustainability in Dining',
-  'Sustainability Terms & Definitions',
-  'Be a Planteater',
-  'Testing',
-]
-
 LogBox.ignoreLogs(['Setting a timer'])
 
-const QuizPage = (props) => {
-  const [questions, setQuestions] = useState(null)
+const QuizPage = () => {
+  const [questions, setQuestions] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [chosenAnswer, setChosenAnswer] = useState(4)
 
-  const fetchChoice = async (docRefs) => {
+  const fetchAllQuestions = async () => {
     try {
-      let choices = []
-      for (let i = 0; i < docRefs.length; i++) {
-        const docSnapShot = await docRefs[i].get()
-        choices.push(docSnapShot.data())
-      }
-      return choices
-    } catch (err) {
-      console.log(err)
-    }
-  }
+      const questionArr = []
 
-  const fetchQuestions = async () => {
-    try {
-      const questionsRef = await firebase
+      const questionRef = await firebase
         .firestore()
-        .collection('question')
-        .limit(5)
+        .collection('questions')
         .get()
-      let questions = []
-      questionsRef.forEach((doc) => {
-        questions.push({
-          id: doc.id,
-          choices: doc.data().choices,
-          difficulty: doc.data().difficulty,
-          question: doc.data().question,
-        })
-      })
-      for (let i = 0; i < questions.length; i++) {
-        let choices = await fetchChoice(questions[i].choices)
-        questions[i].choices = choices
+
+      while (questionArr.length < 5) {
+        let random = Math.floor(Math.random() * questionRef.size)
+        if (questionArr.indexOf(random) === -1) {
+          questionArr.push({
+            choices: questionRef.docs[random].data().choices,
+            difficulty: questionRef.docs[random].data().difficulty,
+            question: questionRef.docs[random].data().question,
+            correctAnswer: questionRef.docs[random].data().correctAnswer,
+          })
+        }
       }
-      setQuestions([...questions])
+      setQuestions(questionArr)
     } catch (err) {
       console.error(err)
     }
@@ -91,7 +68,6 @@ const QuizPage = (props) => {
     if (0 <= currentIndex < questions.length) {
       setCurrentIndex(currentIndex + 1)
     }
-    setChosenAnswer(questions[currentIndex + 1].userChoice)
   }
 
   const previousQuestion = () => {
@@ -99,21 +75,16 @@ const QuizPage = (props) => {
     if (0 <= currentIndex < questions.length) {
       setCurrentIndex(currentIndex - 1)
     }
-    setChosenAnswer(questions[currentIndex - 1].userChoice)
   }
 
   const saveChoice = (choiceIndex) => {
     questions[currentIndex].userChoice = choiceIndex
     setQuestions([...questions])
-    setChosenAnswer(choiceIndex)
   }
 
   const calculateScore = () => {
     return questions.reduce((acc, question) => {
-      if (
-        question.userChoice &&
-        question.choices[question.userChoice].isAnswer
-      ) {
+      if (question.choices[question.userChoice] === question.correctAnswer) {
         return acc + 1
       } else {
         return acc
@@ -125,23 +96,32 @@ const QuizPage = (props) => {
     const correct = calculateScore()
     const dbh = firebase.firestore()
     let userId = await SecureStore.getItemAsync('uid')
-    let doc = await dbh.collection('users').doc(userId).get()
+    let doc = await firebase.firestore().collection('users').doc(userId).get()
     if (!doc.exists) {
       alert('No user data found!')
     } else {
       let dataObj = doc.data()
-      setValue('points', dataObj.points + correct, true)
+      await firebase
+        .firestore()
+        .collection('users')
+        .doc(userId)
+        .set({
+          ...dataObj,
+          points: dataObj.points + correct,
+          //showQuiz: 1, //uncomment after testing
+        })
     }
   }
 
   useEffect(() => {
     //fetch on first render
-    fetchQuestions()
+    //fetchQuestions()
+    fetchAllQuestions()
   }, [])
 
   return (
     <View style={styles.container}>
-      {questions ? (
+      {questions.length ? (
         <QuizForm
           questions={questions}
           currentIndex={currentIndex}
@@ -149,10 +129,9 @@ const QuizPage = (props) => {
           previousQuestion={previousQuestion}
           saveChoice={saveChoice}
           onSubmit={onSubmit}
-          chosenAnswer={chosenAnswer}
         />
       ) : (
-        <Text>Loading stuff</Text>
+        <Text>Loading Questions</Text>
       )}
     </View>
   )

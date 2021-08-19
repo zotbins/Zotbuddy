@@ -250,6 +250,7 @@ const LoginForm = (props) => {
           <TouchableOpacity
             style={[styles.button, { backgroundColor: '#0064A4' }]}
             onPress={onLogin}
+            // onPress={testLogin}
           >
             <Text style={[styles.buttonText, { color: 'white' }]}>Login</Text>
           </TouchableOpacity>

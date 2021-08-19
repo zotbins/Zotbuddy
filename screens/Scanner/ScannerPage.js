@@ -14,10 +14,12 @@ import {
 } from 'native-base'
 
 import BarCodeScannerComponent from '../../components/BarCodeScanner'
+import CameraPage from '../Camera/CameraPage'
 
-const ScannerPage = props => {
+const ScannerPage = (props) => {
   console.log('scanner')
-  return (<BarCodeScannerComponent/>)
+  // return (<BarCodeScannerComponent/>)
+  return <CameraPage />
 }
 
 export default ScannerPage
