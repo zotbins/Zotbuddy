@@ -19,6 +19,10 @@ const ProfileForm =  props  => {
     navigation.navigate("ResetPassword")
   }
 
+  const toAboutUs = () => {
+    navigation.navigate("AboutUs")
+  }
+
   /*const displayData = async (_) => {
     const dbh = firebase.firestore()
     let userId = await SecureStore.getItemAsync('uid');
@@ -66,12 +70,16 @@ const ProfileForm =  props  => {
       <View style={styles.grayBorder}/>
 
       <View style={styles.button}>
-        <TouchableOpacity style={styles.profileButton} onPress={onSubmit}>
-          <Text style={styles.profileButtonText}>Submit</Text>
+        <TouchableOpacity style={styles.profileButton} onPress={onReset}>
+          <Text style={styles.profileButtonText}>Change Password</Text>
           <Text style={styles.profileButtonEnd}>></Text>  
         </TouchableOpacity>
-        <TouchableOpacity style={styles.lastProfileButton} onPress={onReset}>
-          <Text style={styles.profileButtonText}>Reset</Text>
+        <TouchableOpacity style={styles.profileButton}>
+          <Text style={styles.profileButtonText}>Manage Notifications</Text>
+          <Text style={styles.profileButtonEnd}>></Text>  
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.lastProfileButton} onPress={toAboutUs}>
+          <Text style={styles.profileButtonText}>About us</Text>
           <Text style={styles.profileButtonEnd}>></Text>  
         </TouchableOpacity>
         {/**
@@ -81,7 +89,6 @@ const ProfileForm =  props  => {
          * 
          * onPress => link with fb or gmail
          */}
-        
       </View>
       
 
