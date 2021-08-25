@@ -115,12 +115,9 @@ const SignUpForm =  props  => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
     <SafeAreaView style={styles.container}>
-    <View style={styles.header}>
-      {/* <BackArrow onPress={() => navigation.navigate('Login')} style={styles.backArrowImage} /> */}
-    
-          <Text style={styles.title}>Create Account</Text>
-        </View>
-      <View style={[styles.loginBox, {marginTop: marginTop}]}>
+
+      <Text style={styles.title}>Create Account</Text>
+      <View style={[styles.loginBox, {marginTop: marginTop}]}> 
       <Text style={styles.helperText}>
           Don't worry, you can always change this information later.
       </Text>
@@ -138,7 +135,14 @@ const SignUpForm =  props  => {
                 placeholder = "First Name"
                 onChangeText={(text) =>  {
                   clearLoginError()
-                  setValue('firstname', text, true)}}
+                  setValue('firstname', text, true)}
+                }
+                onFocus={() => 
+                  {setFirstNameInputColor('green')
+                  console.log("Hi i am on focus")
+                }
+                }
+                onBlur={() => setFirstNameInputColor('black')}
               />
     
             )}
@@ -168,6 +172,8 @@ const SignUpForm =  props  => {
                 onChangeText={(text) =>  {
                   clearLoginError()
                   setValue('lastname', text, true)}}
+                onFocus={() => setFirstNameInputColor('#6AA2B8')}
+                onBlur={() => setFirstNameInputColor('black')}
               />
     
             )}
@@ -228,6 +234,8 @@ const SignUpForm =  props  => {
                 onChangeText={(text) =>  {
                   clearLoginError()
                   setValue('password', text, true)}}
+                onFocus={() => setFirstNameInputColor('#6AA2B8')}
+                onBlur={() => setFirstNameInputColor('black')}
               />
     
             )}
@@ -242,36 +250,52 @@ const SignUpForm =  props  => {
 
       {err && <Text style= {styles.errorText}> {err} </Text>}
 
-      <Button title="Sign Up" onPress={onSignUp} styles={{marginBottom: 20}} />
-      <Text></Text>
-      <Button title="Back" onPress={() => props.navigation.goBack()} />
-      
-    </View>
+      <TouchableOpacity
+          style={[styles.button, { backgroundColor: '#0064A4' }]}
+          onPress={onSignUp}
+        >
+          <Text style={[styles.buttonText, { color: 'white' }]}>Finish</Text>
+        </TouchableOpacity>
+        {/* 
+    <Button title = "Sign In With Google" onPress={() => signInWithGoogleAsync()}/>
+    <Button title = "Sign In with Facebook" onPress={() => logInwithFacebookAsync()}></Button> */}
+      </View>
+      <View style={styles.bottom}>
+        <Text
+          onPress={() => navigation.navigate('Login')}
+          style={styles.signUp}
+        >
+          Already have an account?{' '}
+          <Text style={{ fontWeight: 'bold' }}>Sign in here!</Text>
+        </Text>
+      </View>
     </SafeAreaView>
-    </KeyboardAvoidingView>
+  </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'grey',
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingTop: Constants.statusBarHeight,
     padding: 8,
-    marginTop: 0,
     width: '100%',
-    
     backgroundColor: '#F4F4F4',
   },
   header: {
+    backgroundColor: 'pink',
     flex: .2,
     flexDirection: 'column',
     alignItems: 'center',
     width: '95%',
+
     padding: 3,
     paddingBottom: 0,
+  
   },
   loginBox: {
     backgroundColor: 'white',
@@ -283,8 +307,8 @@ const styles = StyleSheet.create({
     flexShrink: 3,
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 3,
-    paddingBottom: 20,
+    padding: 0,
+    paddingBottom: 10,
     width: '92%',
     overflow: 'visible',
   },
@@ -302,6 +326,8 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   title: {
+
+    marginTop: 10,
     fontSize: 26,
     color: '#0064A4',
     alignSelf: 'center',
@@ -375,7 +401,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     alignSelf: 'flex-start',
-    padding: 7,
+    paddingTop: 0,
+    paddingLeft: 20,
     flexDirection: 'column',
     color: '#fa4646'
 }

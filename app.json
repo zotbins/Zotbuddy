@@ -29,7 +29,8 @@
         "jsx",
         "json",
         "wasm",
-        "svg"
+        "svg",
+        "svgx"
       ]
     },
     "ios": {

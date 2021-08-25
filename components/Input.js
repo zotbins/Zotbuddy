@@ -3,30 +3,47 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity, TextInput, Text } from 'react-native';
 
 export default function Input(props){
-    console.log("styles is ", props.otherStyles.loginBox)
+
     if (props.value == ""){
         var eT = "Required"
-        console.log("OOpsies")
-    }else{
-        console.log(props.value)
     }
     return(
+        <React.Fragment>
         <View style={styles.loginBox}>
         <TextInput
             {...props}
             />
+        
+        </View>
         {eT && (
-            <Text style={[props.otherStyles.errorText]}>*{eT}</Text>
+            <View style={styles.errorBox}>
+            <Text style={[styles.errorText]}>*{eT}</Text>
+            </View>
         )}
-    </View>
+        {!eT && (
+            <Text style={[styles.errorText]}>{eT}</Text>
+        )}
+        
+    
+    </React.Fragment>
     );
 
 }
 const styles = StyleSheet.create({
+    errorBox: {
+        backgroundColor: 'white',
+        flexShrink: 0,
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '92%',
+        paddingBottom: 0
+ 
+
+    },
 
     loginBox: {
         backgroundColor: 'white',
-        flexShrink: 3,
+
         flexDirection: 'column',
         alignItems: 'center',
         width: '92%',
@@ -40,7 +57,9 @@ const styles = StyleSheet.create({
       },
     errorText: {
         alignSelf: 'flex-start',
-        padding: 7,
+        padding: 1,
+        paddingLeft: 20,
+        flexShrink: 3,
         flexDirection: 'column',
         color: '#fa4646'
     }

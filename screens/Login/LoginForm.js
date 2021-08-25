@@ -218,7 +218,7 @@ const LoginForm = (props) => {
           }
           else if (error.toString() == "Error: The password is invalid or the user does not have a password."){
             clearLoginError()
-            console.log("I come here")
+
             setErr("Wrong Password. Try Again or Reset it")
           }
           else if (error.toString() == "Error: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."){
@@ -228,6 +228,9 @@ const LoginForm = (props) => {
           else if (error.toString() == "Error: The email address is badly formatted."){
             clearLoginError()
             setErr("Invalid Email Format")
+          }
+          else{
+            alert(error.toString())
           }
 
           console.log(error.toString())
@@ -268,7 +271,7 @@ const LoginForm = (props) => {
                 errorText={errors?.email?.message}
                 style={[styles.input, { borderColor: 'black' }]}
                 value={value}
-                placeholder = "email"
+                placeholder = "Email"
                 onFocus={() => setUserInputColor('#6AA2B8')}
                 onBlur={() => setUserInputColor('black')}
                 onChangeText={(text) =>  {
@@ -304,7 +307,7 @@ const LoginForm = (props) => {
                 error = {errors.password}
                 errorText={errors?.password?.message}
                 value={value}
-                placeholder = "password"
+                placeholder = "Password"
                 style={[styles.input, { borderColor: 'black' }]}
                 onFocus={() => setUserInputColor('#6AA2B8')}
                 onBlur={() => setUserInputColor('black')}
@@ -482,6 +485,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     alignSelf: 'flex-start',
+    paddingTop: 0,
     paddingLeft: 20,
     flexDirection: 'column',
     color: '#fa4646'
