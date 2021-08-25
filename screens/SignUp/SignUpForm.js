@@ -12,18 +12,19 @@ import {
   SafeAreaView,
   Keyboard,
 } from 'react-native'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import Constants from 'expo-constants'
 import * as firebase from 'firebase'
 import 'firebase/firestore'
 import { storeItem } from '../../util'
 import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
-import BackArrow from '../../assets/svgs/BackArrow.svg'
-
+//import BackArrow from '../../assets/svgs/BackArrow.svg'
+import Input from "../../components/Input";
 
 const SignUpForm =  props  => {
-  const { register, setValue, getValues, errors } = useForm()
+  const { control, register, setValue, getValues, errors } = useForm()
+  const [err, setErr] = useState(null)
   const [firstNameInputColor, setFirstNameInputColor] = useState('black')
   const [lastNameInputColor, setLastNameInputColor] = useState('black')
   const [emailInputColor, setEmailInputColor] = useState('black')
@@ -31,11 +32,20 @@ const SignUpForm =  props  => {
   const [marginTop, setMarginTop] = useState(100)
   const navigation = useNavigation()
 
+  const clearLoginError = () => {
+    setErr(null)
+  }
+
   const onSignUp = async (_) => {
     const email = getValues('email')
     const password = getValues('password')
     const firstname = getValues('firstname')
     const lastname = getValues('lastname')
+
+    if (email == "" || password == "" || firstname == "" || lastname == ""){
+      console.log("Came here")
+      return;
+    }
 
     try{
       firebase.auth().createUserWithEmailAndPassword(email, password).then(async (res) => {
@@ -59,6 +69,22 @@ const SignUpForm =  props  => {
           console.log('SecureStore unavailable')
         }
       })
+      .catch(error => {
+        console.log(error.toString())
+        if (error.toString() == "Error: The email address is already in use by another account."){
+          clearLoginError()
+          setErr("The email address is already in use")
+        }
+        else if (error.toString() == "Error: The email address is badly formatted."){
+          clearLoginError()
+          setErr("Invalid Email Format")
+        }
+        else if (error.toString() == "Error: Password should be at least 6 characters"){
+          clearLoginError()
+          setErr("Password should be at least 6 characters")
+        }
+      
+      })
     }
     catch(error){
       console.log(error.toString())
@@ -66,10 +92,6 @@ const SignUpForm =  props  => {
   }
   
   useEffect(() => {
-    register({name: 'firstname'}, {required: true})
-    register({name: 'lastname'},{required: true})
-    register({ name: 'email'}, { required: true })
-    register({ name: 'password'}, { required: true })
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
@@ -91,81 +113,145 @@ const SignUpForm =  props  => {
 
   console.log(errors)
 
-  return (<KeyboardAvoidingView
-    style={{ flex: 1 }}
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-  >
+  return (
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
     <SafeAreaView style={styles.container}>
-    <View style={styles.header}>
-      <BackArrow onPress={() => navigation.navigate('Login')} style={styles.backArrowImage} />
-    
-          <Text style={styles.title}>Create Account</Text>
-        </View>
-      <View style={[styles.loginBox, {marginTop: marginTop}]}>
+
+      <Text style={styles.title}>Create Account</Text>
+      <View style={[styles.loginBox, {marginTop: marginTop}]}> 
       <Text style={styles.helperText}>
           Don't worry, you can always change this information later.
-        </Text>
+      </Text>
       <Text style={styles.label}>First Name</Text>
-      <TextInput
-          style={[styles.input, { borderColor: firstNameInputColor }]}
-          onFocus={() => setFirstNameInputColor('#6AA2B8')}
-          onBlur={() => setFirstNameInputColor('black')}
-        onChangeText = {text => setValue('firstname', text, true)}
-      />
-      {errors.firstname && <Text>This is required.</Text>}
+      <Controller
+            defaultValue=""
+            control={control}
+            render={({onChange, onBlur, value}) => (
+            
+              <Input
+                name="firstname"
+                otherStyles={styles}
+                style={[styles.input, { borderColor: 'black' }]}
+                value={value}
+                placeholder = "First Name"
+                onChangeText={(text) =>  {
+                  clearLoginError()
+                  setValue('firstname', text, true)}
+                }
+                onFocus={() => 
+                  {setFirstNameInputColor('green')
+                  console.log("Hi i am on focus")
+                }
+                }
+                onBlur={() => setFirstNameInputColor('black')}
+              />
+    
+            )}
+            name="firstname"
+            rules={{
+              required: {
+                value:true,
+                message: 'First Name is required'
+              }
+            }}
+          />
+
 
       <Text style={styles.label}>Last Name</Text>
-      <TextInput
-          style={[styles.input, { borderColor: lastNameInputColor }]}
-          onFocus={() => setLastNameInputColor('#6AA2B8')}
-          onBlur={() => setLastNameInputColor('black')}
-        onChangeText = {text => setValue('lastname', text, true)}
-      />
-      {errors.lastname && <Text>This is required.</Text>}
+
+      <Controller
+            defaultValue=""
+            control={control}
+            render={({onChange, onBlur, value}) => (
+            
+              <Input
+                name="lastname"
+                otherStyles={styles}
+                style={[styles.input, { borderColor: 'black' }]}
+                value={value}
+                placeholder = "Last Name"
+                onChangeText={(text) =>  {
+                  clearLoginError()
+                  setValue('lastname', text, true)}}
+                onFocus={() => setFirstNameInputColor('#6AA2B8')}
+                onBlur={() => setFirstNameInputColor('black')}
+              />
+    
+            )}
+            name="lastname"
+            rules={{
+              required: {
+                value:true,
+                message: 'Last Name is required'
+              }
+            }}
+          />
+
 
       <Text style={styles.label}>Email</Text>
-      <TextInput
-          style={[styles.input, { borderColor: emailInputColor }]}
-          onFocus={() => setEmailInputColor('#6AA2B8')}
-          onBlur={() => setEmailInputColor('black')}
-        onChangeText={text => setValue('email', text, true)}
-      />
-      {errors.email && <Text>This is required.</Text>}
+
+      <Controller
+            defaultValue=""
+            control={control}
+            render={({onChange, onBlur, value}) => (
+            
+              <Input
+                name="email"
+                otherStyles={styles}
+                style={[styles.input, { borderColor: 'black' }]}
+                value={value}
+                placeholder = "Email"
+                onChangeText={(text) =>  {
+                  clearLoginError()
+                  setValue('email', text, true)}}
+              />
+    
+            )}
+            name="email"
+            rules={{
+              required: {
+                value:true,
+                message: 'Email is required'
+              }
+            }}
+          />
+
 
       <Text style={styles.label}>Password</Text>
-      <TextInput
-          style={[styles.input, { borderColor: passInputColor }]}
-          onFocus={() => setPassInputColor('#6AA2B8')}
-          onBlur={() => setPassInputColor('black')}
-        secureTextEntry={true}
-        onChangeText={text => setValue('password', text, true)}
-      />
-      {errors.password && <Text>This is required.</Text>}
 
+      <Controller
+            defaultValue=""
+            control={control}
+            render={({onChange, onBlur, value}) => (
+            
+              <Input
+                name="password"
+                otherStyles={styles}
+                style={[styles.input, { borderColor: 'black' }]}
+                secureTextEntry={true}
+                value={value}
+                placeholder = "Password"
 
-        {/* <Text style={[styles.label, { color: userInputColor }]}>Email</Text>
-        <TextInput
-          style={[styles.input, { borderColor: userInputColor }]}
-          onFocus={() => setUserInputColor('#6AA2B8')}
-          onBlur={() => setUserInputColor('black')}
-          onChangeText={(text) => setValue('email', text, true)}
-        />
+                onChangeText={(text) =>  {
+                  clearLoginError()
+                  setValue('password', text, true)}}
+                onFocus={() => setFirstNameInputColor('#6AA2B8')}
+                onBlur={() => setFirstNameInputColor('black')}
+              />
+    
+            )}
+            name="password"
+            rules={{
+              required: {
+                value:true,
+                message: 'Password is required'
+              }
+            }}
+          />
 
-        {errors.email && <Text>This is required.</Text>}
+      {err && <Text style= {styles.errorText}> {err} </Text>}
 
-        <Text style={[styles.label, { color: passInputColor }]}>
-          Password
-        </Text>
-        <TextInput
-          style={[styles.input, { borderColor: passInputColor }]}
-          onFocus={() => setPassInputColor('#6AA2B8')}
-          onBlur={() => setPassInputColor('black')}
-          secureTextEntry={true}
-          onChangeText={(text) => setValue('password', text, true)}
-        />
-        {errors.password && <Text>This is required.</Text>} */}
-
-        <TouchableOpacity
+      <TouchableOpacity
           style={[styles.button, { backgroundColor: '#0064A4' }]}
           onPress={onSignUp}
         >
@@ -173,7 +259,6 @@ const SignUpForm =  props  => {
         </TouchableOpacity>
         {/* 
     <Button title = "Sign In With Google" onPress={() => signInWithGoogleAsync()}/>
-
     <Button title = "Sign In with Facebook" onPress={() => logInwithFacebookAsync()}></Button> */}
       </View>
       <View style={styles.bottom}>
@@ -187,48 +272,12 @@ const SignUpForm =  props  => {
       </View>
     </SafeAreaView>
   </KeyboardAvoidingView>
-    // <View style={styles.container}>
-    //   <Text style={styles.label}>First Name</Text>
-    //   <TextInput
-    //     style = {styles.input}
-    //     onChangeText = {text => setValue('firstname', text, true)}
-    //   />
-    //   {errors.firstname && <Text>This is required.</Text>}
-
-    //   <Text style={styles.label}>Last Name</Text>
-    //   <TextInput
-    //     style = {styles.input}
-    //     onChangeText = {text => setValue('lastname', text, true)}
-    //   />
-    //   {errors.lastname && <Text>This is required.</Text>}
-
-    //   <Text style={styles.label}>Email</Text>
-    //   <TextInput
-    //     style={styles.input}
-    //     onChangeText={text => setValue('email', text, true)}
-    //   />
-    //   {errors.email && <Text>This is required.</Text>}
-
-    //   <Text style={styles.label}>Password</Text>
-    //   <TextInput
-    //     style={styles.input}
-    //     secureTextEntry={true}
-    //     onChangeText={text => setValue('password', text, true)}
-    //   />
-    //   {errors.password && <Text>This is required.</Text>}
-
-    
-    //   <Button title="Sign Up" onPress={onSignUp} styles={{marginBottom: 20}} />
-    //   <Text></Text>
-    //   <Button title="Back" onPress={() => props.navigation.goBack()} />
-      
-      
-    // </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'grey',
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-end',
@@ -237,16 +286,18 @@ const styles = StyleSheet.create({
     padding: 8,
     marginTop: 0,
     width: '100%',
-    
     backgroundColor: '#F4F4F4',
   },
   header: {
+    backgroundColor: 'pink',
     flex: .2,
     flexDirection: 'column',
     alignItems: 'center',
     width: '95%',
+
     padding: 3,
     paddingBottom: 0,
+  
   },
   loginBox: {
     backgroundColor: 'white',
@@ -258,8 +309,8 @@ const styles = StyleSheet.create({
     flexShrink: 3,
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 3,
-    paddingBottom: 20,
+    padding: 0,
+    paddingBottom: 10,
     width: '92%',
     overflow: 'visible',
   },
@@ -277,6 +328,8 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   title: {
+
+    marginTop: 10,
     fontSize: 26,
     color: '#0064A4',
     alignSelf: 'center',
@@ -348,6 +401,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#0064A4',
   },
+  errorText: {
+    alignSelf: 'flex-start',
+    paddingTop: 0,
+    paddingLeft: 20,
+    flexDirection: 'column',
+    color: '#fa4646'
+}
 })
 
 export default SignUpForm;

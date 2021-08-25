@@ -119,10 +119,11 @@ export default class MapPage extends React.Component {
       west: null,
       north: null,
       east: null,
-      latitude: null,
-      longitude: null,
+      latitude: 33.647250,
+      longitude: -117.838600,
       closestBin: "Default",
       distance: "N/A Mile(s) Away",
+      cannotFindLocation: true,
       uniqueValue: 1,
       showInstructions: false,
     };
@@ -152,6 +153,7 @@ export default class MapPage extends React.Component {
       ...this.state,
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
+      cannotFindLocation: false
     });
 
     // Location used to show the Zotbins on the map
@@ -184,6 +186,7 @@ export default class MapPage extends React.Component {
       this.updateState(location);
     } catch (error) {
       console.log(error);
+      
     }
   }
 
@@ -276,7 +279,7 @@ export default class MapPage extends React.Component {
             <Marker style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: 33.647250, longitude: -117.846600 }} /> */}
 
           </MapView> 
-          {this.state.latitude == null ?
+          {this.state.cannotFindLocation ?
           <View style={styles.overlay}>
             {!this.state.showInstructions ?
             <View>
