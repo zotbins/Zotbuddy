@@ -8,7 +8,8 @@ import {
   LogBox,
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
-import firebase from 'firebase'
+import * as firebase from 'firebase'
+import 'firebase/firestore'
 import * as SecureStore from 'expo-secure-store'
 import {
   Container,
@@ -122,8 +123,9 @@ const QuizPage = (props) => {
 
   const onSubmit = async () => {
     const correct = calculateScore()
+    const dbh = firebase.firestore()
     let userId = await SecureStore.getItemAsync('uid')
-    let doc = dbh.collection('users').doc(userId).get()
+    let doc = await dbh.collection('users').doc(userId).get()
     if (!doc.exists) {
       alert('No user data found!')
     } else {
