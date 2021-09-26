@@ -41,8 +41,9 @@ import { TapGestureHandler } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   mapView: {
-    flexShrink: 1,
-    height: '100%'
+    flex: 1,
+    height: '100%',
+    width: '100%'
   }, calloutText: {
     flexGrow: 1,
     flexDirection: 'column',

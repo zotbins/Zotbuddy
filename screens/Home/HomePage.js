@@ -32,51 +32,72 @@ import {
 
 import ProgressCircle from 'react-native-progress-circle'
 import MapPage from '../Map/MapPage'
-import Leaderboard from '../Trivia/Leaderboard'
+import LeaderboardPage from '../Leaderboard/LeaderboardPage'
 
 import uciDiningLogo from '../../assets/images/UCIDining_logo.png'
 import zotbinsLogo from '../../assets/images/ZotBins_logo_slow_blink.gif'
 import zotBuddyLogo from '../../assets/images/petr.jpg'
-import { Constants } from 'expo-barcode-scanner'
+// import { Constants } from 'expo-barcode-scanner'
+import { Feather } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SmileySvg from '../../assets/svgs/smiley.svg'
 import { useEffect } from 'react'
+import { Ionicons } from '@expo/vector-icons';
 
 const HomePage = (props) => {
   const [quizDone, setQuizDone] = useState(false);
   const [checkQuiz, setCheckQuiz] = useState(true);
+  const [getName, setGetName] = useState(true);
   const [quizPoints, setQuizPoints] = useState(0);
   const [boolean, setBoolean] = useState(true); 
+  const [firstName, setFirstName] = useState('');
   const navigation = useNavigation()
 
 
   useEffect(() => {
     if (checkQuiz) {
       console.log('here')
+      
       isQuizDone();
     }
+
+    if (getName) {
+      getFirstName();
+    }
+    
     console.log('here')
-    console.log(quizDone);
+    console.log(firstName);
     
 
   });
+
+  const getFirstName = async(_) => {
+    const dbh = firebase.firestore()
+    let userId = await SecureStore.getItemAsync('uid');
+    let doc =  await dbh.collection("users").doc(userId).get()
+    let dataObj = doc.data()
+    console.log(dataObj.points)
+    setFirstName(dataObj.firstname)
+    setGetName(false)
+  }
 
   const toHome = useCallback(() => {
     navigation.navigate('Trivia')
   }, [])
 
   const isQuizDone = async (_) => {
-    console.log("test")
+    console.log(Constants.expoVersion)
     const dbh = firebase.firestore()
     console.log("test")
     let userId = await SecureStore.getItemAsync('uid');
     let doc = await dbh.collection("users").doc(userId).get()
     let dataObj = doc.data()
     console.log(dataObj.dateSignedIn)
-    let dataSignedInArray = dataObj.dateSignedIn.split('/')
-    let month = dataSignedInArray[0]
-    let day = dataSignedInArray[1]
-    let year = dataSignedInArray[2]
+    let dateSignedInArray = dataObj.dateSignedIn.split('/')
+    let month = dateSignedInArray[0]
+    let day = dateSignedInArray[1]
+    let year = dateSignedInArray[2]
     let date = new Date()
 
     if(dataObj.showQuiz == 1){
@@ -117,7 +138,7 @@ const HomePage = (props) => {
         <Text>Test Button to Reload Quiz Check</Text>
       </TouchableOpacity>
     <View style={styles.welcome}>
-      <Text style={styles.nameStyle}>Welcome back, _____</Text>
+      <Text style={styles.nameStyle}>Welcome back, {firstName}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.profileButton}>
         <SmileySvg style={styles.smile}/>
       </TouchableOpacity>
@@ -165,7 +186,7 @@ const HomePage = (props) => {
       <Text onPress={() => navigation.navigate('Leaderboard')} style={styles.seeMore}>See More</Text>
     </View>
     <View style={styles.leaderboard}>
-      <Leaderboard />
+      <LeaderboardPage />
     </View>
 
     <View style={styles.topText}>
@@ -246,7 +267,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   leaderboard: {
-    flexShrink: 2,
+    flex: 2,
     // backgroundColor: "white",
     borderRadius: 20,
     overflow: 'hidden',

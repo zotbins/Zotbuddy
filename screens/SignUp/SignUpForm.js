@@ -11,6 +11,7 @@ import {
   ScrollView,
   SafeAreaView,
   Keyboard,
+  Dimensions,
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import Constants from 'expo-constants'
@@ -29,7 +30,7 @@ const SignUpForm =  props  => {
   const [lastNameInputColor, setLastNameInputColor] = useState('black')
   const [emailInputColor, setEmailInputColor] = useState('black')
   const [passInputColor, setPassInputColor] = useState('black')
-  const [marginTop, setMarginTop] = useState(100)
+  const [marginTop, setMarginTop] = useState("15%")
   const navigation = useNavigation()
 
   const clearLoginError = () => {
@@ -95,13 +96,14 @@ const SignUpForm =  props  => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        setMarginTop(50)// or some other action
+        console.log(Dimensions.get('window').height / 10)
+        setMarginTop("5%")// or some other action
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
-        setMarginTop(100); // or some other action
+        setMarginTop("15%"); // or some other action
       }
     );
 
@@ -285,7 +287,7 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     padding: 8,
     marginTop: 0,
-    width: '100%',
+    width: "100%",
     backgroundColor: '#F4F4F4',
   },
   header: {
@@ -317,7 +319,7 @@ const styles = StyleSheet.create({
   bottom: {
 
     flex: 1,
-    marginBottom: 18,
+    marginBottom: 1,
     justifyContent: 'flex-end',
   },
   logo: {

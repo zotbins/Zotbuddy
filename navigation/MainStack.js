@@ -1,6 +1,7 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Icon } from 'native-base'
+// import { Icon } from 'native-base'
+import { Feather } from '@expo/vector-icons';
 
 import HomePage from '../screens/Home/HomePage'
 import AboutPage from '../screens/About/AboutPage'
@@ -12,6 +13,10 @@ import SocialFeedPage from '../screens/SocialFeed/SocialFeedPage'
 import MapPage from '../screens/Map/MapPage'
 import QuizPage from '../screens/Trivia/QuizPage'
 
+import NavCamera from '../assets/svgs/NavCamera.svg'
+import NavEvent from '../assets/svgs/NavEvent.svg'
+import NavHome from '../assets/svgs/NavHome.svg'
+
 const Tab = createBottomTabNavigator()
 
 const MainStack = () => {
@@ -22,46 +27,26 @@ const MainStack = () => {
           let iconName
           switch (route.name) {
             case 'Home':
-              iconName = 'home'
-              break
-            case 'About':
-              iconName = 'home'
-              break
-            case 'Trivia':
-              iconName = 'albums-outline'
-              break
+              return <NavHome />
             case 'Scanner':
-              iconName = 'trash-bin-outline'
-              break
-            case 'Profile':
-              iconName = 'person-outline'
-              break
+              return <NavCamera />
             case 'Events':
-              iconName = 'calendar-clear-outline'
-              break
-            case 'SocialFeed':
-              iconName = 'logo-instagram'
-            case 'Map':
-              iconName = 'map-pin'
+              return <NavEvent />
             default:
               break
           }
-          return <Icon name={iconName} style={{ color }} />
+          return <Feather name={iconName}  size={24} style={{ color }} />
+          // return <Ionicons name='home' size={24} style={{ color }} />
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'tomato',
+        activeTintColor: '#0064A4',
         inactiveTintColor: 'gray',
       }}
     >
       <Tab.Screen name="Home" component={HomePage} />
-      <Tab.Screen name="About" component={AboutPage} />
-      <Tab.Screen name="Trivia" component={QuizPage} />
       <Tab.Screen name="Scanner" component={ScannerPage} />
-      <Tab.Screen name="Profile" component={ProfilePage} />
       <Tab.Screen name="Events" component={EventsPage} />
-      <Tab.Screen name="SocialFeed" component={SocialFeedPage} />
-      <Tab.Screen name="Map" component={MapPage} />
     </Tab.Navigator>
   )
 }
