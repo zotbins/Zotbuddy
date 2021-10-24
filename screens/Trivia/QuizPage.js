@@ -25,6 +25,7 @@ import {
   CardItem,
 } from 'native-base'
 import QuizForm from './QuizForm'
+import { useNavigation } from '@react-navigation/native'
 
 /**
  * Styles need to be refactored for different platforms
@@ -43,6 +44,7 @@ const quizCategories = [
 LogBox.ignoreLogs(['Setting a timer'])
 
 const QuizPage = (props) => {
+  const navigation = useNavigation()
   const [questions, setQuestions] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [chosenAnswer, setChosenAnswer] = useState(4)
@@ -64,7 +66,7 @@ const QuizPage = (props) => {
     try {
       const questionsRef = await firebase
         .firestore()
-        .collection('question')
+        .collection('questions')
         .limit(5)
         .get()
       let questions = []
@@ -74,12 +76,13 @@ const QuizPage = (props) => {
           choices: doc.data().choices,
           difficulty: doc.data().difficulty,
           question: doc.data().question,
+          correctAnswer: doc.data().correctAnswer
         })
       })
-      for (let i = 0; i < questions.length; i++) {
-        let choices = await fetchChoice(questions[i].choices)
-        questions[i].choices = choices
-      }
+      // for (let i = 0; i < questions.length; i++) {
+      //   let choices = await fetchChoice(questions[i].choices)
+      //   questions[i].choices = choices
+      // }
       setQuestions([...questions])
     } catch (err) {
       console.error(err)
@@ -111,11 +114,20 @@ const QuizPage = (props) => {
   const calculateScore = () => {
     return questions.reduce((acc, question) => {
       if (
-        question.userChoice &&
-        question.choices[question.userChoice].isAnswer
+        question.choices[question.userChoice] ==
+        question.correctAnswer
       ) {
+        console.log("Correct")
+        console.log(question.question)
+        console.log(question.choices[question.userChoice])
+        console.log(question.correctAnswer)
         return acc + 1
       } else {
+        console.log("Incorrect")
+        console.log(question.question)
+        console.log(question.userChoice)
+        console.log(question.choices[question.userChoice])
+        console.log(question.correctAnswer)
         return acc
       }
     }, 0)
@@ -130,7 +142,15 @@ const QuizPage = (props) => {
       alert('No user data found!')
     } else {
       let dataObj = doc.data()
-      setValue('points', dataObj.points + correct, true)
+      dataObj.points = correct
+      console.log(dataObj.points)
+      dbh.collection('users').doc(userId).update({
+        points: dataObj.points,
+        showQuiz: 0,
+        
+      })
+      navigation.navigate("Main")
+      // setValue('points', dataObj.points + correct, true)
     }
   }
 

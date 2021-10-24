@@ -53,15 +53,17 @@ const ProfileForm =  props  => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{props.blood.firstname} {props.blood.lastname}</Text>
-      <Text style={styles.points}>{props.blood.points} Points</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>{props.blood.firstname} {props.blood.lastname}</Text>
+        <Text style={styles.points}>{props.blood.points} Points</Text>
+      </View>
 
       <View style={styles.grayBorder}/>
 
         
       <View style={styles.infoBox}>
-        <Text style={styles.infoTitle}>Full Name</Text>
-        <Text style={styles.infoName}>{props.blood.firstname} {props.blood.lastname}</Text>
+        {/* <Text style={styles.infoTitle}>Full Name</Text>
+        <Text style={styles.infoName}>{props.blood.firstname} {props.blood.lastname}</Text> */}
         
         <Text style={styles.infoTitle}>Email</Text>
         <Text style={styles.info}>{props.blood.email}</Text>
@@ -100,6 +102,12 @@ const ProfileForm =  props  => {
 }
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 30,
+    marginRight: 30
+  },
   profileButtonText: {
     fontSize: 16,
     marginLeft: 10

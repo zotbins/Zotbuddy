@@ -44,7 +44,7 @@ const QuizForm = (props) => {
                     return(
                         <TouchableOpacity onPress={() => saveChoice(index)} key={index}>
                             <Card style={chosenAnswer === index ? styles.answerChosenCard : styles.answerCard}>
-                                <Text style={chosenAnswer === index ? styles.cardChosenText : styles.cardText}>{choice.choiceText}</Text>
+                                <Text style={chosenAnswer === index ? styles.cardChosenText : styles.cardText}>{choice}</Text>
                             </Card>
                         </TouchableOpacity>
                     )

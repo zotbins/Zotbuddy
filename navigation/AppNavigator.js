@@ -14,6 +14,8 @@ import TriviaPage from '../screens/Trivia/TriviaPage'
 import ProfilePage from '../screens/Profile/ProfilePage'
 import AboutPage from '../screens/About/AboutPage'
 import QuizPage from '../screens/Trivia/QuizPage'
+import SocialFeedPage from '../screens/SocialFeed/SocialFeedPage'
+import QuizForm from '../screens/Trivia/QuizForm'
 
 
 const Stack = createStackNavigator()
@@ -37,6 +39,7 @@ const AppNavigator = props => {
             <Stack.Screen name='Profile' component={ProfilePage} />
             <Stack.Screen name='AboutUs' component={AboutPage} />
             <Stack.Screen name='Quiz' component={QuizPage} />
+            <Stack.Screen name='SocialMedia' component={SocialFeedPage} />
             
 
             

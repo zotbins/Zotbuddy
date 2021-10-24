@@ -65,10 +65,17 @@ const HomePage = (props) => {
     if (getName) {
       getFirstName();
     }
+
+    const navigatedTo = navigation.addListener('focus', () => {
+      setCheckQuiz(true)
+    });
     
     console.log('here')
     console.log(firstName);
-    
+    return () => {
+      // Unsubscribe for the focus Listener
+      navigatedTo;
+    };
 
   });
 
@@ -102,6 +109,10 @@ const HomePage = (props) => {
 
     if(dataObj.showQuiz == 1){
       console.log('Here')
+      dbh.collection('users').doc(userId).update({
+        showQuiz: 1,
+        dateSignedIn: (date.getMonth() + 1).toString() + "/" + (date.getDate()).toString() + "/" + (date.getFullYear()).toString()
+      })
       setQuizDone(false)
       
     }
@@ -174,7 +185,7 @@ const HomePage = (props) => {
     :
     <View style={styles.trivia} >
       <Text>Take today’s quiz to boost your ranking!</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Trivia')} style={styles.button}>
+      <TouchableOpacity onPress={() => navigation.navigate('Quiz')} style={styles.button}>
         <Text style={{color: "#6AA2B8", textAlign: 'center'}}>Take Quiz</Text>
       </TouchableOpacity>
     </View>
