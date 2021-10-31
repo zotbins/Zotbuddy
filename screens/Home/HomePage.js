@@ -54,7 +54,6 @@ const HomePage = (props) => {
   const [firstName, setFirstName] = useState('');
   const navigation = useNavigation()
 
-
   useEffect(() => {
     if (checkQuiz) {
       console.log('here')
@@ -70,8 +69,9 @@ const HomePage = (props) => {
       setCheckQuiz(true)
     });
     
-    console.log('here')
+    console.log('first')
     console.log(firstName);
+
     return () => {
       // Unsubscribe for the focus Listener
       navigatedTo;
@@ -197,7 +197,7 @@ const HomePage = (props) => {
       <Text onPress={() => navigation.navigate('Leaderboard')} style={styles.seeMore}>See More</Text>
     </View>
     <View style={styles.leaderboard}>
-      <LeaderboardPage />
+      <LeaderboardPage/>
     </View>
 
     <View style={styles.topText}>
