@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import { Text, View, StyleSheet, TextInput, Button, FlatList, SafeAreaView, Image, TouchableHighlight, Platform,} from 'react-native'
+import { Text, View, StyleSheet, Pressable, FlatList, SafeAreaView, Image, TouchableHighlight, Modal,} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import {
     responsiveHeight,
     responsiveWidth,
     responsiveFontSize
   } from "react-native-responsive-dimensions";
+
+import { BlurView } from 'expo-blur'
 
 {/* Iphone figma Width: 375, Height: 812 */}
 
@@ -14,7 +16,8 @@ const LeaderboardForm = props => {
     let arr = props.blood
     let currentEmail = props.email
     let currentObj;
-
+    const sortTitles = ["Sort By:", "Rank: Highest", "Rank: Lowest", "Name: A-Z", "Name: Z-A"]
+    
     const getCurrentObj = () => {
         let userObj
         for (const obj of arr) {
@@ -25,14 +28,43 @@ const LeaderboardForm = props => {
     }
     currentObj = getCurrentObj()
 
-    console.log("OBJECT",currentObj)
+    const [modalVisible, setModalVisible] = useState(false);
 
     const backPage = () => {
         navigation.goBack()
     }
     return(
         <SafeAreaView style = {styles.container}>
-   
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible)
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Sort By:</Text>
+                        <Text style={{...styles.modalText, color: "#4B83D7"}}>Rank: Highest</Text>
+                        <Text style={{...styles.modalText, color: "#4B83D7"}}>Rank: Lowest</Text>
+                        <Text style={{...styles.modalText, color: "#4B83D7"}}>Name: A-Z</Text>
+                        <Text style={{...styles.modalText, color: "#4B83D7"}}>Name: Z-A</Text>
+                    </View>
+                    
+                    <View style={{alignItems: "center", paddingTop: responsiveHeight(0.74)}}>
+                        <Pressable
+                            underlayColor="transparent"
+                            style={styles.button}
+                            onPress={() => setModalVisible(!modalVisible)}
+                        >
+                            <Text style={{...styles.modalText, bottom: 15}}>Cancel</Text>
+                        </Pressable>
+                    </View>
+
+                </View>
+            </Modal>
+
             <View style={styles.flatListContainer}>
                 <FlatList
                     ListHeaderComponent={
@@ -58,7 +90,7 @@ const LeaderboardForm = props => {
                         </View>
 
                         <View style={styles.sortContainer}>
-                            <TouchableHighlight underlayColor="transparent" onPress={backPage}>
+                            <TouchableHighlight underlayColor="transparent" onPress={() => setModalVisible(true)}>
                                 <Text style = {styles.sortTitle}>Sort</Text>
                             </TouchableHighlight>
                         </View>
@@ -78,26 +110,60 @@ const LeaderboardForm = props => {
                             <Text style = {{...styles.font, ...styles.rankText}}>Rank {item.key}</Text>
                             <Text style = {{...styles.font, ...styles.pointsText}}>{item.points} Points</Text>   
                         </View>
-                        
                     }
                     keyExtractor = {item => item.key.toString()}
                 />
             </View>
-        </SafeAreaView>
+       </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        top: responsiveHeight(54)
+    },
+
+    modalView: {
+        marginHorizontal: responsiveWidth(14.13),
+        backgroundColor: "white",
+        borderRadius: 15,
+        alignItems: "center",
+        height: responsiveHeight(36.21),
+        elevation: 5,
+        paddingTop: 5
+    },
+
+    button: {
+        borderRadius: 15,
+        paddingTop: 10,
+        elevation: 5,
+        backgroundColor: "white",
+        width: responsiveWidth(71.73)
+    },
+    textStyle: {
+        color: "#4B83D7",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginTop: 16,
+        textAlign: "center",
+        fontWeight: "bold", 
+        fontSize: 20,
+        color: 'black'
+    },
     container: {
         flex: 1,
         backgroundColor: "#F4F4F4",
         paddingTop: 48,
         paddingHorizontal: 20,
+
     },
 
     flatListContainer: {
         alignItems: 'center', 
-        marginBottom: 36
+        marginBottom: 36,
     },
 
     pageTitle: {

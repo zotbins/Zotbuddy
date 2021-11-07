@@ -143,11 +143,11 @@ const HomePage = (props) => {
   }
   return (
     // <SafeAreaView style={styles.container}>
-    // <ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow:1}}>    
+    <ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow:1}}>    
     <View style={styles.container}>
-      <TouchableOpacity styles={{border: '1px solid blue'}} onPress={isQuizDone}>
+      {/* <TouchableOpacity styles={{border: '1px solid blue'}} onPress={isQuizDone}>
         <Text>Test Button to Reload Quiz Check</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     <View style={styles.welcome}>
       <Text style={styles.nameStyle}>Welcome back, {firstName}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.profileButton}>
@@ -197,7 +197,7 @@ const HomePage = (props) => {
       <Text onPress={() => navigation.navigate('Leaderboard')} style={styles.seeMore}>See More</Text>
     </View>
     <View style={styles.leaderboard}>
-      <LeaderboardPage/>
+      <LeaderboardPage page={"home"}/>
     </View>
 
     <View style={styles.topText}>
@@ -209,7 +209,7 @@ const HomePage = (props) => {
     </View>
 
     </View>
-    // </ScrollView>
+    </ScrollView>
     // </SafeAreaView>
   )
 }
@@ -281,7 +281,6 @@ const styles = StyleSheet.create({
     flex: 2,
     // backgroundColor: "white",
     borderRadius: 20,
-    overflow: 'hidden',
   },
   nearby_bins: {
     paddingTop: 5,
@@ -292,7 +291,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   scrollView: {
-    marginHorizontal: 20,
+    marginHorizontal: 0,
   },
 })
 
