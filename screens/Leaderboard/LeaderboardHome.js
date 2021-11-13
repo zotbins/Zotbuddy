@@ -6,7 +6,7 @@ import {
     responsiveWidth,
     responsiveFontSize
   } from "react-native-responsive-dimensions";
-  
+
 {/* Iphone figma Width: 375, Height: 812 */}
 
 const LeaderboardHome = props => {
@@ -41,14 +41,14 @@ const LeaderboardHome = props => {
                     </Text>
                 </View>
 
-                <FlatList
-                    data = {arr.slice(0,3)}
+                {/* <FlatList
+                    data = {arr.slice(0,1)}
                     renderItem = {({item}) =>
                         <View style = {{width: responsiveWidth(89.3),
                                         borderTopLeftRadius: item.key == 1 ? 15 : 0,
                                         borderTopRightRadius: item.key == 1 ? 15 : 0,
-                                        borderBottomLeftRadius: item.key == 3 ? 15 : 0,
-                                        borderBottomRightRadius: item.key == 3 ? 15 : 0,
+                                        borderBottomLeftRadius: item.key == 1 ? 15 : 0,
+                                        borderBottomRightRadius: item.key == 1 ? 15 : 0,
                                         backgroundColor:"#FFFFFF", marginBottom: item.key != 3 ? 2 : 0}}>
                             <Text style = {{...styles.font, ...styles.nameText}}>{item.firstname}</Text>
                             <Text style = {{...styles.font, ...styles.rankText}}>Rank {item.key}</Text>
@@ -56,7 +56,7 @@ const LeaderboardHome = props => {
                         </View>
                     }
                     keyExtractor = {item => item.key.toString()}
-                />
+                /> */}
                     
 
         </SafeAreaView>
@@ -85,25 +85,27 @@ const styles = StyleSheet.create({
     youContainer: {
         backgroundColor:'#FFEB8F', 
         borderRadius: 15, 
-        marginBottom: 7, 
+        // marginBottom: 7, 
         marginTop: 3
     },
 
     nameText: {
         fontSize: responsiveFontSize(2.06), 
         left: responsiveWidth(5.87), 
-        top: 12,
+        top: responsiveHeight(1.35),
     },
 
     rankText: {
         fontSize: responsiveFontSize(2.06),
-        left: responsiveWidth(71.2)
+        left: responsiveWidth(71.2),
+        top: responsiveHeight(0.5)
     },
 
     pointsText: {
         fontSize: responsiveFontSize(1.51), 
         left: responsiveWidth(5.87), 
-        top: -11
+        top: -responsiveHeight(0.5),
+        paddingBottom: responsiveHeight(1.9)
     },
     
     sortContainer: {
@@ -128,7 +130,6 @@ const styles = StyleSheet.create({
 
     font: {
         fontFamily: "Roboto",
-        marginBottom: 4,
         color: "#555759"
     },
 })

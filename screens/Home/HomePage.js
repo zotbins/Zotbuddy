@@ -278,9 +278,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   leaderboard: {
-    flex: 2,
+    // flex: 2,
     // backgroundColor: "white",
-    borderRadius: 20,
+    // borderRadius: 20,
   },
   nearby_bins: {
     paddingTop: 5,
