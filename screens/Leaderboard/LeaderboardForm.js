@@ -17,6 +17,9 @@ const LeaderboardForm = props => {
     const navigation = useNavigation()
     let currentObj;
 
+    const [sorter1, setSorter1] = useState("points")
+    const [sorter2, setSorter2] = useState("desc")
+
     //================ FROM LeaderboardPage.js ===============================
     let page = props.page
     const [arr, setArr] = useState([])
@@ -24,38 +27,84 @@ const LeaderboardForm = props => {
     const auth = firebase.auth()
     const currentEmail =  auth.currentUser?.email
 
-    // sorter1 and sorter2 determine how the leaderboard is sorted
-    // default is sort by rank descending
-    const [sorter1, setSorter1] = useState("points")
-    const [sorter2, setSorter2] = useState("desc")
-
-    // Problem: key is based on the position that object is in the firebase document. Thus,
-    // it is not a good indicator of a user's rank (rank should be based on one's # of points)
     const getLeaderboard = async () => {
       let arr = []
       const db = firebase.firestore()
-      const query = db.collection("users").orderBy(sorter1, sorter2)
+      const query = db.collection("users").orderBy("points", "desc").limit(10)
       await query.get().then((querySnapshot) => {
           querySnapshot.forEach((userDoc) => {
-              arr.push({...userDoc.data(), key: arr.length + 1})
+              arr.push({...userDoc.data(), key: arr.length + 1, rank: arr.length+1})
           })
       })
-      console.log(arr)
       setArr(arr)
+    }
+
+    const sortLeaderboard = (s1, s2) => {
+        // Clicking a sorter when its already sorted that way does not call arr.sort() again
+        if (s1 === sorter1 && s2 === sorter2) { return; }
+
+        if (s1 === "points" && s2 === "desc") {
+            arr.sort(function(a,b) {return b.points - a.points});
+        }
+        else if (s1 === "points" && s2 === "asc") {
+            arr.sort(function(a,b) {return a.points - b.points});
+        }
+        else if (s1 === "firstname" && s2 === "desc")
+        {
+            arr.sort(function(a,b) {
+                var nameA = a.firstname === undefined ? a.firstname : a.firstname.toUpperCase();
+                var nameB = b.firstname === undefined ? b.firstname : b.firstname.toUpperCase();
+                if (nameA === undefined) { return 1; }
+                if (nameB === undefined) { return -1; }
+
+                // Order: Z-A
+                // nameA - nameB < 0 ? B comes before A
+                // nameA - nameB > 0 ? A comes before B
+                if (nameA < nameB) {
+                    return 1;
+                }
+                if (nameA > nameB) {
+                    return -1;
+                }
+                return 0;
+            });
+        }
+        else
+        {
+            arr.sort(function(a,b) {
+                var nameA = a.firstname === undefined ? a.firstname : a.firstname.toUpperCase();
+                var nameB = b.firstname === undefined ? b.firstname : b.firstname.toUpperCase();
+                if (nameA === undefined) { return 1; }
+                if (nameB === undefined) { return -1; }
+
+                // Order: A-Z
+                // nameA - nameB < 0 ? A comes before B
+                // nameA - nameB > 0 ? B comes before A
+                if (nameA < nameB) {
+                    return -1;
+                }
+                if (nameA > nameB) {
+                    return 1;
+                }
+                return 0;
+            });
+        }
     }
 
     useEffect(() => {
        async function cover(){
           getLeaderboard()
+          updateLeaderboard("points", "desc", "rankDesc")
        }
        cover()
-      }, [sorter1, sorter2])
+    //    console.log(arr)
+      }, [])
 
     //=====================================================================
 
+    // ====================================================================
     // Get the object containing the ranking details of the current app user
     const getCurrentObj = () => {
-        let userObj
         for (const obj of arr) {
             if (obj.email === currentEmail) {
                 return obj
@@ -63,6 +112,8 @@ const LeaderboardForm = props => {
         }
     }
     currentObj = getCurrentObj()
+    // =====================================================================
+
 
     const [modalVisible, setModalVisible] = useState(false);
     
@@ -85,10 +136,14 @@ const LeaderboardForm = props => {
     // (2) The leaderboard should display a new combination of users based upon the sorter selected
     const updateLeaderboard = (newSorter1, newSorter2, sorterSpecifier) =>
     {
-        // update way of sorting leaderboard
-        setSorter1(newSorter1)
-        setSorter2(newSorter2)
-        
+        //update sorters
+        setSorter1(newSorter1);
+        setSorter2(newSorter2);
+
+        // sort leaderboard
+        sortLeaderboard(newSorter1, newSorter2);
+        // console.log("NEW ARRAY:\n", arr)
+
         // update boldness of sorters
         if (sorterSpecifier == "rankDesc") {
             setRankDesc(true)
@@ -242,14 +297,15 @@ const LeaderboardForm = props => {
                             <Text style = {styles.rankingTitle}>All Rankings</Text>
                         </>
                         }
-                        data = {arr.slice(0,10)}
+                        data = {arr}
                         renderItem = {({item}) =>
                             <View style = {{width: responsiveWidth(89.3),
-                                            borderTopLeftRadius: item.key == 1 ? 15 : 0,
-                                            borderTopRightRadius: item.key == 1 ? 15 : 0,
-                                            borderBottomLeftRadius: item.key == 10 ? 15 : 0,
-                                            borderBottomRightRadius: item.key == 10 ? 15 : 0,
-                                            backgroundColor: item.email === currentEmail ? "#FFEB8F" : (item.key % 2 === 0 ? "#E4E0DB" : "#FFFFFF")}}>
+                                            borderTopLeftRadius: arr.findIndex(x => x === item) + 1 == 1 ? 15 : 0,
+                                            borderTopRightRadius: arr.findIndex(x => x === item) + 1 == 1 ? 15 : 0,
+                                            borderBottomLeftRadius: arr.findIndex(x => x === item) + 1 == 10 ? 15 : 0,
+                                            borderBottomRightRadius: arr.findIndex(x => x === item) + 1 == 10 ? 15 : 0,
+                                            backgroundColor: item.email === currentEmail ? "#FFEB8F" : 
+                                            ((arr.findIndex(x => x === item) + 1) % 2 === 0 ? "#E4E0DB" : "#FFFFFF")}}>
                                 <Text style = {{...styles.font, ...styles.nameText}}>{item.firstname}</Text>
                                 <Text style = {{...styles.font, ...styles.rankText}}>Rank {item.key}</Text>
                                 <Text style = {{...styles.font, ...styles.pointsText}}>{item.points} Points</Text>   
