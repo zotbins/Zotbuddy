@@ -3,15 +3,16 @@ import * as firebase from 'firebase'
 import 'firebase/firestore'
 import { Text, View, StyleSheet, Pressable, FlatList, SafeAreaView, Image, TouchableHighlight, Modal, Platform} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+
 import {
     responsiveHeight,
     responsiveWidth,
     responsiveFontSize
   } from "react-native-responsive-dimensions";
 import LeaderboardHome from "./LeaderboardHome"
-import { BlurView } from 'expo-blur'
 
 {/* Iphone figma Width: 375, Height: 812 */}
+
 
 const LeaderboardForm = props => {
     const navigation = useNavigation()
@@ -97,7 +98,6 @@ const LeaderboardForm = props => {
           updateLeaderboard("points", "desc", "rankDesc")
        }
        cover()
-    //    console.log(arr)
       }, [])
 
     //=====================================================================
@@ -181,14 +181,12 @@ const LeaderboardForm = props => {
               )
         }
         return(
-            <SafeAreaView style = {styles.container}>
+            <SafeAreaView style = {{...styles.container, backgroundColor: modalVisible ? 'rgba(95, 95, 95, 0.49)' : '#F4F4F4',
+                                    opacity: modalVisible ?  0.3 : 1,}}>
                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={modalVisible}
-                    onRequestClose={() => {
-                        setModalVisible(!modalVisible)
-                    }}
                 >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
@@ -320,6 +318,13 @@ const LeaderboardForm = props => {
 }
 
 const styles = StyleSheet.create({
+    absolute: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    },
     centeredView: {
         top: responsiveHeight(53.5)
     },
@@ -363,7 +368,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: "#F4F4F4",
         paddingTop: 48,
         paddingHorizontal: 20,
 
