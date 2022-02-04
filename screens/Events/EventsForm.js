@@ -6,10 +6,17 @@ import Constants from 'expo-constants'
 import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
 import { get } from 'react-native/Libraries/Utilities/PixelRatio'
+import * as Font from 'expo-font';
+
 
 const EventsForm = props => {
     let arr = props.blood
-    
+    useEffect(() => {
+        (async () => await Font.loadAsync({
+        Roboto: require('native-base/Fonts/Roboto.ttf'),
+        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+        }))();
+        }, [])
 
     return(
         <SafeAreaView style = {styles.container}>
