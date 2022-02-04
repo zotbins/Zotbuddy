@@ -1,14 +1,14 @@
 import React, {useState} from 'react'
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
-
+// import * as firebase from 'firebase'
+// import 'firebase/firestore'
+import {App, firebaseDb, firebaseAuth} from "../../App"
 const ResetPassword = props => {
     const [text1, onChangeText1] = useState("");
     const [text2, onChangeText2] = useState("");
 
     const newPassword = async (_) => {
-        const user = firebase.auth().currentUser;
+        const user = firebaseAuth.currentUser;
         if(text1 == text2){
             try {
                 await user.updatePassword(text1)

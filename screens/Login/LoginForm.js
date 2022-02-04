@@ -14,8 +14,9 @@ import {
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import Constants from 'expo-constants'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
+import firebase from 'firebase/compat/app';
+// import 'firebase/firestore'
+import { firebaseDb, firebaseAuth } from '../../firebaseConfig'
 import { storeItem } from '../../util'
 import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
@@ -66,13 +67,12 @@ const LoginForm = (props) => {
         const LastName = body.name.split(' ')[1]
 
         try {
-          firebase
-            .auth()
+          firebaseAuth
             .createUserWithEmailAndPassword(body.email, '123456')
             .then(async (res) => {
               if (SecureStore.isAvailableAsync()) {
                 await storeItem('uid', res.user.uid)
-                const dbh = firebase.firestore()
+                const dbh = firebaseDb
 
                 dbh.collection('users').doc(res.user.uid).set({
                   firstname: firstName,
@@ -123,21 +123,20 @@ const LoginForm = (props) => {
 
   const onSignIn = (googleUser) => {
     console.log('Google Auth Response', googleUser)
-    var unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+    var unsubscribe = firebaseAuth.onAuthStateChanged((firebaseUser) => {
       unsubscribe()
       if (!isUserEqual(googleUser, firebaseUser)) {
         var credential = firebase.auth.GoogleAuthProvider.credential(
           googleUser.idToken,
           googleUser.accessToken
         ) //ending credential
-        firebase
-          .auth()
+        firebaseAuth
           .signInWithCredential(credential)
           .then(function (result) {
             //if (result.additionalUserInfo.isNewUser()){
             if (SecureStore.isAvailableAsync()) {
               //await storeItem('uid', res.user.uid)
-              const dbh = firebase.firestore()
+              const dbh = firebaseDb
               dbh.collection('users').doc(result.user.uid).set({
                 firstname: result.additionalUserInfo.profile.given_name,
                 lastname: result.additionalUserInfo.profile.family_name,
@@ -196,8 +195,7 @@ const LoginForm = (props) => {
     console.log('Hey there1!', email, password)
 
     try {
-      firebase
-        .auth()
+      firebaseAuth
         .signInWithEmailAndPassword(email, password)
         .then(async (res) => {
           console.log('Hey there!')

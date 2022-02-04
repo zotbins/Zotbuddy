@@ -15,8 +15,9 @@ import {
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import Constants from 'expo-constants'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
+// import * as firebase from 'firebase'
+// import 'firebase/firestore'
+import {firebaseDb, firebaseAuth} from "../../firebaseConfig"
 import { storeItem } from '../../util'
 import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
@@ -49,10 +50,10 @@ const SignUpForm =  props  => {
     }
 
     try{
-      firebase.auth().createUserWithEmailAndPassword(email, password).then(async (res) => {
+      firebaseAuth.createUserWithEmailAndPassword(email, password).then(async (res) => {
         if (SecureStore.isAvailableAsync()) {
           await storeItem('uid', res.user.uid)
-          const dbh = firebase.firestore()
+          const dbh = firebaseDb
           
           date = new Date()
           dbh.collection('users').doc(res.user.uid).set({

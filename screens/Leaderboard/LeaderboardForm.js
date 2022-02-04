@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
+// import * as firebase from 'firebase'
+// import 'firebase/firestore'
 import { Text, View, StyleSheet, Pressable, FlatList, SafeAreaView, Image, TouchableHighlight, Modal, Platform} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -10,7 +10,7 @@ import {
     responsiveFontSize
   } from "react-native-responsive-dimensions";
 import LeaderboardHome from "./LeaderboardHome"
-
+import { firebaseDb, firebaseAuth} from "../../firebaseConfig"
 {/* Iphone figma Width: 375, Height: 812 */}
 
 
@@ -25,12 +25,12 @@ const LeaderboardForm = props => {
     let page = props.page
     const [arr, setArr] = useState([])
     
-    const auth = firebase.auth()
+    const auth = firebaseAuth
     const currentEmail =  auth.currentUser?.email
 
     const getLeaderboard = async () => {
       let arr = []
-      const db = firebase.firestore()
+      const db = firebaseDb
       const query = db.collection("users").orderBy("points", "desc").limit(10)
       await query.get().then((querySnapshot) => {
           querySnapshot.forEach((userDoc) => {
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
     },
 
     pageTitle: {
-        fontFamily: "Arial",
+        // fontFamily: "Arial",
         fontSize: 20,
         lineHeight: 23,
         marginBottom: responsiveHeight(5),
@@ -416,14 +416,14 @@ const styles = StyleSheet.create({
     },
 
     sortTitle: {
-        fontFamily: "Arial",
+        // fontFamily: "Arial",
         fontSize: 14,
         lineHeight: 16,
         color: "#0064A4"
     },
 
     rankingTitle: {
-        fontFamily: "Arial",
+        // fontFamily: "Arial",
         fontSize: 16,
         marginBottom: 11,
         fontWeight: "bold",

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import EventsForm from "./EventsForm"
-import * as firebase from 'firebase'
-import 'firebase/firestore'
+// import * as firebase from 'firebase'
+// import 'firebase/firestore'
+import { firebaseDb, firebaseAuth } from '../../firebaseConfig'
 
 const EventsPage = props => {
   const [arr, setArr] = useState([])
   
   const getEvents = async (_) => {
     let arr = []
-    const db = firebase.firestore()
+    const db = firebaseDb;
     const query = db.collection("event").orderBy('startDate', 'asc')
     await query.get().then((querySnapshot) => {
         querySnapshot.forEach((userDoc) => {

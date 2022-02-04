@@ -132,9 +132,9 @@ export default class MapPage extends React.Component {
   async getLocation() {
     try {
       // this.getBins();
-      let { status } = await Location.requestPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        status = await Location.requestPermissionsAsync();
+        status = await Location.requestForegroundPermissionsAsync();
         return;
       }
       let location = await Location.getCurrentPositionAsync({});

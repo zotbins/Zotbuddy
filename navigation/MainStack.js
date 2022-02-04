@@ -13,7 +13,7 @@ import SocialFeedPage from '../screens/SocialFeed/SocialFeedPage'
 import MapPage from '../screens/Map/MapPage'
 import QuizPage from '../screens/Trivia/QuizPage'
 
-import NavCamera from '../assets/svgs/NavCamera.svg'
+// import NavCamera from '../assets/svgs/NavCamera.svg'
 import NavEvent from '../assets/svgs/NavEvent.svg'
 import NavHome from '../assets/svgs/NavHome.svg'
 
@@ -29,7 +29,7 @@ const MainStack = () => {
             case 'Home':
               return <NavHome />
             case 'Scanner':
-              return <NavCamera />
+              return <NavHome />
             case 'Events':
               return <NavEvent />
             default:

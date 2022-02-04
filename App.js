@@ -2,17 +2,18 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, StatusBar } from 'react-native'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
-import firebase from 'firebase'
+// import firebase from 'firebase'
+// import firebase from 'firebase/compat/app';
 import { Asset } from 'expo-asset'
 import AppLoading from 'expo-app-loading'
 import AppNavigator from './navigation/AppNavigator'
 import LoginPage from './screens/Login/LoginPage'
 
-import { firebaseConfig } from './config'
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig)
-}
+// import { firebaseConfig } from './config'
+// import {firebaseDb, firebaseAuth} from './firebaseConfig'
+// if (firebase.apps.length === 0) {
+//   firebase.initializeApp(firebaseConfig)
+// }
 
 const App = (props) => {
   const [isLoadingComplete, setLoadingComplete] = useState(false)

@@ -9,8 +9,9 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native'
-import firebase from 'firebase'
-import 'firebase/firestore'
+// import firebase from 'firebase'
+// import 'firebase/firestore'
+import { firebaseDb, firebaseAuth } from '../../firebaseConfig'
 import * as SecureStore from 'expo-secure-store'
 import { useNavigation } from '@react-navigation/native'
 import {
@@ -80,7 +81,7 @@ const HomePage = (props) => {
   });
 
   const getFirstName = async(_) => {
-    const dbh = firebase.firestore()
+    const dbh = firebaseDb
     let userId = await SecureStore.getItemAsync('uid');
     let doc =  await dbh.collection("users").doc(userId).get()
     let dataObj = doc.data()
@@ -95,7 +96,7 @@ const HomePage = (props) => {
 
   const isQuizDone = async (_) => {
     console.log(Constants.expoVersion)
-    const dbh = firebase.firestore()
+    const dbh = firebaseDb
     console.log("test")
     let userId = await SecureStore.getItemAsync('uid');
     let doc = await dbh.collection("users").doc(userId).get()

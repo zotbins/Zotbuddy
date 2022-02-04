@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Text, View, StyleSheet, TextInput, Image } from 'react-native'
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
+// import * as firebase from 'firebase'
+// import 'firebase/firestore'
+import {firebaseDb, firebaseAuth} from "../../firebaseConfig"
 import { Icon, Button, Card } from 'native-base'
 
 
@@ -12,7 +13,7 @@ const ForgotPasswordForm =  props  => {
   const [userInputColor, setUserInputColor] = useState('black')
 
   const passwordReset = (e) => {
-    firebase.auth().sendPasswordResetEmail(getValues("email"))
+    firebaseAuth.sendPasswordResetEmail(getValues("email"))
   }
 
   const backToLogin = () => {

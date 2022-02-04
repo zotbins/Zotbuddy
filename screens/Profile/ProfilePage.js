@@ -7,8 +7,9 @@ import {
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 import ProfileForm from './ProfileForm'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
+// import * as firebase from 'firebase'
+// import 'firebase/firestore'
+import { firebaseDb, firebaseAuth } from '../../firebaseConfig'
 import * as SecureStore from 'expo-secure-store'
 
 
@@ -42,7 +43,7 @@ const BackgroundHeader = () => {
 const ProfilePage = props => {
   const [display, setDisplay] = useState({})
   const displayData = async (_) => {
-    const dbh = firebase.firestore()
+    const dbh = firebaseDb;
     let userId = await SecureStore.getItemAsync('uid');
     let doc =  await dbh.collection("users").doc(userId).get()
 
