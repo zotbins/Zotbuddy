@@ -56,11 +56,12 @@ const HomePage = (props) => {
   const navigation = useNavigation()
 
   useEffect(() => {
-    if (checkQuiz) {
-      console.log('here')
+    // TypeError here: undefined object initialized
+    // if (checkQuiz) {
+    //   console.log('here')
       
-      isQuizDone();
-    }
+    //   isQuizDone();
+    // }
 
     if (getName) {
       getFirstName();
@@ -101,6 +102,17 @@ const HomePage = (props) => {
     let userId = await SecureStore.getItemAsync('uid');
     let doc = await dbh.collection("users").doc(userId).get()
     let dataObj = doc.data()
+    /* dataObj:
+        Object {
+      "email": "zotbins@gmail.com",
+      "firstname": "test",
+      "lastname": "1",
+      "password": "123456",
+      "points": 1,
+      "showQuiz": 0,
+    }
+    There exists no dateSignedIn property 
+    */
     console.log(dataObj.dateSignedIn)
     let dateSignedInArray = dataObj.dateSignedIn.split('/')
     let month = dateSignedInArray[0]

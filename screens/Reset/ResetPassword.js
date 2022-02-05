@@ -2,7 +2,8 @@ import React, {useState} from 'react'
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
 // import * as firebase from 'firebase'
 // import 'firebase/firestore'
-import {App, firebaseDb, firebaseAuth} from "../../App"
+import { firebaseDb, firebaseAuth } from "../../firebaseConfig"
+
 const ResetPassword = props => {
     const [text1, onChangeText1] = useState("");
     const [text2, onChangeText2] = useState("");

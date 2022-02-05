@@ -83,7 +83,7 @@ export default class MapPage extends React.Component {
 
   arr_of_Zotbins = {"zotbin1": {
                   "name": "West Food Court",  
-                  "description": "Location of a Zotbin!", 
+                  "description": "We have three Zotbins\ndeployed here!\n", 
                   "percentage": 58,
                   "latitude": 33.645191, 
                   "longitude": -117.835342,
@@ -91,7 +91,7 @@ export default class MapPage extends React.Component {
                 },
                 "zotbin2": {
                   "name": "Student Center",  
-                  "description": "Location of a Zotbin!", 
+                  "description": "We have three Zotbins\ndeployed here!\n", 
                   "percentage": 88,
                   "latitude": 33.647250, 
                   "longitude": -117.846600,
@@ -293,16 +293,17 @@ export default class MapPage extends React.Component {
             <View style={styles.modalView}>
                 <View style={{flexDirection: 'row'}}>
                   <View style={{flexDirection: 'column'}}>
-                    <Text>{Object.values(this.arr_of_Zotbins)[this.state.binSelected].name}</Text>
+                    <Text style={{color:'#39FF14', fontWeight: 'bold'}}>{Object.values(this.arr_of_Zotbins)[this.state.binSelected].name}</Text>
+                    <Text>{Object.values(this.arr_of_Zotbins)[this.state.binSelected].description}</Text>
                     <Text 
-                      style={{textDecorationLine:'underline',color:'blue'}}
+                      style={{textDecorationLine:'underline', color:'blue', fontWeight:'bold'}}
                       onPress={() => Linking.openURL(`https://maps.google.com?q=${Object.values(this.arr_of_Zotbins)[this.state.binSelected].latitude},
                       ${Object.values(this.arr_of_Zotbins)[this.state.binSelected].longitude}`)}
                     >
                       Directions
                     </Text>
                   </View>
-                  <Image style={{resizeMode:'cover', height: 100, width: 190, marginLeft: 30}} 
+                  <Image style={{resizeMode:'cover', height: 100, width: 170, marginLeft: 8}} 
                     source={Object.values(this.arr_of_Zotbins)[this.state.binSelected].image}
                   />
                  </View>
