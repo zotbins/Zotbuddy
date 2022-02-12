@@ -10,13 +10,11 @@ import {
 {/* Iphone figma Width: 375, Height: 812 */}
 
 const LeaderboardHome = props => {
-    const navigation = useNavigation()
     let arr = props.blood
     let currentEmail = props.email
     let currentObj;
 
     const getCurrentObj = () => {
-        let userObj
         for (const obj of arr) {
             if (obj.email === currentEmail) {
                 return obj

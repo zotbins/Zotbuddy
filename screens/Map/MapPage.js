@@ -8,7 +8,7 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
-  Modal,
+  TouchableHighlight,
   Image,
 } from 'react-native'
 import * as Linking from 'expo-linking';
@@ -31,7 +31,7 @@ import {
 import MapView, { Marker } from "react-native-maps";
 
 import zotbins from "../../assets/images/Zotbins_logo_transparent.png"
-
+import {withNavigation} from 'react-navigation';
 import * as Location from 'expo-location'
 import {getDistance} from 'geolib'
 import { ThemeColors } from 'react-navigation';
@@ -59,7 +59,7 @@ const ZotbinMarker = (props) => {
   )
 }
 
-export default class MapPage extends React.Component {
+class MapPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -228,51 +228,11 @@ export default class MapPage extends React.Component {
   }
 
   render() {
-  
     const zotMarkers = Object.values(this.arr_of_Zotbins).map((zotbin, key) =>
       <Marker key={key}  image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: zotbin.latitude, longitude: zotbin.longitude}}
       onPress={() => this.onMarkerPress(key)}
       >
-        {/* <MapView.Callout 
-           tooltip style={styles.calloutText}
-           onPress={() => Linking.openURL(`https://maps.google.com?q=${zotbin.latitude},${zotbin.longitude}`)}
-        >
-           <View>
-             <Text>{zotbin.name}{"\n"}Bin Capacity: {zotbin.percentage}%</Text>
-               <Text 
-                 style={{textDecorationLine:'underline',color:'blue'}}
-               >
-                 Get Directions
-               </Text>
-           </View>
-        </MapView.Callout>  */}
-        {/* <Modal
-          animationType='slide'
-          transparent={true}
-          visible={this.state.modalVisible}
-        >
-          <View style={styles.modalView}>
-            <Text>
-              Hello
-            </Text>
-          </View>
-        </Modal>  */}
-        {/* {this.state.modalVisible &&           
-        <View style={styles.modalView}>
-          <Text>{zotbin.name}{"\n"}Bin Capacity: {zotbin.percentage}%</Text>
-          <Text 
-            style={{textDecorationLine:'underline',color:'blue'}}
-            onPress={() => console.log(hello)}
-          >
-            Get Directions
-          </Text>
-        </View>
-        } */}
-     
       </Marker>
-
-  
-      
     );
 
       return (
@@ -283,18 +243,30 @@ export default class MapPage extends React.Component {
             style={StyleSheet.absoluteFillObject} 
             provider={MapView.PROVIDER_GOOGLE}
           > 
-            {zotMarkers}   
-
+            {zotMarkers}  
+             
             {/* <ZotbinMarker title="West Food Court" description="Location of a Zotbin!" latitude={33.645191} longitude={-117.835342}/>
             <Marker style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: 33.647250, longitude: -117.846600 }} /> */}
     
           </MapView> 
+          {
+            <TouchableHighlight 
+              style = {{marginLeft: responsiveWidth(5), marginTop: responsiveHeight(4), 
+                        width: responsiveWidth(6)}}
+              underlayColor = 'transparent'
+              onPress={() => this.props.navigation.goBack()}
+            > 
+              <Image
+                  source={require('../../assets/images/back_arrow.png')}
+              />
+            </TouchableHighlight>
+          }
           {this.state.modalVisible &&        
             <View style={styles.modalView}>
                 <View style={{flexDirection: 'row'}}>
                   <View style={{flexDirection: 'column'}}>
                     <Text style={{color:'#39FF14', fontWeight: 'bold'}}>{Object.values(this.arr_of_Zotbins)[this.state.binSelected].name}</Text>
-                    <Text>{Object.values(this.arr_of_Zotbins)[this.state.binSelected].description}</Text>
+                    <Text>Bin Capacity: {Object.values(this.arr_of_Zotbins)[this.state.binSelected].percentage}%{'\n'}</Text>
                     <Text 
                       style={{textDecorationLine:'underline', color:'blue', fontWeight:'bold'}}
                       onPress={() => Linking.openURL(`https://maps.google.com?q=${Object.values(this.arr_of_Zotbins)[this.state.binSelected].latitude},
@@ -303,12 +275,13 @@ export default class MapPage extends React.Component {
                       Directions
                     </Text>
                   </View>
-                  <Image style={{resizeMode:'cover', height: 100, width: 170, marginLeft: 8}} 
+                  <Image style={{resizeMode:'cover', height: 100, width: 170, marginLeft: 25}} 
                     source={Object.values(this.arr_of_Zotbins)[this.state.binSelected].image}
                   />
                  </View>
             </View>
           }
+
           {this.state.cannotFindLocation ?
           <View style={styles.overlay}>
             {!this.state.showInstructions ?
@@ -335,6 +308,7 @@ export default class MapPage extends React.Component {
   }
 
 }
+export default withNavigation(MapPage)
 
 const styles = StyleSheet.create({
   mapView: {
@@ -369,7 +343,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    top: responsiveHeight(75)
+    top: responsiveHeight(69)
   },
   button: {
     borderRadius: 20,
