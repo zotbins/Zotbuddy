@@ -34,6 +34,7 @@ import Instagram from '../../assets/svgs/Instagram.svg'
 import DropdownDown from '../../assets/svgs/DropdownDown.svg'
 import DropdownUp from '../../assets/svgs/DropdownUp.svg'
 import { useNavigation } from '@react-navigation/native'
+import BackButton from '../../components/BackButton'
 
 /**
  * Styles need to be refactored for different platforms
@@ -78,6 +79,7 @@ const AboutPage = props => {
       <ScrollView style={{marginHorizontal: 0}}>
       <View style = {{width: "90%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
         {/* <Image style={styles.zotBuddyLogo} source={zotBuddyLogo}/> */}
+        <BackButton />
         <Text style={styles.title}>About Us</Text>
         <Card>
           <CardItem style={{marginBottom: 0}}>

@@ -3,11 +3,14 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  Platform
 } from 'react-native'
 import {
     Text,
     Card,
 } from 'native-base'
+import { useNavigation } from '@react-navigation/native'
+import BackButton from '../../components/BackButton'
 
 const progressBarPercents = ['20%', '40%', '60%', '80%', '100%'];
 
@@ -22,9 +25,14 @@ const QuizForm = (props) => {
     chosenAnswer
   } = props
 
+  const navigation = useNavigation()
+
   return (
     <View style={styles.container}>
+        
+        <BackButton />
         <View style={styles.header}>
+            
             <Text style={styles.headerText}>Title of Daily Trivia Quiz!</Text>
         </View>
         <View>
@@ -84,6 +92,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F4F4F4'
+    },
+    back: {
+        position: "absolute",
+        top: 20,
+        left: 20,
+        zIndex: 5
     },
     header: {
         backgroundColor: 'white',

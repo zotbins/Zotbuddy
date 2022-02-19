@@ -205,7 +205,7 @@ const HomePage = (props) => {
       <Text onPress={() => navigation.navigate('Map')} style={styles.seeMore}>See More</Text>
     </View>
     <View style={styles.nearby_bins}>
-      <MapPage />  
+      <MapPage showBack='false' />  
     </View>
 
     </View>

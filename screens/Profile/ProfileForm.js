@@ -3,8 +3,7 @@ import { Text, View, StyleSheet, TextInput, Button, TouchableOpacity} from 'reac
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
 import { useNavigation } from '@react-navigation/native'
-
-
+import BackButton from '../../components/BackButton'
 
 const ProfileForm =  props  => {
   //const { register, setValue, getValues, reset, errors } = useForm()
@@ -53,6 +52,8 @@ const ProfileForm =  props  => {
 
   return (
     <View style={styles.container}>
+
+      <BackButton />
       <View style={styles.header}>
         <Text style={styles.title}>{props.blood.firstname} {props.blood.lastname}</Text>
         <Text style={styles.points}>{props.blood.points} Points</Text>

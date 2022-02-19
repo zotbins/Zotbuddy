@@ -15,7 +15,9 @@ import ProfilePage from '../screens/Profile/ProfilePage'
 import AboutPage from '../screens/About/AboutPage'
 import QuizPage from '../screens/Trivia/QuizPage'
 import SocialFeedPage from '../screens/SocialFeed/SocialFeedPage'
+import CameraOptionPage from '../screens/CameraOption/CameraOptionPage'
 import QuizForm from '../screens/Trivia/QuizForm'
+import ScannerPage from '../screens/Scanner/ScannerPage'
 
 
 const Stack = createStackNavigator()
@@ -40,6 +42,8 @@ const AppNavigator = props => {
             <Stack.Screen name='AboutUs' component={AboutPage} />
             <Stack.Screen name='Quiz' component={QuizPage} />
             <Stack.Screen name='SocialMedia' component={SocialFeedPage} />
+            <Stack.Screen name='CameraOption' component={CameraOptionPage} />
+            <Stack.Screen name='Scanner' component={ScannerPage} />
             
 
             

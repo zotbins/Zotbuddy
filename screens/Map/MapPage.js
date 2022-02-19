@@ -7,7 +7,9 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
-  Modal
+  Modal,
+  StatusBar,
+  SafeAreaView
 } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 import {
@@ -34,14 +36,25 @@ import {getDistance} from 'geolib'
 import { ThemeColors } from 'react-navigation';
 import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 import { TapGestureHandler } from 'react-native-gesture-handler';
+import BackArrow from '../../assets/svgs/BackArrow.svg'
+import { useNavigation } from '@react-navigation/native'
+import BackButton from '../../components/BackButton';
 
 // import MapboxGL from "@react-native-mapbox-gl/maps";
 
 // MapboxGL.setAccessToken("pk.eyJ1Ijoiem90Ymluc3Rlc3QiLCJhIjoiY2tud3B0OTYxMGV2YTJzbzhxbGF1NHN2MyJ9.3xw5Mq1Rlk-5ioy4HHhtvg");
 
 const styles = StyleSheet.create({
+  back: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 5
+  },
   mapView: {
+    paddingTop: StatusBar.currentHeight,
     flex: 1,
+    flexDirection: 'row',
     height: '100%',
     width: '100%'
   }, calloutText: {
@@ -50,7 +63,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#B6DFA7',
   },
   overlay: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    height: 100,
+    padding: 10,
+    // alignItems: "center",
+    alignSelf: 'flex-end',
+    width: '100%'
   },
   centeredView: {
     flex: 1,
@@ -111,7 +129,13 @@ const ZotbinMarker = (props) => {
   )
 }
 
-export default class MapPage extends React.Component {
+const MapPage = (props) => {
+  const navigation = useNavigation();
+  return <MapPageClass showBack={props.showBack} navigation={navigation} />;
+
+};
+
+class MapPageClass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -126,10 +150,11 @@ export default class MapPage extends React.Component {
       distance: "N/A Mile(s) Away",
       cannotFindLocation: true,
       uniqueValue: 1,
-      showInstructions: false,
+      showInstructions: false
     };
   }
-  
+
+
 
   arr_of_Zotbins = {"zotbin1": {
                   "name": "West Food Court",  
@@ -244,6 +269,10 @@ export default class MapPage extends React.Component {
     });
     console.log(this.arr_of_bins[shortest_distance_index].name)
   }
+  
+  goBack() {
+    this.navigation.goBack()
+  }
 
 
   setShowInstructions(bool) {
@@ -256,6 +285,9 @@ export default class MapPage extends React.Component {
 
   render() {
   
+    const { navigation } = this.props;
+    console.log(this.props.showBack)
+
     const zotMarkers = Object.values(this.arr_of_Zotbins).map((zotbin, key) =>
         <Marker key={key} style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: zotbin.latitude, longitude: zotbin.longitude}}>
         <MapView.Callout tooltip style={styles.customView}>
@@ -268,7 +300,8 @@ export default class MapPage extends React.Component {
       
     );
       return (
-        <View style={styles.mapView}>
+        <SafeAreaView style={styles.mapView}>
+
           
           <MapView 
             region={{latitude: this.state.latitude, longitude: this.state.longitude, latitudeDelta: 0.02, longitudeDelta: 0.02}} 
@@ -280,7 +313,46 @@ export default class MapPage extends React.Component {
             <Marker style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: 33.647250, longitude: -117.846600 }} /> */}
 
           </MapView> 
-          {this.state.cannotFindLocation ?
+          {this.props.showBack == undefined ? 
+          <BackButton /> : <></>}
+
+        {(() => {
+                if (this.props.showBack) {
+                  return (
+                    <></>
+                  )
+                } else {
+                  if (this.state.cannotFindLocation ) {
+                    if (!this.state.showInstructions ) {
+                      return (
+                        <View>
+                        <Text>Your location cannot found.</Text>
+                        <TouchableOpacity onPress={() => this.setShowInstructions(true)}>
+                          <Text>Click here to see how to show your location!</Text>
+                        </TouchableOpacity>
+                        </View>
+                      )
+                    } else {
+                      return (
+                        <View><Text>To enable your location, please click Settings > Location > Allow Location</Text>
+                        <Text>And to enable it within this App, please go to this App's info > Permissions > Location > Allow Location Permission</Text>
+                        <TouchableOpacity onPress={this.refreshComponent}>
+                          <Text>Click here after you have enabled your location</Text>
+                        </TouchableOpacity>
+                        </View>
+                      )
+                    }
+                  } else {
+                    return (
+                      <View style={styles.overlay}><Text>Closest Zotbin: {this.state.closestBin}</Text>
+                      <Text>Distance: {this.state.distance}</Text></View>
+                    )
+                  }
+                  
+                }
+              })()}
+
+          {/* {this.state.cannotFindLocation ?
           <View style={styles.overlay}>
             {!this.state.showInstructions ?
             <View>
@@ -298,9 +370,12 @@ export default class MapPage extends React.Component {
             }
             </View>
           :<View style={styles.overlay}><Text>Closest Zotbin: {this.state.closestBin}</Text>
-          <Text>Distance: {this.state.distance}</Text></View>}
-        </View>
+          <Text>Distance: {this.state.distance}</Text></View>} */}
+        </SafeAreaView>
       )
   }
 
 }
+
+
+export default MapPage

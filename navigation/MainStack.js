@@ -16,6 +16,7 @@ import QuizPage from '../screens/Trivia/QuizPage'
 import NavCamera from '../assets/svgs/NavCamera.svg'
 import NavEvent from '../assets/svgs/NavEvent.svg'
 import NavHome from '../assets/svgs/NavHome.svg'
+import CameraOptionPage from '../screens/CameraOption/CameraOptionPage';
 
 const Tab = createBottomTabNavigator()
 
@@ -28,7 +29,7 @@ const MainStack = () => {
           switch (route.name) {
             case 'Home':
               return <NavHome />
-            case 'Scanner':
+            case 'CameraOption':
               return <NavCamera />
             case 'Events':
               return <NavEvent />
@@ -45,7 +46,7 @@ const MainStack = () => {
       }}
     >
       <Tab.Screen name="Home" component={HomePage} />
-      <Tab.Screen name="Scanner" component={ScannerPage} />
+      <Tab.Screen name="CameraOption" component={CameraOptionPage} />
       <Tab.Screen name="Events" component={EventsPage} />
     </Tab.Navigator>
   )
