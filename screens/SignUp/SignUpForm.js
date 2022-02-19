@@ -55,7 +55,7 @@ const SignUpForm =  props  => {
           await storeItem('uid', res.user.uid)
           const dbh = firebaseDb
           
-          date = new Date()
+          const date = new Date()
           dbh.collection('users').doc(res.user.uid).set({
             firstname: firstname,
             lastname: lastname,

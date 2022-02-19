@@ -21,9 +21,14 @@ const LeaderboardHome = props => {
             }
         }
     }
-    currentObj = getCurrentObj()
 
-    console.log("OBJECT",currentObj)
+    useEffect(() => {
+       console.log("USE EFFECT RAN") 
+       currentObj = getCurrentObj()
+      }, [])
+    
+    currentObj = getCurrentObj()
+    // console.log("LEADERBOARD OBJECT",currentObj)
 
     return(
         <SafeAreaView style = {styles.container}>
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
     },
 
     font: {
-        fontFamily: "Roboto",
+        // fontFamily: "Roboto",
         color: "#555759"
     },
 })

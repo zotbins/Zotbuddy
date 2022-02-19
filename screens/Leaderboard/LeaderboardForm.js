@@ -31,10 +31,12 @@ const LeaderboardForm = props => {
     const getLeaderboard = async () => {
       let arr = []
       const db = firebaseDb
-      const query = db.collection("users").orderBy("points", "desc").limit(10)
+      // == FIX TO SIGN IN ERROR == 
+      // previously set the arr only to have the top 10 users: now contains all the users
+      const query = db.collection("users").orderBy("points", "desc")
       await query.get().then((querySnapshot) => {
           querySnapshot.forEach((userDoc) => {
-              arr.push({...userDoc.data(), key: arr.length + 1, rank: arr.length+1})
+              arr.push({...userDoc.data(), key: arr.length + 1})
           })
       })
       setArr(arr)
@@ -92,11 +94,13 @@ const LeaderboardForm = props => {
         }
     }
 
+    // empty dependency list indicates that useEffect() will only run the function
+    // once, which we want, as we only need to get the array of users once
     useEffect(() => {
-       async function cover(){
-          getLeaderboard()
-          updateLeaderboard("points", "desc", "rankDesc")
-       }
+        console.log("FIRST USE EFFECT RAN")
+        async function cover() {
+            getLeaderboard()
+        }
        cover()
       }, [])
 
@@ -295,7 +299,7 @@ const LeaderboardForm = props => {
                             <Text style = {styles.rankingTitle}>All Rankings</Text>
                         </>
                         }
-                        data = {arr}
+                        data = {arr.slice(0,10)}
                         renderItem = {({item}) =>
                             <View style = {{width: responsiveWidth(89.3),
                                             borderTopLeftRadius: arr.findIndex(x => x === item) + 1 == 1 ? 15 : 0,
@@ -326,11 +330,11 @@ const styles = StyleSheet.create({
         right: 0
     },
     centeredView: {
-        top: responsiveHeight(53.5)
+        top: Platform.OS == 'android' ? responsiveHeight(50) : responsiveHeight(54)
     },
 
     modalView: {
-        marginHorizontal: responsiveWidth(14.13),
+        marginHorizontal: responsiveWidth(10),
         backgroundColor: "white",
         borderRadius: 15,
         alignItems: "center",
@@ -343,7 +347,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         elevation: 5,
         backgroundColor: "white",
-        width: responsiveWidth(71.73)
+        width: responsiveWidth(80)
     },
     textStyle: {
         color: "#4B83D7",
@@ -431,7 +435,7 @@ const styles = StyleSheet.create({
     },
 
     font: {
-        fontFamily: "Roboto",
+        // fontFamily: "Roboto",
         marginBottom: 4,
         color: "#555759"
     },
