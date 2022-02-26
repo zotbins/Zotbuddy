@@ -1,19 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 // import * as firebase from 'firebase'
 // import 'firebase/firestore'
-import { Text, View, StyleSheet, Pressable, FlatList, SafeAreaView, Image, TouchableHighlight, Modal, Platform} from 'react-native'
+import { Text, View, StyleSheet, Pressable, FlatList, SafeAreaView, Image, TouchableHighlight, Modal, Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import {
     responsiveHeight,
     responsiveWidth,
     responsiveFontSize
-  } from "react-native-responsive-dimensions";
+} from "react-native-responsive-dimensions";
 import LeaderboardHome from "./LeaderboardHome"
-import { firebaseDb, firebaseAuth} from "../../firebaseConfig"
-{/* Iphone figma Width: 375, Height: 812 */}
+import { firebaseDb, firebaseAuth } from "../../firebaseConfig"
+{/* Iphone figma Width: 375, Height: 812 */ }
 
-
+/* Creating leaderboard form that takes into account points and sorts
+them in descending or ascending order. */
 const LeaderboardForm = props => {
     const navigation = useNavigation()
     let currentObj;
@@ -24,22 +25,22 @@ const LeaderboardForm = props => {
     //================ FROM LeaderboardPage.js ===============================
     let page = props.page
     const [arr, setArr] = useState([])
-    
+
     const auth = firebaseAuth
-    const currentEmail =  auth.currentUser?.email
+    const currentEmail = auth.currentUser?.email
 
     const getLeaderboard = async () => {
-      let arr = []
-      const db = firebaseDb
-      // == FIX TO SIGN IN ERROR == 
-      // previously set the arr only to have the top 10 users: now contains all the users
-      const query = db.collection("users").orderBy("points", "desc")
-      await query.get().then((querySnapshot) => {
-          querySnapshot.forEach((userDoc) => {
-              arr.push({...userDoc.data(), key: arr.length + 1})
-          })
-      })
-      setArr(arr)
+        let arr = []
+        const db = firebaseDb
+        // == FIX TO SIGN IN ERROR == 
+        // previously set the arr only to have the top 10 users: now contains all the users
+        const query = db.collection("users").orderBy("points", "desc")
+        await query.get().then((querySnapshot) => {
+            querySnapshot.forEach((userDoc) => {
+                arr.push({ ...userDoc.data(), key: arr.length + 1 })
+            })
+        })
+        setArr(arr)
     }
 
     const sortLeaderboard = (s1, s2) => {
@@ -47,14 +48,13 @@ const LeaderboardForm = props => {
         if (s1 === sorter1 && s2 === sorter2) { return; }
 
         if (s1 === "points" && s2 === "desc") {
-            arr.sort(function(a,b) {return b.points - a.points});
+            arr.sort(function (a, b) { return b.points - a.points });
         }
         else if (s1 === "points" && s2 === "asc") {
-            arr.sort(function(a,b) {return a.points - b.points});
+            arr.sort(function (a, b) { return a.points - b.points });
         }
-        else if (s1 === "firstname" && s2 === "desc")
-        {
-            arr.sort(function(a,b) {
+        else if (s1 === "firstname" && s2 === "desc") {
+            arr.sort(function (a, b) {
                 var nameA = a.firstname === undefined ? a.firstname : a.firstname.toUpperCase();
                 var nameB = b.firstname === undefined ? b.firstname : b.firstname.toUpperCase();
                 if (nameA === undefined) { return 1; }
@@ -72,9 +72,8 @@ const LeaderboardForm = props => {
                 return 0;
             });
         }
-        else
-        {
-            arr.sort(function(a,b) {
+        else {
+            arr.sort(function (a, b) {
                 var nameA = a.firstname === undefined ? a.firstname : a.firstname.toUpperCase();
                 var nameB = b.firstname === undefined ? b.firstname : b.firstname.toUpperCase();
                 if (nameA === undefined) { return 1; }
@@ -101,8 +100,8 @@ const LeaderboardForm = props => {
         async function cover() {
             getLeaderboard()
         }
-       cover()
-      }, [])
+        cover()
+    }, [])
 
     //=====================================================================
 
@@ -120,7 +119,7 @@ const LeaderboardForm = props => {
 
 
     const [modalVisible, setModalVisible] = useState(false);
-    
+
     // States to set the text boldness of each sorter in the modal
     // if a sorter is selected, then the text corresponding to that sorter
     // (ie. "Rank: Highest"/"Rank: Lowest") is bolded
@@ -138,8 +137,7 @@ const LeaderboardForm = props => {
     // (1) The boldness of the sorters: the sorter selected must be bolded while the remaining
     //     three should be unbolded
     // (2) The leaderboard should display a new combination of users based upon the sorter selected
-    const updateLeaderboard = (newSorter1, newSorter2, sorterSpecifier) =>
-    {
+    const updateLeaderboard = (newSorter1, newSorter2, sorterSpecifier) => {
         //update sorters
         setSorter1(newSorter1);
         setSorter2(newSorter2);
@@ -155,13 +153,13 @@ const LeaderboardForm = props => {
             setAlphabDesc(false)
             setAlphabAsc(false)
         }
-        else if (sorterSpecifier == "rankAsc"){
+        else if (sorterSpecifier == "rankAsc") {
             setRankDesc(false)
             setRankAsc(true)
             setAlphabDesc(false)
             setAlphabAsc(false)
         }
-        else if (sorterSpecifier == "alphabDesc"){
+        else if (sorterSpecifier == "alphabDesc") {
             setRankDesc(false)
             setRankAsc(false)
             setAlphabDesc(true)
@@ -176,17 +174,19 @@ const LeaderboardForm = props => {
     }
 
     if (arr.length == 0) {
-        return<></>   
+        return <></>
     }
     else {
-        if (page == "home"){
+        if (page == "home") {
             return (
-                <LeaderboardHome blood = {arr} email = {currentEmail}/>
-              )
+                <LeaderboardHome blood={arr} email={currentEmail} />
+            )
         }
-        return(
-            <SafeAreaView style = {{...styles.container, backgroundColor: modalVisible ? 'rgba(95, 95, 95, 0.49)' : '#F4F4F4',
-                                    opacity: modalVisible ?  0.3 : 1,}}>
+        return (
+            <SafeAreaView style={{
+                ...styles.container, backgroundColor: modalVisible ? 'rgba(95, 95, 95, 0.49)' : '#F4F4F4',
+                opacity: modalVisible ? 0.3 : 1,
+            }}>
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -198,65 +198,65 @@ const LeaderboardForm = props => {
                             <View style={styles.sortBy}>
                                 <Text style={styles.modalText}>Sort By:</Text>
                                 <Image
-                                        style={{top: responsiveHeight(1.7)}}
-                                        source={require('../../assets/images/arr_separator.png')}
+                                    style={{ top: responsiveHeight(1.7) }}
+                                    source={require('../../assets/images/arr_separator.png')}
                                 />
                             </View>
 
                             <View style={styles.sorters}>
-                                <TouchableHighlight underlayColor="transparent" onPress = {() => updateLeaderboard("points", "desc", "rankDesc")}>
-                                    <Text style={{...styles.modalText, color: "#4B83D7", fontWeight: rankDesc ? "bold" : "normal"}}>
+                                <TouchableHighlight underlayColor="transparent" onPress={() => updateLeaderboard("points", "desc", "rankDesc")}>
+                                    <Text style={{ ...styles.modalText, color: "#4B83D7", fontWeight: rankDesc ? "bold" : "normal" }}>
                                         Rank: Highest
                                     </Text>
                                 </TouchableHighlight>
                                 <Image
-                                        style={{top: responsiveHeight(1.7)}}
-                                        source={require('../../assets/images/arr_separator.png')}
+                                    style={{ top: responsiveHeight(1.7) }}
+                                    source={require('../../assets/images/arr_separator.png')}
                                 />
                             </View>
 
                             <View style={styles.sorters}>
                                 {/* CHANGE HARDCODED FONT WEIGHTS */}
-                                <TouchableHighlight underlayColor="transparent" onPress = {() => updateLeaderboard("points", "asc", "rankAsc")}>
-                                    <Text style={{...styles.modalText, color: "#4B83D7",fontWeight: rankAsc ? "bold" : "normal"}}>
+                                <TouchableHighlight underlayColor="transparent" onPress={() => updateLeaderboard("points", "asc", "rankAsc")}>
+                                    <Text style={{ ...styles.modalText, color: "#4B83D7", fontWeight: rankAsc ? "bold" : "normal" }}>
                                         Rank: Lowest
                                     </Text>
                                 </TouchableHighlight>
                                 <Image
-                                        style={{top: responsiveHeight(1.7)}}
-                                        source={require('../../assets/images/arr_separator.png')}
+                                    style={{ top: responsiveHeight(1.7) }}
+                                    source={require('../../assets/images/arr_separator.png')}
                                 />
                             </View>
 
                             <View style={styles.sorters}>
-                                <TouchableHighlight underlayColor="transparent" onPress = {() => updateLeaderboard("firstname", "asc", "alphabAsc")}>
-                                    <Text style={{...styles.modalText, color: "#4B83D7", fontWeight: alphabAsc ? "bold" : "normal"}}>
+                                <TouchableHighlight underlayColor="transparent" onPress={() => updateLeaderboard("firstname", "asc", "alphabAsc")}>
+                                    <Text style={{ ...styles.modalText, color: "#4B83D7", fontWeight: alphabAsc ? "bold" : "normal" }}>
                                         Name: A-Z
                                     </Text>
                                 </TouchableHighlight>
                                 <Image
-                                        style={{top: responsiveHeight(1.7)}}
-                                        source={require('../../assets/images/arr_separator.png')}
+                                    style={{ top: responsiveHeight(1.7) }}
+                                    source={require('../../assets/images/arr_separator.png')}
                                 />
                             </View>
 
                             <View style={styles.sorters}>
-                                <TouchableHighlight underlayColor="transparent" onPress = {() => updateLeaderboard("firstname", "desc", "alphabDesc")}>
-                                    <Text style={{...styles.modalText,  color: "#4B83D7", fontWeight: alphabDesc ? "bold" : "normal"}}>
+                                <TouchableHighlight underlayColor="transparent" onPress={() => updateLeaderboard("firstname", "desc", "alphabDesc")}>
+                                    <Text style={{ ...styles.modalText, color: "#4B83D7", fontWeight: alphabDesc ? "bold" : "normal" }}>
                                         Name: Z-A
                                     </Text>
                                 </TouchableHighlight>
                             </View>
                         </View>
-                        
-                        <View style={{alignItems: "center", paddingTop: responsiveHeight(0.74)}}>
+
+                        <View style={{ alignItems: "center", paddingTop: responsiveHeight(0.74) }}>
                             <Pressable
                                 underlayColor="transparent"
                                 style={styles.button}
                                 onPress={() => setModalVisible(!modalVisible)}
                             >
                                 <View style={styles.cancelText}>
-                                    <Text style={{...styles.modalText, fontWeight: "normal", color: "#4B83D7"}}>
+                                    <Text style={{ ...styles.modalText, fontWeight: "normal", color: "#4B83D7" }}>
                                         Cancel
                                     </Text>
                                 </View>
@@ -269,54 +269,56 @@ const LeaderboardForm = props => {
                 <View style={styles.flatListContainer}>
                     <FlatList
                         ListHeaderComponent={
-                        <>
-                            <TouchableHighlight underlayColor="transparent" onPress={backPage}>
-                                <Image
-                                    source={require('../../assets/images/back_arrow.png')}
-                                />
-                            </TouchableHighlight>
-
-                            <Text style = {styles.pageTitle}>Leaderboard</Text>
-
-                            <View style={styles.youContainer}>
-                                <Text style = {{...styles.font, ...styles.nameText, fontWeight: 'bold'}}
-                                    >You
-                                </Text>
-                                <Text style = {{...styles.font, ...styles.rankText}}>
-                                    Rank {currentObj.key}
-                                </Text>
-                                <Text style = {{...styles.font, ...styles.pointsText}}>
-                                    {currentObj.points} Points
-                                </Text>
-                            </View>
-
-                            <View style={styles.sortContainer}>
-                                <TouchableHighlight underlayColor="transparent" onPress={() => setModalVisible(true)}>
-                                    <Text style = {styles.sortTitle}>Sort</Text>
+                            <>
+                                <TouchableHighlight underlayColor="transparent" onPress={backPage}>
+                                    <Image
+                                        source={require('../../assets/images/back_arrow.png')}
+                                    />
                                 </TouchableHighlight>
-                            </View>
 
-                            <Text style = {styles.rankingTitle}>All Rankings</Text>
-                        </>
+                                <Text style={styles.pageTitle}>Leaderboard</Text>
+
+                                <View style={styles.youContainer}>
+                                    <Text style={{ ...styles.font, ...styles.nameText, fontWeight: 'bold' }}
+                                    >You
+                                    </Text>
+                                    <Text style={{ ...styles.font, ...styles.rankText }}>
+                                        Rank {currentObj.key}
+                                    </Text>
+                                    <Text style={{ ...styles.font, ...styles.pointsText }}>
+                                        {currentObj.points} Points
+                                    </Text>
+                                </View>
+
+                                <View style={styles.sortContainer}>
+                                    <TouchableHighlight underlayColor="transparent" onPress={() => setModalVisible(true)}>
+                                        <Text style={styles.sortTitle}>Sort</Text>
+                                    </TouchableHighlight>
+                                </View>
+
+                                <Text style={styles.rankingTitle}>All Rankings</Text>
+                            </>
                         }
-                        data = {arr.slice(0,10)}
-                        renderItem = {({item}) =>
-                            <View style = {{width: responsiveWidth(89.3),
-                                            borderTopLeftRadius: arr.findIndex(x => x === item) + 1 == 1 ? 15 : 0,
-                                            borderTopRightRadius: arr.findIndex(x => x === item) + 1 == 1 ? 15 : 0,
-                                            borderBottomLeftRadius: arr.findIndex(x => x === item) + 1 == 10 ? 15 : 0,
-                                            borderBottomRightRadius: arr.findIndex(x => x === item) + 1 == 10 ? 15 : 0,
-                                            backgroundColor: item.email === currentEmail ? "#FFEB8F" : 
-                                            ((arr.findIndex(x => x === item) + 1) % 2 === 0 ? "#E4E0DB" : "#FFFFFF")}}>
-                                <Text style = {{...styles.font, ...styles.nameText}}>{item.firstname}</Text>
-                                <Text style = {{...styles.font, ...styles.rankText}}>Rank {item.key}</Text>
-                                <Text style = {{...styles.font, ...styles.pointsText}}>{item.points} Points</Text>   
+                        data={arr.slice(0, 10)}
+                        renderItem={({ item }) =>
+                            <View style={{
+                                width: responsiveWidth(89.3),
+                                borderTopLeftRadius: arr.findIndex(x => x === item) + 1 == 1 ? 15 : 0,
+                                borderTopRightRadius: arr.findIndex(x => x === item) + 1 == 1 ? 15 : 0,
+                                borderBottomLeftRadius: arr.findIndex(x => x === item) + 1 == 10 ? 15 : 0,
+                                borderBottomRightRadius: arr.findIndex(x => x === item) + 1 == 10 ? 15 : 0,
+                                backgroundColor: item.email === currentEmail ? "#FFEB8F" :
+                                    ((arr.findIndex(x => x === item) + 1) % 2 === 0 ? "#E4E0DB" : "#FFFFFF")
+                            }}>
+                                <Text style={{ ...styles.font, ...styles.nameText }}>{item.firstname}</Text>
+                                <Text style={{ ...styles.font, ...styles.rankText }}>Rank {item.key}</Text>
+                                <Text style={{ ...styles.font, ...styles.pointsText }}>{item.points} Points</Text>
                             </View>
                         }
-                        keyExtractor = {item => item.key.toString()}
+                        keyExtractor={item => item.key.toString()}
                     />
                 </View>
-        </SafeAreaView>
+            </SafeAreaView>
         );
     }
 }
@@ -356,7 +358,7 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: "center",
-        fontWeight: "bold", 
+        fontWeight: "bold",
         fontSize: responsiveFontSize(2.46),
         color: 'black'
     },
@@ -377,8 +379,8 @@ const styles = StyleSheet.create({
 
     },
     flatListContainer: {
-        alignItems: 'center', 
-        marginBottom: responsiveHeight(3), 
+        alignItems: 'center',
+        marginBottom: responsiveHeight(3),
     },
 
     pageTitle: {
@@ -392,14 +394,14 @@ const styles = StyleSheet.create({
     },
 
     youContainer: {
-        backgroundColor:'#FFEB8F', 
-        borderRadius: 15, 
-        marginBottom: responsiveHeight(2.09), 
+        backgroundColor: '#FFEB8F',
+        borderRadius: 15,
+        marginBottom: responsiveHeight(2.09),
     },
 
     nameText: {
-        fontSize: responsiveFontSize(2.06), 
-        left: responsiveWidth(5.87), 
+        fontSize: responsiveFontSize(2.06),
+        left: responsiveWidth(5.87),
         top: responsiveHeight(1.48)
     },
 
@@ -409,13 +411,13 @@ const styles = StyleSheet.create({
     },
 
     pointsText: {
-        fontSize: responsiveFontSize(1.51), 
-        left: responsiveWidth(5.87), 
+        fontSize: responsiveFontSize(1.51),
+        left: responsiveWidth(5.87),
         top: -responsiveHeight(1.35)
     },
-    
+
     sortContainer: {
-        marginBottom: 10, 
+        marginBottom: 10,
         left: responsiveWidth(80)
     },
 
