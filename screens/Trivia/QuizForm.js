@@ -8,7 +8,8 @@ import {
     Text,
     Card,
 } from 'native-base'
-
+import { useNavigation } from '@react-navigation/native'
+import BackButton from '../../components/BackButton'
 const progressBarPercents = ['20%', '40%', '60%', '80%', '100%'];
 
 const QuizForm = (props) => {
@@ -24,8 +25,9 @@ const QuizForm = (props) => {
 
   return (
     <View style={styles.container}>
+        <BackButton />
         <View style={styles.header}>
-            <Text style={styles.headerText}>Title of Daily Trivia Quiz!</Text>
+            <Text style={styles.headerText}>Daily Trivia Quiz!</Text>
         </View>
         <View>
             <View style={styles.progressBar}>
@@ -35,6 +37,7 @@ const QuizForm = (props) => {
         </View>
         <View style={styles.questionView}>
             <Card style={styles.questionCard}>
+                {/* {console.log(questions[currentIndex])} */}
                 <Text style={styles.questionText}>{questions[currentIndex].question}</Text>
             </Card>
         </View>

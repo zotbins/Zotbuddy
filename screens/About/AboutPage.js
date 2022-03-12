@@ -6,8 +6,10 @@ import {
   View,
   Pressable,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableHighlight
 } from 'react-native'
+import Constants from 'expo-constants'
 import { Rect, Svg } from 'react-native-svg'
 import {
   Container,
@@ -26,6 +28,12 @@ import {
   CardItem,
 } from 'native-base'
 
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
+
 import uciDiningLogo from '../../assets/images/UCIDining_logo.png'
 import zotbinsLogo from '../../assets/images/ZotBins_logo_slow_blink.gif'
 import zotBuddyLogo from '../../assets/images/petr.jpg'
@@ -34,7 +42,7 @@ import Instagram from '../../assets/svgs/Instagram.svg'
 import DropdownDown from '../../assets/svgs/DropdownDown.svg'
 import DropdownUp from '../../assets/svgs/DropdownUp.svg'
 import { useNavigation } from '@react-navigation/native'
-
+import BackButton from '../../components/BackButton'
 /**
  * Styles need to be refactored for different platforms
  * This is just a quick MVP
@@ -72,11 +80,19 @@ const AboutPage = props => {
   const toSocialMedia = () => {
     navigation.navigate("SocialMedia")
   }
-
+  const backToProfile = () => {
+    props.navigation.goBack()
+  }
   return (
     <View style={styles.container}>
       <ScrollView style={{marginHorizontal: 0}}>
+      <BackButton />
       <View style = {{width: "90%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
+        {/* <TouchableHighlight underlayColor="transparent" onPress={backToProfile}>
+          <Image
+              source={require('../../assets/images/back_arrow.png')}
+          />
+        </TouchableHighlight> */}
         {/* <Image style={styles.zotBuddyLogo} source={zotBuddyLogo}/> */}
         <Text style={styles.title}>About Us</Text>
         <Card>
@@ -167,9 +183,12 @@ const AboutPage = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#edf3f6',
-    // alignItems: 'center'
+    flexGrow: 1,
+    paddingTop: Constants.statusBarHeight,
+    padding: 8,
+    width: '100%',
+    backgroundColor: '#F4F4F4'
+
   },
   button: {
     marginBottom: 20,
@@ -192,7 +211,7 @@ const styles = StyleSheet.create({
     marginLeft: '95%'
   },
   title: {
-    marginTop: 60,
+    marginTop: responsiveHeight(5),
     marginBottom: 20,
     fontSize: 24,
     fontWeight: '700',

@@ -51,6 +51,7 @@ const SignUpForm =  props  => {
 
     try{
       firebaseAuth.createUserWithEmailAndPassword(email, password).then(async (res) => {
+  
         if (SecureStore.isAvailableAsync()) {
           await storeItem('uid', res.user.uid)
           const dbh = firebaseDb
@@ -65,8 +66,9 @@ const SignUpForm =  props  => {
             dateSignedIn: (date.getMonth() + 1).toString() + "/" + (date.getDay()).toString() + "/" + (date.getFullYear()).toString(),
             showQuiz: 1
           })
-          
-          navigation.navigate("Main")
+          // send verification email to user so that they can verify their account and consequently be able to sign in
+          await firebaseAuth.currentUser.sendEmailVerification();
+          navigation.navigate("Login")
         } else {
           console.log('SecureStore unavailable')
         }

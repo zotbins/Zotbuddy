@@ -198,14 +198,25 @@ const LoginForm = (props) => {
       firebaseAuth
         .signInWithEmailAndPassword(email, password)
         .then(async (res) => {
-          console.log('Hey there!')
-          if (SecureStore.isAvailableAsync()) {
-            console.log(res.user.id)
-            await storeItem('uid', res.user.uid)
+          console.log('RES', res.user.emailVerified)
 
-            navigation.navigate('Main')
-          } else {
-            console.log('SecureStore unavailable')
+          if (res.user.emailVerified)
+          {
+            if (SecureStore.isAvailableAsync()) {
+              console.log(res.user.id)
+              await storeItem('uid', res.user.uid)
+  
+              navigation.navigate('Main')
+              setValue("email", '', true)
+              setValue("password", '', true)
+            } else {
+              console.log('SecureStore unavailable')
+            }      
+          }
+          else
+          {
+            alert("Email not Verified")
+            // Have a modal that lets the user receive the verification email again
           }
         })
         .catch(error => {

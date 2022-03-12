@@ -63,22 +63,105 @@ const QuizPage = (props) => {
     }
   }
 
+  const selectRandom = async(array, amount) => {
+    var tempArr = array
+    var newArr = []
+    console.log("START")
+    console.log("---------")
+    for (var i = 0; i < amount; i++) {
+
+
+      var randomNum = Math.floor(Math.random() * tempArr.length)
+      newArr.push(tempArr[randomNum])
+      tempArr.splice(randomNum, 1)
+
+    }
+    return newArr
+  }
+
+  // Discontinued Code
+  // const oldFetch = async () => {
+  //   try {
+  //     const questionsRef = await firebaseDb
+  //       .collection('questions')
+  //       .limit(5)
+  //       .get()
+  //     let questions = []
+  //     questionsRef.forEach((doc) => {
+  //       questions.push({
+  //         id: doc.id,
+  //         choices: doc.data().choices,
+  //         difficulty: doc.data().difficulty,
+  //         question: doc.data().question,
+  //         correctAnswer: doc.data().correctAnswer
+  //       })
+  //     })
+  //     console.log("OLD QUESTIONS", questions)
+  //   } catch (err) {
+  //     console.error(err)
+  //   }
+  // }
   const fetchQuestions = async () => {
     try {
-      const questionsRef = await firebaseDb
+      const easyQuestionsRef = await firebaseDb
         .collection('questions')
-        .limit(5)
+        .where("difficulty", '==', "EASY")
         .get()
-      let questions = []
-      questionsRef.forEach((doc) => {
-        questions.push({
-          id: doc.id,
+      
+      const mediumQuestionsRef = await firebaseDb
+        .collection('questions')
+        .where("difficulty", '==',"MEDIUM")
+        .get()
+
+      const hardQuestionsRef = await firebaseDb
+        .collection('questions')
+        .where("difficulty", '==',"HARD")
+        .get()
+      
+      let easyQuestions = []
+      let mediumQuestions = []
+      let hardQuestions = []
+
+      easyQuestionsRef.forEach((doc) => {
+        easyQuestions.push({id: doc.id,
           choices: doc.data().choices,
           difficulty: doc.data().difficulty,
           question: doc.data().question,
-          correctAnswer: doc.data().correctAnswer
-        })
+          correctAnswer: doc.data().correctAnswer})
       })
+
+      mediumQuestionsRef.forEach((doc) => {
+        mediumQuestions.push({id: doc.id,
+          choices: doc.data().choices,
+          difficulty: doc.data().difficulty,
+          question: doc.data().question,
+          correctAnswer: doc.data().correctAnswer})
+      })
+
+      hardQuestionsRef.forEach((doc) => {
+        hardQuestions.push({id: doc.id,
+          choices: doc.data().choices,
+          difficulty: doc.data().difficulty,
+          question: doc.data().question,
+          correctAnswer: doc.data().correctAnswer})
+      })
+
+      let selectedEasyQuestions = await selectRandom(easyQuestions, 1)
+      let selectedMediumQuestions = await selectRandom(mediumQuestions, 2)
+      let selectedHardQuestions = await selectRandom(hardQuestions, 2)
+      let questions = []
+      for (var i = 0; i < 1; i++) {
+        questions.push(selectedEasyQuestions[i])
+      }
+      for (var i = 0; i < 2; i++) {
+        questions.push(selectedMediumQuestions[i])
+      }
+      for (var i = 0; i < 2; i++) {
+        questions.push(selectedHardQuestions[i])
+      }
+      console.log("START OF ALL QUESTIONS")
+      console.log(questions)
+      
       // for (let i = 0; i < questions.length; i++) {
       //   let choices = await fetchChoice(questions[i].choices)
       //   questions[i].choices = choices

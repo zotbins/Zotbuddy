@@ -1,9 +1,15 @@
 import React, {useEffect} from 'react'
-import { Text, View, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'
+import { Text, View, StyleSheet, TextInput, Button, TouchableOpacity, Image, TouchableHighlight} from 'react-native'
 import { useForm } from 'react-hook-form'
 import Constants from 'expo-constants'
 import { useNavigation } from '@react-navigation/native'
-
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
+import { firebaseAuth } from '../../firebaseConfig'
+import BackButton from '../../components/BackButton'
 
 
 const ProfileForm =  props  => {
@@ -23,6 +29,21 @@ const ProfileForm =  props  => {
     navigation.navigate("AboutUs")
   }
 
+  const onLogOut = () => {
+    firebaseAuth.signOut().then(() => {
+      // sign-out successful
+      console.log("signed out")
+    }).catch((error) => {
+      // an error occurred
+      console.log(error);
+    });
+
+    navigation.navigate("Login")
+  }
+
+  const onBackPage = () => {
+    navigation.goBack()
+  }
   /*const displayData = async (_) => {
     const dbh = firebase.firestore()
     let userId = await SecureStore.getItemAsync('uid');
@@ -53,6 +74,22 @@ const ProfileForm =  props  => {
 
   return (
     <View style={styles.container}>
+      <View>
+        {/* <TouchableHighlight underlayColor="transparent" onPress={onBackPage}>
+            <Image
+                source={require('../../assets/images/back_arrow.png')}
+            />
+        </TouchableHighlight> */}
+        <BackButton />
+      </View>
+      <View style={styles.profile}>
+          <Text style={styles.textStyle}>Profile</Text>
+          {/* <Image 
+              style={{height:responsiveHeight(10), marginLeft: responsiveWidth(25)}}
+              source={require("../../assets/images/Zotbins_logo_transparent.png")}
+              resizeMode='contain'
+          /> */}
+      </View>
       <View style={styles.header}>
         <Text style={styles.title}>{props.blood.firstname} {props.blood.lastname}</Text>
         <Text style={styles.points}>{props.blood.points} Points</Text>
@@ -71,6 +108,12 @@ const ProfileForm =  props  => {
 
       <View style={styles.grayBorder}/>
 
+      {/* 
+      TODO:
+        - Add password reset page
+        - Add manage notifications page
+        - Some features missing on About us Page (ZotBins blurb)
+       */}
       <View style={styles.button}>
         <TouchableOpacity style={styles.profileButton} onPress={onReset}>
           <Text style={styles.profileButtonText}>Change Password</Text>
@@ -93,9 +136,17 @@ const ProfileForm =  props  => {
          */}
       </View>
       
-
+      {/* 
+      TODO:
+        - Reset email and password entered previously
+      */}
       <View style={styles.grayBorder}/>
-      <Text style={{alignSelf: 'center', justifyContent: 'flex-end', fontWeight: 'bold', fontSize: 18}}>Log Out</Text>
+      <Text 
+        style={{alignSelf: 'center', justifyContent: 'flex-end', fontWeight: 'bold', fontSize: 18}}
+        onPress={onLogOut}
+      >
+        Log Out
+      </Text>
 
     </View>
   );
@@ -107,6 +158,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 30,
     marginRight: 30
+  },
+  profile: {
+    paddingTop: responsiveHeight(5),
+    paddingBottom: responsiveHeight(5),
+    alignItems: 'center',
+    width: '100%',
+  },
+  textStyle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#0064A4',
   },
   profileButtonText: {
     fontSize: 16,
@@ -190,7 +252,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    justifyContent: 'center',
     paddingTop: Constants.statusBarHeight,
     padding: 8,
     width: '100%',

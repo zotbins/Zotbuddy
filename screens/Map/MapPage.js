@@ -38,7 +38,6 @@ import { ThemeColors } from 'react-navigation';
 import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
-
 // import MapboxGL from "@react-native-mapbox-gl/maps";
 
 // MapboxGL.setAccessToken("pk.eyJ1Ijoiem90Ymluc3Rlc3QiLCJhIjoiY2tud3B0OTYxMGV2YTJzbzhxbGF1NHN2MyJ9.3xw5Mq1Rlk-5ioy4HHhtvg");
@@ -251,7 +250,7 @@ class MapPage extends React.Component {
           </MapView> 
           {
             <TouchableHighlight 
-              style = {{marginLeft: responsiveWidth(5), marginTop: responsiveHeight(4), 
+              style = {{marginLeft: responsiveWidth(7), marginTop: responsiveHeight(4), 
                         width: responsiveWidth(6)}}
               underlayColor = 'transparent'
               onPress={() => this.props.navigation.goBack()}
