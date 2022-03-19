@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
   StyleSheet,
   View,
-  TouchableOpacity,
+  TouchableHighlight,
   Platform
 } from 'react-native'
 import {
@@ -14,10 +14,10 @@ import BackArrow from '../assets/svgs/BackArrow.svg'
 
 const BackButton = (props) => {
 
-    const navigation = useNavigation()
+    const navigate = props.nav
 
     return  <>{
-    <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}><BackArrow style={styles.button}/></TouchableOpacity>
+    <TouchableHighlight style={styles.back} onPress={navigate}><BackArrow style={styles.button}/></TouchableHighlight>
 
     }</>
 

@@ -42,7 +42,7 @@ const AppNavigator = props => {
             <Stack.Screen name='Quiz' component={QuizPage} />
             <Stack.Screen name='SocialMedia' component={SocialFeedPage} />
             <Stack.Screen name='CameraOption' component={CameraOptionPage} />
-            <Stack.Screen name='Scanner' component={ScannerPage} />
+            <Stack.Screen name='Scan' component={ScannerPage} />
 
             
           </>

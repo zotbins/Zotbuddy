@@ -75,12 +75,12 @@ const ProfileForm =  props  => {
   return (
     <View style={styles.container}>
       <View>
-        {/* <TouchableHighlight underlayColor="transparent" onPress={onBackPage}>
+        <TouchableHighlight underlayColor="transparent" onPress={onBackPage}>
             <Image
                 source={require('../../assets/images/back_arrow.png')}
             />
-        </TouchableHighlight> */}
-        <BackButton />
+        </TouchableHighlight>
+        {/* <BackButton nav={onBackPage}/> */}
       </View>
       <View style={styles.profile}>
           <Text style={styles.textStyle}>Profile</Text>
@@ -119,10 +119,12 @@ const ProfileForm =  props  => {
           <Text style={styles.profileButtonText}>Change Password</Text>
           <Text style={styles.profileButtonEnd}>></Text>  
         </TouchableOpacity>
-        <TouchableOpacity style={styles.profileButton}>
+        
+        {/* <TouchableOpacity style={styles.profileButton}>
           <Text style={styles.profileButtonText}>Manage Notifications</Text>
           <Text style={styles.profileButtonEnd}>></Text>  
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        
         <TouchableOpacity style={styles.lastProfileButton} onPress={toAboutUs}>
           <Text style={styles.profileButtonText}>About us</Text>
           <Text style={styles.profileButtonEnd}>></Text>  

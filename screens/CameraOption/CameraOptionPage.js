@@ -37,16 +37,17 @@ const CameraOptionPage = props => {
         <Text style={styles.title}>Select an option to identify your waste.</Text>
         <TouchableOpacity
             style={[styles.button, {marginBottom: 15}]}
-            onPress={() => navigation.navigate('Scanner')}
+            onPress={() => navigation.navigate('Scan')}
           >
             <Text style={[styles.buttonText]}>Bar Code Scanning</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* UNDER CONSTRUCTION */}
+          {/* <TouchableOpacity
             style={[styles.button, {marginBottom: 25}]}
             // onPress={() => navigation.navigate('Map')}
           >
             <Text style={[styles.buttonText]}>Image Recognition</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
       </View>
     </View>

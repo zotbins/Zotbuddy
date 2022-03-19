@@ -84,17 +84,17 @@ class MapPage extends React.Component {
                   "name": "West Food Court",  
                   "description": "We have three Zotbins\ndeployed here!\n", 
                   "percentage": 58,
-                  "latitude": 33.645191, 
-                  "longitude": -117.835342,
+                  "latitude": 33.648889, 
+                  "longitude": -117.842500,
                   "image": require("../../assets/images/west-food-court.jpg")
                 },
                 "zotbin2": {
-                  "name": "Student Center",  
-                  "description": "We have three Zotbins\ndeployed here!\n", 
+                  "name": "Donald Bren Hall",  
+                  "description": "We have two Zotbins\ndeployed here!\n", 
                   "percentage": 88,
-                  "latitude": 33.647250, 
-                  "longitude": -117.846600,
-                  "image": require("../../assets/images/student-center-entrance.jpg")
+                  "latitude": 33.643056, 
+                  "longitude": -117.841667,
+                  "image": require("../../assets/images/dbh.jpg")
                 }
     }
 
@@ -208,11 +208,15 @@ class MapPage extends React.Component {
   }
 
   onMarkerPress = (num) => {
+    const latitude = Object.values(this.arr_of_Zotbins)[num].latitude;
+    const longitude = Object.values(this.arr_of_Zotbins)[num].longitude;
     if (num != this.state.binSelected && this.state.modalVisible)
     {
       this.setState({
         ...this.state,
-        binSelected: num
+        binSelected: num,
+        latitude: latitude,
+        longitude: longitude
       });
     }
     else 
@@ -220,7 +224,9 @@ class MapPage extends React.Component {
       this.setState({
         ...this.state,
         modalVisible: !this.state.modalVisible,
-        binSelected: num
+        binSelected: num,
+        latitude: latitude,
+        longitude: longitude
       });
     }
     // console.log(this.state.modalVisible, this.state.binSelected)
@@ -244,8 +250,8 @@ class MapPage extends React.Component {
           > 
             {zotMarkers}  
              
-            {/* <ZotbinMarker title="West Food Court" description="Location of a Zotbin!" latitude={33.645191} longitude={-117.835342}/>
-            <Marker style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: 33.647250, longitude: -117.846600 }} /> */}
+            {/* <ZotbinMarker title="West Food Court" description="Location of a Zotbin!" latitude={33.645191} longitude={-117.835342}/> */}
+            {/* <Marker style={styles.binMarker} image={require("../../assets/images/Zotbins_logo_transparent.png")} coordinate={{ latitude: 33.647250, longitude: -117.846600 }} /> */}
     
           </MapView> 
           {
@@ -274,10 +280,10 @@ class MapPage extends React.Component {
                       Directions
                     </Text>
                   </View>
-                  <Image style={{resizeMode:'cover', height: 100, width: 170, marginLeft: 25}} 
+                  <Image style={{resizeMode:'cover', height: 100, width: responsiveWidth(38), marginLeft: 25}} 
                     source={Object.values(this.arr_of_Zotbins)[this.state.binSelected].image}
                   />
-                 </View>
+                </View>
             </View>
           }
 

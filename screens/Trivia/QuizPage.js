@@ -160,7 +160,7 @@ const QuizPage = (props) => {
         questions.push(selectedHardQuestions[i])
       }
       console.log("START OF ALL QUESTIONS")
-      console.log(questions)
+      // console.log(questions)
       
       // for (let i = 0; i < questions.length; i++) {
       //   let choices = await fetchChoice(questions[i].choices)

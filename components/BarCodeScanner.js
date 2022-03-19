@@ -8,6 +8,9 @@ import axios from 'axios'
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 
+// TODO: FIX WARNING 
+// expo-permissions is now deprecated — the functionality has been moved to other expo packages 
+// that directly use these permissions (e.g. expo-location, expo-camera). The package will be removed in the upcoming releases.
 
 export default class BarCodeScannerComponent extends Component{
     state = {

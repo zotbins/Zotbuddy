@@ -86,13 +86,13 @@ const AboutPage = props => {
   return (
     <View style={styles.container}>
       <ScrollView style={{marginHorizontal: 0}}>
-      <BackButton />
+      {/* <BackButton /> */}
       <View style = {{width: "90%", alignSelf: "center", marginTop: 10, marginBottom: 20, justifyContent: "space-between"}}>
-        {/* <TouchableHighlight underlayColor="transparent" onPress={backToProfile}>
+        <TouchableHighlight underlayColor="transparent" onPress={backToProfile}>
           <Image
               source={require('../../assets/images/back_arrow.png')}
           />
-        </TouchableHighlight> */}
+        </TouchableHighlight>
         {/* <Image style={styles.zotBuddyLogo} source={zotBuddyLogo}/> */}
         <Text style={styles.title}>About Us</Text>
         <Card>

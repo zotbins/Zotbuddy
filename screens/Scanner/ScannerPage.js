@@ -1,23 +1,27 @@
 import React, { useState } from 'react'
-import {
-  Container,
-  Content,
-  Header,
-  Left,
-  Right,
-  Body,
-  Title,
-  Text,
-  Button,
-  Card,
-  CardItem,
-} from 'native-base'
+import { Text, View, StyleSheet, SafeAreaView, FlatList, Image} from 'react-native'
+// import {
+//   Container,
+//   Content,
+//   Header,
+//   Left,
+//   Right,
+//   Body,
+//   Title,
+//   Button,
+//   Card,
+//   CardItem,
+// } from 'native-base'
 
 import BarCodeScannerComponent from '../../components/BarCodeScanner'
 
-const ScannerPage = props => {
-  console.log('scanner')
-  return (<BarCodeScannerComponent/>)
+const ScannerPage = (props) => {
+  console.log('SCANNER')
+  return(
+    <BarCodeScannerComponent/>
+  )
+
+  
 }
 
 export default ScannerPage

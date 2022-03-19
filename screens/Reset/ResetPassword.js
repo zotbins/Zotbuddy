@@ -53,7 +53,12 @@ const ResetPassword = props => {
     return(
         <View style={styles.container}>
             <View style={{marginLeft: 0}}>
-                <BackButton/>
+                <TouchableHighlight underlayColor="transparent" onPress={backToProfile}>
+                    <Image
+                        source={require('../../assets/images/back_arrow.png')}
+                    />
+                </TouchableHighlight>
+                {/* <BackButton/> */}
             </View>
             <View style={{alignItems: "center"}}>
                 <Image 

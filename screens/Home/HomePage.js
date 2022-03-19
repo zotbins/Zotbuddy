@@ -45,6 +45,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import SmileySvg from '../../assets/svgs/smiley.svg'
 import { useEffect } from 'react'
 import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons'; 
 
 const HomePage = (props) => {
   const [quizDone, setQuizDone] = useState(false);
@@ -57,11 +58,11 @@ const HomePage = (props) => {
 
   useEffect(() => {
     // TypeError here: undefined object initialized
-    // if (checkQuiz) {
-    //   console.log('here')
+    if (checkQuiz) {
+      console.log('CHECKING QUIZ')
       
-    //   isQuizDone();
-    // }
+      isQuizDone();
+    }
 
     if (getName) {
       getFirstName();
@@ -71,7 +72,7 @@ const HomePage = (props) => {
       setCheckQuiz(true)
     });
     
-    console.log('first')
+    console.log('USE EFFECT RAN')
     console.log(firstName);
 
     return () => {
@@ -113,7 +114,6 @@ const HomePage = (props) => {
     }
     There exists no dateSignedIn property 
     */
-    console.log(dataObj.dateSignedIn)
     let dateSignedInArray = dataObj.dateSignedIn.split('/')
     let month = dateSignedInArray[0]
     let day = dateSignedInArray[1]
@@ -164,7 +164,8 @@ const HomePage = (props) => {
     <View style={styles.welcome}>
       <Text style={styles.nameStyle}>Welcome back, {firstName}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.profileButton}>
-        <SmileySvg style={styles.smile}/>
+        {/* <SmileySvg style={styles.smile}/> */}
+        <FontAwesome5 name="user-alt" size={24} color="black" />
       </TouchableOpacity>
     </View>
 
