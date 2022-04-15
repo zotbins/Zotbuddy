@@ -271,6 +271,7 @@ class MapPage extends React.Component {
                 <View style={{flexDirection: 'row'}}>
                   <View style={{flexDirection: 'column'}}>
                     <Text style={{color:'#39FF14', fontWeight: 'bold'}}>{Object.values(this.arr_of_Zotbins)[this.state.binSelected].name}</Text>
+                    {/* <Text>{Object.values(this.arr_of_Zotbins)[this.state.binSelected].description}</Text> */}
                     <Text>Bin Capacity: {Object.values(this.arr_of_Zotbins)[this.state.binSelected].percentage}%{'\n'}</Text>
                     <Text 
                       style={{textDecorationLine:'underline', color:'blue', fontWeight:'bold'}}

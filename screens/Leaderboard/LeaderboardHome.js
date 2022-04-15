@@ -28,7 +28,7 @@ const LeaderboardHome = props => {
       }, [])
     
     currentObj = getCurrentObj()
-    // console.log("LEADERBOARD OBJECT",currentObj)
+    console.log("LEADERBOARD OBJECT",currentObj)
 
     return(
         <SafeAreaView style = {styles.container}>

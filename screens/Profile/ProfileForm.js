@@ -74,14 +74,7 @@ const ProfileForm =  props  => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <TouchableHighlight underlayColor="transparent" onPress={onBackPage}>
-            <Image
-                source={require('../../assets/images/back_arrow.png')}
-            />
-        </TouchableHighlight>
-        {/* <BackButton nav={onBackPage}/> */}
-      </View>
+      <BackButton nav={onBackPage}/>
       <View style={styles.profile}>
           <Text style={styles.textStyle}>Profile</Text>
           {/* <Image 
@@ -103,6 +96,7 @@ const ProfileForm =  props  => {
         <Text style={styles.infoName}>{props.blood.firstname} {props.blood.lastname}</Text> */}
         
         <Text style={styles.infoTitle}>Email</Text>
+        {console.log("CURRENT USER: ",props.blood)}
         <Text style={styles.info}>{props.blood.email}</Text>
       </View>
 

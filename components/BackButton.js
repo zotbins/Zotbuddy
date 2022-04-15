@@ -3,7 +3,9 @@ import {
   StyleSheet,
   View,
   TouchableHighlight,
-  Platform
+  TouchableOpacity,
+  Platform,
+  Image
 } from 'react-native'
 import {
     Text,
@@ -13,21 +15,22 @@ import { useNavigation } from '@react-navigation/native'
 import BackArrow from '../assets/svgs/BackArrow.svg'
 
 const BackButton = (props) => {
+    return( 
+      <TouchableOpacity style={styles.back} onPress={props.nav}>
+        <Image
+            source={require('../assets/images/back_arrow.png')}
+        />
+      </TouchableOpacity>
+    );
 
-    const navigate = props.nav
-
-    return  <>{
-    <TouchableHighlight style={styles.back} onPress={navigate}><BackArrow style={styles.button}/></TouchableHighlight>
-
-    }</>
 
 }
 
 const styles = StyleSheet.create({
     back: {
         position: "absolute",
-        // top: 20,
-        // left: 20,
+        top: 20,
+        left: 20,
         zIndex: 5,
         width: 70,
         height: 27,

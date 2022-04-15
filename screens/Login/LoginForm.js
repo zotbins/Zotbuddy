@@ -11,6 +11,7 @@ import {
   ScrollView,
   SafeAreaView,
   Keyboard,
+  Modal
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import Constants from 'expo-constants'
@@ -30,13 +31,16 @@ import { SvgXml, SvgUri } from 'react-native-svg'
 import { Row } from 'native-base'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Input from "../../components/Input";
-
+import { responsiveHeight } from 'react-native-responsive-dimensions';
 const LoginForm = (props) => {
   const { control, setValue, getValues, errors} = useForm()
   const navigation = useNavigation()
   const [userInputColor, setUserInputColor] = useState('black')
   const [passInputColor, setPassInputColor] = useState('black')
   const [err, setErr] = useState(null)
+
+  const [verifyModalVisible, setVerifyModalVisible] = useState(false);
+  const [emailVerificationSent, setEmailVerificationSent] = useState(false);
 
   let _textInputRef = null
 
@@ -183,6 +187,20 @@ const LoginForm = (props) => {
     navigation.navigate('ForgotPassword')
   }
 
+  const resendEmailVerification = () => {
+    console.log("Hello!");
+    setVerifyModalVisible(false);
+    firebaseAuth.currentUser.sendEmailVerification()
+    .then(function() {
+      // Verification email sent.
+      setEmailVerificationSent(true);
+    })
+    .catch(function(error) {
+      // Error occurred. Inspect error.code.
+      console.log(error)
+    });
+  }
+
   const onLogin = async (_) => {
     //TODO
     //fix onLogin to operate like onSignUp
@@ -215,8 +233,8 @@ const LoginForm = (props) => {
           }
           else
           {
-            alert("Email not Verified")
-            // Have a modal that lets the user receive the verification email again
+            // alert("Email not Verified")
+            setVerifyModalVisible(true);
           }
         })
         .catch(error => {
@@ -263,9 +281,59 @@ const LoginForm = (props) => {
           <ZotZeroHorizontal style={styles.logo} />
           {/* <SvgXml style={styles.logo} source={require('../../assets/svgs/ZotZeroHorizontal.svg')} /> */}
           {/* <Image style={styles.logo} source={require("../../assets/images/ZotZero.png")} /> */}
-          <Text style={styles.title}> Welcome to ZotZero!</Text>
+          {/* <Text style={styles.title}> Welcome to ZotZero!</Text> */}
+
+          {<Modal
+              animationType="slide"
+              transparent={true}
+              visible={emailVerificationSent}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!emailVerificationSent);
+              }}
+          >
+            <View style={styles.modalView}>
+              <Text style={{textAlign: "center", fontWeight:'bold', fontSize: 20}}>
+                Email Verification Sent
+              </Text>
+              {/* <Text 
+                style={{textAlign: "center", textDecorationLine:'underline', color:'blue', fontWeight:'bold', fontSize: 20}}
+                onPress={() => setEmailVerificationSent(false)}
+              >
+                Close
+              </Text> */}
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#0064A4' }]}
+                onPress={() => setEmailVerificationSent(false)}
+              >
+                <Text style={[styles.buttonText, { color: 'white' }]}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+          }
+        {<Modal
+              animationType="slide"
+              transparent={true}
+              visible={verifyModalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!verifyModalVisible);
+              }}
+        >
+          <View style={styles.modalView}>
+            <Text style={{textAlign: "center", fontWeight:'bold', fontSize: 20}}>
+              Email not Verified
+            </Text>
+            <Text 
+              style={{textAlign: "center", textDecorationLine:'underline', color:'blue', fontWeight:'bold', fontSize: 20}}
+              onPress={resendEmailVerification}
+            >
+              Resend Email Verification?
+            </Text>
+          </View>
+        </Modal>
+          }
         </View>
-        
         <View style={styles.loginBox}>
           <Text style={[styles.label, { color: userInputColor }]}>Email</Text>
           <Controller
@@ -389,7 +457,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: Constants.statusBarHeight,
     padding: 8,
-    marginTop: 60,
+    marginTop: 50,
     width: '100%',
     backgroundColor: '#F4F4F4',
   },
@@ -498,7 +566,24 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     flexDirection: 'column',
     color: '#fa4646'
-}
+  },
+  modalView: {
+    height: responsiveHeight(20),
+    justifyContent: "center",
+    alignItems: 'center',
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    top: responsiveHeight(10)
+  },
 })
 
 export default LoginForm

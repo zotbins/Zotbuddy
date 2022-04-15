@@ -225,15 +225,15 @@ const QuizPage = (props) => {
       alert('No user data found!')
     } else {
       let dataObj = doc.data()
-      dataObj.points = correct
+      dataObj.points += correct;
       console.log(dataObj.points)
       dbh.collection('users').doc(userId).update({
         points: dataObj.points,
         showQuiz: 0,
         
       })
+      // setValue('points', dataObj.points + correct, true);
       navigation.navigate("Main")
-      // setValue('points', dataObj.points + correct, true)
     }
   }
 
